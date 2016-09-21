@@ -1,0 +1,37 @@
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<div class="general">
+  <ul class="list-group">
+    <% users.forEach(function(user, i) { %>
+      <li class="list-item">
+        <a href="#" class="list-group-item clearfix">
+          <%= user.local.email %>
+          <hr>
+          <span class="pull-center">
+            <form>
+              <div class="form-group">
+                  <label for="sel_tipo<%= user.local.email %>">Seleccionar tipo de cuenta</label>
+                  <select class="form-control" id="sel_tipo<%= i %>" name="tipo">
+                    <% if(user.local.admin == true){ %>
+                      <option value="1">Administrador</option>
+                      <option value="0">Normal</option>
+                     <% } else{ %>
+                      <option value="0">Normal</option>
+                      <option value="1">Administrador</option>
+                     <% } %>
+                  </select>
+                </div>
+            </form>
+            <button type="button" class="btn btn-info btn-sm" onclick="Update('<%= user.local.email %>', <%= i %>);">
+              <span class="glyphicon glyphicon-refresh"></span> Actualizar
+            </button>
+          </span>
+          <span class="pull-right">
+            <button type="button" class="btn btn-danger btn-sm" onclick="Delete('<%= user.local.email %>');">
+              <span class="glyphicon glyphicon-trash"></span> Eliminar
+            </button>
+          </span>
+        </a>
+      </li>
+    <% }); %>
+  </ul>
+</div>
