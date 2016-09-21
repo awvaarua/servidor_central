@@ -1,34 +1,35 @@
 <div class="general">
+<h1>Lista de nodos pendientes</h1>
+<% pendientes.forEach(function(pendiente, i) { %>
   <div class="panel-group" id="accordion">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a data-toggle="collapse"href="#collapseOne">
-            IP: 192.168.1.145
+          <a data-toggle="collapse" href="#collapse<%= i %>">
+            <%= pendiente.ip %><span class="pull-right"><%= pendiente.date %></span>
           </a>
         </h4>
       </div>
-      <div id="collapseOne" class="panel-collapse collapse">
+      <div id="collapse<%= i %>" class="panel-collapse collapse">
         <div class="panel-body centered">
           <div class="row">
-            <div class="col-lg-12">
-                <h1>Table Records</h1>
-                <table class="table table-bordered table-hover" id="tableAddRow">
+            <div class="col-lg-12">                
+                <table class="table table-bordered table-hover" id="tabla<%= i %>">
                     <thead>
                         <tr>
                             <th>Tipo sensor</th>
                             <th>Pins</th>
                             <th>Frecuencia</th>
-                            <th style="width:10px"><button id="addBtn_0" type="button" class="btn btn-success glyphicon-plus addBtn"></button></th>
+                            <th style="width:10px"><button id="addBtn_0" onclick="AddRow(<%= i %>);" type="button" class="btn btn-success glyphicon-plus addBtn"></button></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr id="tr_0">
+                        <tr id="tb<%= i %>_0">
                             <td><input type="text" id="userName" class="form-control"/></td>
                             <td><input type="text" id="email" class="form-control" /></td>
                             <td><input type="text" id="password" class="form-control" /></td>
                             <td>
-                            <button id="addBtnRemove_0" type="button" class="btn btn-danger glyphicon-minus addBtnRemove"></button></td>
+                            <button id="addBtnRemove_0" onclick="DeleteRow(<%= i %>,0);" type="button" class="btn btn-danger glyphicon-minus addBtnRemove"></button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -38,63 +39,5 @@
       </div>
     </div>
   </div>
-
-  <div class="panel-group" id="accordion">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" href="#collapseTwo">
-            IP: 192.168.1.36
-          </a>
-        </h4>
-      </div>
-      <div id="collapseTwo" class="panel-collapse collapse">
-        <div class="panel-body">
-          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="panel-group" id="accordion">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" href="#collapseThree">
-            IP: 192.168.1.189
-          </a>
-        </h4>
-      </div>
-      <div id="collapseThree" class="panel-collapse collapse">
-        <div class="panel-body">
-          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-        </div>
-      </div>
-    </div>
-  </div>  
+<% }); %>  
 </div>
-<script type="text/javascript">
-  //Row table add remove
-  $(document).ready(function () {
-      $('.addBtn').on('click', function () {
-          //var trID;
-          //trID = $(this).closest('tr'); // table row ID 
-          addTableRow();
-      });
-       $('.addBtnRemove').click(function () {
-          $(this).closest('tr').remove();  
-      })
-      var i = 1;
-      function addTableRow()
-      {
-          var tempTr = $('<tr><td><input type="text" id="userName_' + i + '" class="form-control"/></td><td><input type="text" id="email_' + i + '" class="form-control" /></td><td><input type="text" id="password_' + i + '" class="form-control" /></td><td> <button class="btn btn-danger glyphicon-minus addBtnRemove" id="addBtn_' + i + '"></button></td></tr>').on('click', function () {
-             $(this).closest('tr').remove(); 
-             $(document.body).on('click', '.TreatmentHistoryRemove', function (e) {
-                  $(this).closest('tr').remove();  
-              });
-          });
-          $("#tableAddRow").append(tempTr)
-          i++;
-      }
-  });
-</script>

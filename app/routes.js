@@ -1,4 +1,5 @@
 var Users      = require('../db_operations/users.js');
+var Pendientes = require('../db_operations/pendientes.js');
 module.exports = function(app, passport) {
 
 // =============================================================================
@@ -31,7 +32,7 @@ module.exports = function(app, passport) {
 
     // NODOS PENDIENTES =========================
     app.get('/nodos/pendientes', isLoggedIn, function(req, res) {
-        res.render('nodos-pendientes.ejs');
+        Pendientes.GetPendientes(res);
     });
 
     // LOGOUT ==============================
