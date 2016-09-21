@@ -1,1 +1,1 @@
-# servidor_central
+# Servidor central
