@@ -2,7 +2,7 @@ var Users      = require('../db_operations/users.js');
 module.exports = function(app, passport) {
 
 // =============================================================================
-// NORMAL ROUTES ==================================================
+// NORMAL ROUTES ADMIN PANE ====================================================
 // =============================================================================
 
     // PROFILE SECTION =========================
@@ -27,6 +27,11 @@ module.exports = function(app, passport) {
     // UPDATE USER =========================
     app.post('/user/update', isLoggedIn, isAdmin, function(req, res) {
         Users.UpdateUser(res, req.body.email, req.body.tipo);
+    });
+
+    // NODOS PENDIENTES =========================
+    app.get('/nodos/pendientes', isLoggedIn, function(req, res) {
+        res.render('nodos-pendientes.ejs');
     });
 
     // LOGOUT ==============================
@@ -93,7 +98,6 @@ function isLoggedIn(req, res, next) {
 }
 
 function isAdmin(req, res, next) {
-    console.log(req.user.local.admin);
     if (req.user.local.admin == true){
         return next();
     }
