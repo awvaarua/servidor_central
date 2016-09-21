@@ -25,7 +25,13 @@
                     </thead>
                     <tbody>
                         <tr id="tb<%= i %>_0">
-                            <td><input type="text" id="userName" class="form-control"/></td>
+                            <td>
+                              <select class="form-control">
+                                <option>Temperatura</option>
+                                <option>Humedad</option>
+                                <option>Luminosidad</option>
+                              </select>
+                            </td>
                             <td><input type="text" id="email" class="form-control" /></td>
                             <td><input type="text" id="password" class="form-control" /></td>
                             <td>
@@ -35,6 +41,12 @@
                 </table>
             </div>
           </div>
+          <button type="button" class="btn btn-danger btn-md" onclick="DeleteNodoPendiente('<%= pendiente.ip %>');">
+            <span class="glyphicon glyphicon-trash"></span> Eliminar
+          </button>
+          <button type="button" class="btn btn-success btn-md pull-right">
+            <span class="glyphicon glyphicon-play"></span> Iniciar
+          </button>
         </div>
       </div>
     </div>

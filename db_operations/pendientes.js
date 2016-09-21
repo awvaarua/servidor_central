@@ -11,6 +11,22 @@ var self = module.exports = {
             pendientes : listapendientes
         });
     });
+  },
+
+  InsertPendiente: function(res, ip, date) {
+    Pendiente.collection.insert({ip:ip, date: date}, function (err) {
+      res.setHeader('Content-Type', 'application/json');
+      if (err) {
+        res.send(JSON.stringify({ ok: "false", err: err}));  
+      }
+      res.send(JSON.stringify({ ok: "true"}));
+    });
+  },
+
+  DeletePendiente: function(res, ip) {
+    Pendiente.remove({ip:ip}, function (err) {
+      self.GetPendientes(res);
+    });
   }
 };
 

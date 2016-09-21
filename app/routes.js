@@ -3,7 +3,7 @@ var Pendientes = require('../db_operations/pendientes.js');
 module.exports = function(app, passport) {
 
 // =============================================================================
-// NORMAL ROUTES ADMIN PANE ====================================================
+//  ADMIN PANE =================================================================
 // =============================================================================
 
     // PROFILE SECTION =========================
@@ -40,6 +40,20 @@ module.exports = function(app, passport) {
         req.logout();
         res.redirect('/login');
     });
+
+// =============================================================================
+// API =========================================================================
+// =============================================================================    
+    // RECIVE NEW CONECTION FROM SOME NODE =========================
+    app.post('/nodo/pendiente', function(req, res) {        
+        Pendientes.InsertPendiente(res, req.body.ip, req.body.date);
+    });
+
+    // DELETE NODE PENDING =========================
+    app.post('/nodo/remove', function(req, res) {        
+        Pendientes.DeletePendiente(res, req.body.ip);
+    });
+
 
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================

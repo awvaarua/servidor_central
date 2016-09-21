@@ -18,7 +18,13 @@ function AddRow(tabla){
 	}
 	var fila = filas_por_tabla[tabla];
 	$('#tabla'+tabla+' tbody').append('<tr id="tb'+tabla+'_'+fila+'">'+
-                            '<td><input type="text" id="userName" class="form-control"/></td>'+
+                            '<td>'+
+                              '<select class="form-control">'+
+                                '<option>Temperatura</option>'+
+                                '<option>Humedad</option>'+
+                                '<option>Luminosidad</option>'+
+                              '</select>'+
+                            '</td>'+
                             '<td><input type="text" id="email" class="form-control" /></td>'+
                             '<td><input type="text" id="password" class="form-control" /></td>'+
                             '<td>'+
@@ -28,4 +34,17 @@ function AddRow(tabla){
 
 function DeleteRow(tabla, fila){
 	$('#tb'+tabla+'_'+fila).remove();
+}
+
+function DeleteNodoPendiente(ip){
+	$.ajax({
+	    url : '/nodo/remove',
+	    type : 'POST',
+	    data: {ip:ip},
+	    success : function(response) {
+	        $('#page-wrapper').html(response);
+	        return false;
+	    }
+	});
+  	return false;	
 }
