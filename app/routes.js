@@ -54,6 +54,11 @@ module.exports = function(app, passport) {
         Pendientes.DeletePendiente(res, req.body.ip);
     });
 
+    // NODOS CONFIRMACIÓN =========================
+    app.post('/nodos/confirmacion', function(req, res) {
+        console.log(req.body.confirmacion);
+    });
+
 
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================

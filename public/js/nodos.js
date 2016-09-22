@@ -20,13 +20,13 @@ function AddRow(tabla){
 	$('#tabla'+tabla+' tbody').append('<tr id="tb'+tabla+'_'+fila+'">'+
                             '<td>'+
                               '<select class="form-control">'+
-                                '<option>Temperatura</option>'+
-                                '<option>Humedad</option>'+
-                                '<option>Luminosidad</option>'+
+                                '<option value="0">Temperatura</option>'+
+                                '<option value="1">Humedad</option>'+
+                                '<option value="2">Luminosidad</option>'+
                               '</select>'+
                             '</td>'+
-                            '<td><input type="text" id="email" class="form-control" /></td>'+
-                            '<td><input type="text" id="password" class="form-control" /></td>'+
+                            '<td><input type="text" id="pins" class="form-control" /></td>'+
+                            '<td><input type="text" id="frec" class="form-control" /></td>'+
                             '<td>'+
                             '<button onclick="DeleteRow('+tabla+', '+fila+')" type="button" class="btn btn-danger glyphicon-minus '+
                             'addBtnRemove"></button></td></tr>');
@@ -47,4 +47,29 @@ function DeleteNodoPendiente(ip){
 	    }
 	});
   	return false;	
+}
+
+function SendConfirmation(tabla, ip){
+	var confirmacion =  new Object();
+	confirmacion.ip = ip;
+	confirmacion.scripts = [];
+	$('#tabla'+tabla).find('tbody tr').each (function(tabla) {
+		var script = new Object();
+		script.tipo = $(this).find('td select').val();
+		script.pins = $(this).find('td input#pins').val().split(',');
+		script.pins = JSON.stringify(script.pins);
+		script.frec = $(this).find('td input#frec').val();
+		confirmacion.scripts.push(script);
+	});
+
+	$.ajax({
+	    url : '/nodos/confirmacion/',
+	    type : 'POST',
+	    data: {confirmacion:confirmacion},
+	    success : function(response) {
+	        $('#page-wrapper').html(response);
+	        return false;
+	    }
+	});
+  	return false;
 }
