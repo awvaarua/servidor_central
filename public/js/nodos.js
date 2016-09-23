@@ -36,14 +36,17 @@ function DeleteRow(tabla, fila){
 	$('#tb'+tabla+'_'+fila).remove();
 }
 
-function DeleteNodoPendiente(ip){
+function DeleteNodoPendiente(ip, i){
 	$.ajax({
 	    url : '/nodo/remove',
 	    type : 'POST',
 	    data: {ip:ip},
 	    success : function(response) {
-	        $('#page-wrapper').html(response);
+	        $('#panel'+i).remove();
 	        return false;
+	    },
+	    error : function(response, err){
+	    	return false;
 	    }
 	});
   	return false;	

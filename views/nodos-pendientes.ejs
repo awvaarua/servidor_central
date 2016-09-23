@@ -1,7 +1,7 @@
 <div class="general">
 <h1>Lista de nodos pendientes</h1>
 <% pendientes.forEach(function(pendiente, i) { %>
-  <div class="panel-group" id="accordion">
+  <div class="panel-group" id="panel<%= i %>">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">
@@ -41,7 +41,7 @@
                 </table>
             </div>
           </div>
-          <button type="button" class="btn btn-danger btn-md" onclick="DeleteNodoPendiente('<%= pendiente.ip %>');">
+          <button type="button" class="btn btn-danger btn-md" onclick="DeleteNodoPendiente('<%= pendiente.ip %>',<%= i %>);">
             <span class="glyphicon glyphicon-trash"></span> Eliminar
           </button>
           <button type="button" onclick="SendConfirmation(<%= i %>,'<%= pendiente.ip %>');" class="btn btn-success btn-md pull-right">

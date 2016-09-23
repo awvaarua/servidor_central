@@ -25,8 +25,10 @@ var self = module.exports = {
 
   DeletePendiente: function(res, ip) {
     Pendiente.remove({ip:ip}, function (err) {
-      self.GetPendientes(res);
+      if (err) {
+        res.status(500).send('Algo va mal');
+      }
+      res.status(200).send('Ok');
     });
   }
 };
-

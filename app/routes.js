@@ -1,5 +1,6 @@
 var Users      = require('../db_operations/users.js');
 var Pendientes = require('../db_operations/pendientes.js');
+var Ssh        = require('../ssh_operations/init-node.js');
 module.exports = function(app, passport) {
 
 // =============================================================================
@@ -55,8 +56,17 @@ module.exports = function(app, passport) {
     });
 
     // NODOS CONFIRMACIÓN =========================
-    app.post('/nodos/confirmacion', function(req, res) {
-        console.log(req.body.confirmacion);
+    app.post('/nodos/confirmacion', function(req, res) { 
+        req.body.confirmacion.scripts.forEach(function(value){
+          Ssh.Init(value.tipo,value.frec);
+        });
+    });
+
+    // NODO ADD DATA ==============================
+    app.post('/nodos/data/add', function(req, res) {
+        res.status(200).send('Ok');
+        console.log(req.body);
+        
     });
 
 
