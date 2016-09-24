@@ -62,20 +62,21 @@ function SendConfirmation(tabla, ip){
 		script.pins = $(this).find('td input#pins').val().split(',');
 		script.pins = JSON.stringify(script.pins);
 		script.frec = $(this).find('td input#frec').val();
-		script.ip = ip;
 		confirmacion.scripts.push(script);
 	});
 
 	$.ajax({
 	    url : '/nodos/confirmacion/',
 	    type : 'POST',
+	    dataType: 'json',
 	    data: {confirmacion:confirmacion},
 	    success : function(response) {
-	        alert(response);
-	        return false;
-	    },
-	    error : function(response) {
-		alert(response);
+	    	console.log(response.ok);
+	        if (response.ok == "true") {
+	        	$('#panel_cuerpo'+tabla).html('<div class="alert alert-success">'+
+	  					'Nodo iniciado correctamente'+
+						'</div>');
+	        }	        
 	    }
 	});
   	return false;

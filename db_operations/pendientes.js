@@ -28,7 +28,7 @@ var self = module.exports = {
       if (err) {
         res.status(500).send('Algo va mal');
       }
-      res.status(200).send('Ok');
+      res.send({ ok:"true" });
     });
   }
 };

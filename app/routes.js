@@ -57,18 +57,11 @@ module.exports = function(app, passport) {
 
     // NODOS CONFIRMACIÓN =========================
     app.post('/nodos/confirmacion', function(req, res) {
-        var error = [];
+        res.setHeader('Content-Type', 'application/json');
         req.body.confirmacion.scripts.forEach(function(value){
-      console.log(value);
-          error.push(Ssh.Init(value.tipo,value.frec, value.ip));
+            Ssh.Init(value.tipo,value.frec, req.body.confirmacion.ip);
         });
-        error.forEach(function(value){
-            if (value != 0) {
-                res.status(500).send('Se ha producido un error. Consultar log servidor.');
-                return;
-            }
-        });
-        res.status(200).send('Ok');
+        Pendientes.DeletePendiente(res, req.body.confirmacion.ip);
     });
 
     // NODO ADD DATA ==============================
