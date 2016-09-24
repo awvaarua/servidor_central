@@ -23,12 +23,15 @@ var self = module.exports = {
     });
   },
 
-  DeletePendiente: function(res, ip) {
+  DeletePendiente: function(res, ip, data) {
+    if (typeof data === 'undefined') {
+      data = "";
+    }
     Pendiente.remove({ip:ip}, function (err) {
       if (err) {
         res.status(500).send('Algo va mal');
       }
-      res.send({ ok:"true" });
+      res.send({ ok:"true", data:data});
     });
   }
 };

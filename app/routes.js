@@ -144,15 +144,14 @@ function isAdmin(req, res, next) {
 }
 
 function callback(result, index, req, res, started){
-    console.log(started);
     if (result == "") {
         if (index < req.body.confirmacion.scripts.length) {
             Ssh.Init(req, res, index, started, callback);
         }else{
-            Pendientes.DeletePendiente(res, req.body.confirmacion.ip);
+            Pendientes.DeletePendiente(res, req.body.confirmacion.ip, started);
         }
     }else{
-        //Falta parar todos los resultados abiertos
+        //Parar todos los procesos iniciados
         res.send({ ok:"false", message:result });
     }
 }

@@ -74,10 +74,10 @@ function SendConfirmation(tabla, ip){
 	    dataType: 'json',
 	    data: {confirmacion:confirmacion},
 	    success : function(response) {
-	    	console.log(response.ok);
 	        if (response.ok == "true") {
 	        	$('#panel_cuerpo'+tabla).html('<div class="alert alert-success">'+
-	  					'Nodo iniciado correctamente'+
+	  					'<h1>Nodo iniciado correctamente</h1>'+
+	  					'<p>'+JSON.stringify(response.data)+'</p>'+
 						'</div>');
 	        }else{
 	        	$('#panel_cuerpo'+tabla).html('<div class="alert alert-danger">'+
