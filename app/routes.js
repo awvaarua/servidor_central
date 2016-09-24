@@ -56,10 +56,18 @@ module.exports = function(app, passport) {
     });
 
     // NODOS CONFIRMACIÓN =========================
-    app.post('/nodos/confirmacion', function(req, res) { 
+    app.post('/nodos/confirmacion', function(req, res) {
+        var error = []; 
         req.body.confirmacion.scripts.forEach(function(value){
-          Ssh.Init(value.tipo,value.frec);
+          error.push(Ssh.Init(value.tipo,value.frec));
         });
+        error.forEach(function(value){
+            if (value != 0) {
+                res.status(500).send('Se ha producido un error. Consultar log servidor.');
+                break;
+            }
+        });
+        res.status(200).send('Ok');
     });
 
     // NODO ADD DATA ==============================

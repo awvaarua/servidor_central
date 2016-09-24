@@ -37,24 +37,30 @@ function getTipo(tpo) {
 }
 
 var self = module.exports = {
-  Init: function(tpo, frec) {
+  Init: function(tpo, frec, ip) {
     var tipo = getTipo(tpo);
     ssh.connect({
-      host: '192.168.1.142',
+      host: ip,
       username: 'pi',
       password: 'fura4468AB'
     }).then(function() {
       // Local, Remote 
       ssh.putFile('/Users/ssb/Google Drive/Enginyeria Informatica/4 Quart any/TFG/git/nodo/scripts/'+tipo+'.py', '/home/pi/Documents/Scripts/'+tipo+'.py').then(function() {
-        console.log("The File thing is done") 
-        ssh.exec('nohup python /home/pi/Documents/Scripts/'+tipo+'.py '+frec+' &').then(function(std) {
+        ssh.exec('nohup python /home/pi/Documents/Scripts/'+tipo+'.py '+frec+' &').then(function() {
           ssh.dispose();
-          console.log('STDERR: ' + std);
+          return 0;
+        }, function(error){
+          console.log("se ha producido algún error: "+ error);
+          return 1;
         });       
       }, function(error) {
-        console.log("Something's wrong")
+        console.log("Error al copiar el fichero");
         console.log(error)
+        return 1;
       });
+    }, function(error){
+      console.log("Error al conectar "+error);
+      return 1;
     });
   }
 };
