@@ -64,7 +64,7 @@ module.exports = function(app, passport) {
         error.forEach(function(value){
             if (value != 0) {
                 res.status(500).send('Se ha producido un error. Consultar log servidor.');
-                break;
+                return;
             }
         });
         res.status(200).send('Ok');
