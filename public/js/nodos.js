@@ -62,6 +62,7 @@ function SendConfirmation(tabla, ip){
 		script.pins = $(this).find('td input#pins').val().split(',');
 		script.pins = JSON.stringify(script.pins);
 		script.frec = $(this).find('td input#frec').val();
+		script.ip = ip;
 		confirmacion.scripts.push(script);
 	});
 
@@ -70,8 +71,11 @@ function SendConfirmation(tabla, ip){
 	    type : 'POST',
 	    data: {confirmacion:confirmacion},
 	    success : function(response) {
-	        $('#page-wrapper').html(response);
+	        alert(response);
 	        return false;
+	    },
+	    error : function(response) {
+		alert(response);
 	    }
 	});
   	return false;

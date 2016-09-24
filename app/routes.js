@@ -57,9 +57,10 @@ module.exports = function(app, passport) {
 
     // NODOS CONFIRMACIÓN =========================
     app.post('/nodos/confirmacion', function(req, res) {
-        var error = []; 
+        var error = [];
         req.body.confirmacion.scripts.forEach(function(value){
-          error.push(Ssh.Init(value.tipo,value.frec));
+      console.log(value);
+          error.push(Ssh.Init(value.tipo,value.frec, value.ip));
         });
         error.forEach(function(value){
             if (value != 0) {
