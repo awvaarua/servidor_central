@@ -22,7 +22,7 @@ var self = module.exports = {
       password: 'fura4468AB'
     }).then(function() {
       // Local, Remote 
-      ssh.putFile('/home/pi/Documents/nodo/'+tipo+'.py', '/home/pi/Documents/Scripts/'+tipo+'.py').then(function() {
+      ssh.putFile('/home/pi/Documents/nodo/scripts/'+tipo+'.py', '/home/pi/Documents/Scripts/'+tipo+'.py').then(function() {
         ssh.exec('nohup python /home/pi/Documents/Scripts/'+tipo+'.py '+frec+' &').then(function() {
           ssh.dispose();
           return 0;
