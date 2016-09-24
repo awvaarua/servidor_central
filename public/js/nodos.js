@@ -52,7 +52,8 @@ function DeleteNodoPendiente(ip, i){
   	return false;	
 }
 
-function SendConfirmation(tabla, ip){
+function SendConfirmation(tabla, ip){	
+
 	var confirmacion =  new Object();
 	confirmacion.ip = ip;
 	confirmacion.scripts = [];
@@ -65,6 +66,8 @@ function SendConfirmation(tabla, ip){
 		confirmacion.scripts.push(script);
 	});
 
+	$('#panel_cuerpo'+tabla).html('<img class="loading" src="http://'+window.location.host+'/public/img/load.gif"></img>');
+
 	$.ajax({
 	    url : '/nodos/confirmacion/',
 	    type : 'POST',
@@ -76,7 +79,12 @@ function SendConfirmation(tabla, ip){
 	        	$('#panel_cuerpo'+tabla).html('<div class="alert alert-success">'+
 	  					'Nodo iniciado correctamente'+
 						'</div>');
-	        }	        
+	        }else{
+	        	$('#panel_cuerpo'+tabla).html('<div class="alert alert-danger">'+
+	  					'<h1>Se ha producido un error</h1>'+
+	  					'<p>'+response.message+'</p>'+
+						'</div>');
+	        }
 	    }
 	});
   	return false;

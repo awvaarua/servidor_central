@@ -14,29 +14,34 @@ function getTipo(tpo) {
 }
 
 var self = module.exports = {
-  Init: function(tpo, frec, ip, error) {
-    var tipo = getTipo(tpo);
+  Init: function(req, res, i, started, callback) {
+    var tipo = getTipo(req.body.confirmacion.scripts[i].tipo);
+    var frec = req.body.confirmacion.scripts[0].frec;
+    var error = "";
     ssh.connect({
-      host: ip,
+      host: req.body.confirmacion.ip,
       username: 'pi',
       password: 'fura4468AB'
     }).then(function() {
-      // Local, Remote 
+      //Copiamos el fichero
       ssh.putFile('/Users/ssb/Google Drive/Enginyeria Informatica/4 Quart any/TFG/git/nodo/scripts/'+tipo+'.py', '/home/pi/Documents/Scripts/'+tipo+'.py').then(function() {
-        ssh.exec('nohup python /home/pi/Documents/Scripts/'+tipo+'.py '+frec+' &').then(function() {
+        //Iniciamos la ejecucion
+        ssh.exec('nohup python /home/pi/Documents/Scripts/'+tipo+'.py '+frec+' & echo $! 2>&1').then(function(result) {
+          //Guardamos el pid resultante de la ejecucion
+          started.push(result.split("\n")[0]);
           ssh.dispose();
+          callback(error, i+1, req, res, started);
         }, function(error){
-          console.log("se ha producido algún error: "+ error);
-          error = 1;
+          error = "Error en la ejecucion: " + error;
+          callback(error, i+1, req, res, started);
         });       
       }, function(error) {
-        console.log("Error al copiar el fichero");
-        console.log(error)
-        error = 1;
+        error = "Error al copiar el fichero: " + error;
+        callback(error, i+1, req, res, started);
       });
     }, function(error){
-      console.log("Error al conectar "+error);
-      error = 1;
-    });
+      error = "Error al intentar conectar: " + error;
+      callback(error, i+1, req, res, started);
+    });    
   }
 };

@@ -1,8 +1,8 @@
 var Users      = require('../db_operations/users.js');
 var Pendientes = require('../db_operations/pendientes.js');
 var Ssh        = require('../ssh_operations/init-node.js');
+var fs = require('fs');
 module.exports = function(app, passport) {
-
 // =============================================================================
 //  ADMIN PANE =================================================================
 // =============================================================================
@@ -58,10 +58,8 @@ module.exports = function(app, passport) {
     // NODOS CONFIRMACIÓN =========================
     app.post('/nodos/confirmacion', function(req, res) {
         res.setHeader('Content-Type', 'application/json');
-        req.body.confirmacion.scripts.forEach(function(value){
-            Ssh.Init(value.tipo,value.frec, req.body.confirmacion.ip);
-        });
-        Pendientes.DeletePendiente(res, req.body.confirmacion.ip);
+        var started = [];
+        Ssh.Init(req, res, 0, started, callback);
     });
 
     // NODO ADD DATA ==============================
@@ -71,6 +69,15 @@ module.exports = function(app, passport) {
         
     });
 
+// =============================================================================
+// PUBLIC IMAGES ===============================================================
+// =============================================================================    
+    // RECIVE NEW CONECTION FROM SOME NODE =========================
+    app.get('/public/img/:name', function(req, res) {        
+        var img = fs.readFileSync('./public/img/'+req.params.name);
+        res.writeHead(200, {'Content-Type': 'image/gif' });
+        res.end(img, 'binary');
+    });
 
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================
@@ -134,4 +141,18 @@ function isAdmin(req, res, next) {
         return next();
     }
     res.redirect('/login');
+}
+
+function callback(result, index, req, res, started){
+    console.log(started);
+    if (result == "") {
+        if (index < req.body.confirmacion.scripts.length) {
+            Ssh.Init(req, res, index, started, callback);
+        }else{
+            Pendientes.DeletePendiente(res, req.body.confirmacion.ip);
+        }
+    }else{
+        //Falta parar todos los resultados abiertos
+        res.send({ ok:"false", message:result });
+    }
 }
