@@ -2,29 +2,6 @@ var path = require('path');
 var node_SSH = require('node-ssh');
 var ssh = new node_SSH();
 
-/*var self = module.exports = {
-  Init: function(object) {    
-    var ssh = new SSH({
-      host: '192.168.1.142',
-      user: 'pi',
-      pass: 'fura4468AB'
-    });
-    ssh.exec('node /home/pi/Documents/ExpressAppProva/bucle.js', {
-        out: function(stdout) {
-            console.log(stdout);
-        },
-        err: function(stderr) {
-            console.log(stderr);
-        }
-    });
-    ssh.start({
-      fail: function (err) {
-        console.log(err);
-      }
-    });
-  }
-};*/
-
 function getTipo(tpo) {
   switch(tpo) {
     case "0":
@@ -45,7 +22,7 @@ var self = module.exports = {
       password: 'fura4468AB'
     }).then(function() {
       // Local, Remote 
-      ssh.putFile('/Users/ssb/Google Drive/Enginyeria Informatica/4 Quart any/TFG/git/nodo/scripts/'+tipo+'.py', '/home/pi/Documents/Scripts/'+tipo+'.py').then(function() {
+      ssh.putFile('/home/pi/Documents/nodo/'+tipo+'.py', '/home/pi/Documents/Scripts/'+tipo+'.py').then(function() {
         ssh.exec('nohup python /home/pi/Documents/Scripts/'+tipo+'.py '+frec+' &').then(function() {
           ssh.dispose();
           return 0;
