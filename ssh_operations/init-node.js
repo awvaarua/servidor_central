@@ -1,21 +1,11 @@
 var path = require('path');
 var node_SSH = require('node-ssh');
 var ssh = new node_SSH();
-
-function getTipo(tpo) {
-  switch(tpo) {
-    case "0":
-        return "temperatura";
-    case "1":
-        return "humedad";
-    default:
-        return "temperatura";
-  }
-}
+var Constantes = require('../app/constantes/constantes.js');
 
 var self = module.exports = {
   Init: function(req, res, i, started, callback) {
-    var tipo = getTipo(req.body.confirmacion.scripts[i].tipo);
+    var tipo = Constantes.Tipo(req.body.confirmacion.scripts[i].tipo);
     var frec = req.body.confirmacion.scripts[i].frec;
     var error = "";
     ssh.connect({

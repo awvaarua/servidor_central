@@ -159,7 +159,7 @@ function callback(result, index, req, res, started){
         if (index < req.body.confirmacion.scripts.length) {
             Ssh.Init(req, res, index, started, callback);
         }else{
-            Pendientes.DeletePendiente(res, req.body.confirmacion.ip, started);
+            Nodos.Add(req, res, started);            
         }
     }else{
         //Parar todos los procesos iniciados
