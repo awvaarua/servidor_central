@@ -1,0 +1,22 @@
+#cuerpo_nodos {
+	margin-top: 20px;
+}
+
+.reloj {
+	font-size: 15px;
+}
+
+#sep {
+	border-color: #3176B1;
+	border-width: 3px;
+	opacity: 1;
+}
+
+#sep1 {
+	border-width: 2px;
+	border-color: #8D8D8D;
+}
+
+.vcenter {
+    
+}

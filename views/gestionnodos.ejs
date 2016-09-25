@@ -1,0 +1,13 @@
+<div class="general">
+	<h3>Selecciona el nodo a visualizar</h3>
+	
+	<select id="select_nodo" class="form-control">
+		<option value="0">Seleccionar</option>
+		<% nodos.forEach(function(nodo, i) { %>
+			<option value="<%= nodo.ip %>"><%= nodo.ip %></option>
+		<% }); %> 		
+	</select>
+	<div id="cuerpo_nodos">
+		
+	</div>
+</div>

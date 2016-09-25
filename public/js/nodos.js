@@ -7,8 +7,9 @@ function NodosPendientes() {
 	        return false;
 	    }
 	});
-  return false;
+  	return false;
 }
+
 var filas_por_tabla = [];
 function AddRow(tabla){
 	if (typeof filas_por_tabla[tabla] === 'undefined') {
@@ -88,4 +89,42 @@ function SendConfirmation(tabla, ip){
 	    }
 	});
   	return false;
+}
+
+function GestionNodos() {
+	$.ajax({
+	    url : '/nodos/',
+	    type : 'GET',
+	    success : function(response) {
+	        $('#page-wrapper').html(response);
+	        return false;
+	    }
+	});
+  return false;
+}
+
+$(document).on('change','#select_nodo',function(){
+	var ip = $('#select_nodo').val();
+	if (ip == 0) {
+		$('#cuerpo_nodos').html("");
+	}else{
+		$.ajax({
+		    url : '/nodo/'+ip,
+		    type : 'GET',
+		    success : function(response) {
+		        $('#cuerpo_nodos').html(response);
+		        return false;
+		    }
+		});
+	}
+  	return false;
+});
+
+
+function getTime(start){
+	var d = new Date(start);
+
+	$('#countdown').countup({
+	    start: new Date(d)
+	});
 }

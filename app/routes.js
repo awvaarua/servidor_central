@@ -1,5 +1,6 @@
 var Users      = require('../db_operations/users.js');
 var Pendientes = require('../db_operations/pendientes.js');
+var Nodos = require('../db_operations/nodos.js');
 var Ssh        = require('../ssh_operations/init-node.js');
 var fs = require('fs');
 module.exports = function(app, passport) {
@@ -29,6 +30,16 @@ module.exports = function(app, passport) {
     // UPDATE USER =========================
     app.post('/user/update', isLoggedIn, isAdmin, function(req, res) {
         Users.UpdateUser(res, req.body.email, req.body.tipo);
+    });
+
+    // GESTION DE NODOS =========================
+    app.get('/nodos/', isLoggedIn, function(req, res) {
+        Nodos.GetListado(res);
+    });
+
+    // GESTION DE NODOS =========================
+    app.get('/nodo/:ip', isLoggedIn, function(req, res) {
+        Nodos.GetNodo(req.params.ip, res);
     });
 
     // NODOS PENDIENTES =========================
