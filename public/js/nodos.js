@@ -103,6 +103,28 @@ function GestionNodos() {
   return false;
 }
 
+function CheckStatus(ip) {
+    $.ajax({
+        url : '/nodo/status/'+ip,
+        type : 'GET',
+        success : function(response) {
+        	console.log(response);
+            if (response.status == "online") {
+            	$('#load_estado').remove();
+            	$('#estado_nodo').append('<p><img src="/img/online.png"/> Online</p>');
+            	$('.buttonnode').prop('disabled', false);
+                $('#countdown').removeClass('hide');
+            }else{
+            	$('#load_estado').remove();
+            	$('#estado_nodo').append('<p><img src="/img/offline.png"/> Offline</p>');
+                $('#countdown').html('<p>-</p>');
+                $('#countdown').removeClass('hide');
+            }
+        }
+    });
+    return false;
+}
+
 $(document).on('change','#select_nodo',function(){
 	var ip = $('#select_nodo').val();
 	if (ip == 0) {
@@ -113,6 +135,7 @@ $(document).on('change','#select_nodo',function(){
 		    type : 'GET',
 		    success : function(response) {
 		        $('#cuerpo_nodos').html(response);
+		        CheckStatus(ip);
 		        return false;
 		    }
 		});

@@ -1,8 +1,10 @@
 var Users      = require('../db_operations/users.js');
 var Pendientes = require('../db_operations/pendientes.js');
 var Nodos = require('../db_operations/nodos.js');
+var Data = require('../db_operations/data.js');
 var Ssh        = require('../ssh_operations/init-node.js');
 var fs = require('fs');
+
 module.exports = function(app, passport) {
 // =============================================================================
 //  ADMIN PANE =================================================================
@@ -42,6 +44,11 @@ module.exports = function(app, passport) {
         Nodos.GetNodo(req.params.ip, res);
     });
 
+    // GET NODO STATUS =========================
+    app.get('/nodo/status/:ip', isLoggedIn, function(req, res) {
+        Nodos.Status(req.params.ip, res);
+    });
+
     // NODOS PENDIENTES =========================
     app.get('/nodos/pendientes', isLoggedIn, function(req, res) {
         Pendientes.GetPendientes(res);
@@ -75,9 +82,8 @@ module.exports = function(app, passport) {
 
     // NODO ADD DATA ==============================
     app.post('/nodos/data/add', function(req, res) {
-        res.status(200).send('Ok');
-        console.log(req.body);
-        
+        Data.Add(req.body);
+        res.status(200).send('Ok');        
     });
 
 // =============================================================================

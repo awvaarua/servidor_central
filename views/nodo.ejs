@@ -6,20 +6,21 @@
     <!-- /.panel-heading -->
     <div class="panel-body">
         <div class="row">
-            <div class="col-md-3">
-            	<h4>Estado</h4><p><img src="/img/online.png"/> Online</p>
+            <div id="estado_nodo" class="col-md-3">
+            	<h4>Estado</h4><img id="load_estado" src="/img/load1.gif"/>
+
             </div>
             <div class="col-md-4">
             	<h4>Tiempo online</h4>
-                <div id="countdown" class="countdownHolder reloj">
+                <div id="countdown" class="countdownHolder reloj hide">
                     <script type="text/javascript">getTime("<%= nodo.date %>");</script>
                 </div>
             </div>
             <div class="col-md-4 col-md-offset-1">
             	<h4>Acciones</h4>
-                <button type="button" class="btn btn-primary">Reiniciar</button>
-                <button type="button" class="btn btn-primary">Pendiente</button>
-                <button type="button" class="btn btn-danger">Eliminar</button>
+                <button type="button" class="btn btn-primary buttonnode" disabled="true">Reiniciar</button>
+                <button type="button" class="btn btn-primary buttonnode" disabled="true">Pendiente</button>
+                <button type="button" class="btn btn-danger buttonnode" disabled="true">Eliminar</button>
             </div>
         </div> 
         <hr id="sep1">
@@ -30,76 +31,43 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <strong>Temperatura</strong>
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-1 vcenter">
-                                <h5><strong>PID</strong></h5>
-                                <p>1242</p>
-                            </div>
-                            <div class="col-md-2 vcenter">
-                                <h5><strong>Frecuencia</strong></h5>
-                                <div class="input-group">
-                                  <input class="form-control" type="number" name="frec" value="3">
-                                  <span class="input-group-btn">
-                                    <button type="button" class="btn btn-info">Actualizar</button>
-                                  </span>
+                <% nodo.scripts.forEach(function(script, i) { %>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong><%= script.tipo %></strong>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-1 vcenter">
+                                    <h5><strong>PID</strong></h5>
+                                    <p><%= script.pid %></p>
                                 </div>
-                            </div>
-                            <div class="col-md-4 col-md-offset-1 vcenter">
-                                <h5><strong>Pins</strong></h5>
-                                <div class="input-group">
-                                  <input class="form-control" type="text" name="frec" value="3, 6, 9">
-                                  <span class="input-group-btn">
-                                    <button type="button" class="btn btn-info">Actualizar</button>
-                                  </span>
+                                <div class="col-md-2 vcenter">
+                                    <h5><strong>Frecuencia</strong></h5>
+                                    <div class="input-group">
+                                      <input class="form-control" type="number" name="frec" value="<%= script.frec %>">
+                                      <span class="input-group-btn">
+                                        <button type="button" class="btn btn-info buttonnode" disabled="true">Actualizar</button>
+                                      </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-2 col-md-offset-2 vcenter">
-                                <h5><strong>Acciones</strong></h5>
-                                <button type="button" class="btn btn-danger">Eliminar</button>
+                                <div class="col-md-4 col-md-offset-1 vcenter">
+                                    <h5><strong>Pins</strong></h5>
+                                    <div class="input-group">
+                                      <input class="form-control" type="text" name="frec" value="">
+                                      <span class="input-group-btn">
+                                        <button type="button" class="btn btn-info buttonnode" disabled="true">Actualizar</button>
+                                      </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-md-offset-2 vcenter">
+                                    <h5><strong>Acciones</strong></h5>
+                                    <button type="button" class="btn btn-danger buttonnode" disabled="true">Eliminar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <strong>Humedad</strong>
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-1 vcenter">
-                                <h5><strong>PID</strong></h5>
-                                <p>15678</p>
-                            </div>
-                            <div class="col-md-2 vcenter">
-                                <h5><strong>Frecuencia</strong></h5>
-                                <div class="input-group">
-                                  <input class="form-control" type="number" name="frec" value="300">
-                                  <span class="input-group-btn">
-                                    <button type="button" class="btn btn-info">Actualizar</button>
-                                  </span>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-md-offset-1 vcenter">
-                                <h5><strong>Pins</strong></h5>
-                                <div class="input-group">
-                                  <input class="form-control" type="text" name="frec" value="3, 6, 9, 12">
-                                  <span class="input-group-btn">
-                                    <button type="button" class="btn btn-info">Actualizar</button>
-                                  </span>
-                                </div>
-                            </div>
-                            <div class="col-md-2 col-md-offset-2 vcenter">
-                                <h5><strong>Acciones</strong></h5>
-                                <button type="button" class="btn btn-danger">Eliminar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <% }); %>
             </div>
         </div> 
      </div>

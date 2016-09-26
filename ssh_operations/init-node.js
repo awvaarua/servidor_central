@@ -32,5 +32,21 @@ var self = module.exports = {
       callback(error, i+1, req, res, started);
     });
     ssh.dispose();
+  },
+
+  CheckStatus: function(ip, res){
+    console.log(ip);
+    var error = "";
+    ssh.connect({
+      host: ip,
+      username: 'pi',
+      password: 'fura4468AB'
+    }).then(function() {
+      res.send({ status:"online"});
+    }, function(error){
+      console.log("Error al intentar conectar: " + error);
+      res.send({ status:"offline"});
+    });
+    ssh.dispose();
   }
 };
