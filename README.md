@@ -10,7 +10,7 @@ Proceso de instalación del servidor central:
   - sudo apt install -y nodejs
 
 - Mongo
-- sudo apt-get update
-- sudo apt-get upgrade
-- sudo apt-get install mongodb-server
-- sudo service mongodb start
+  - sudo apt-get update
+  - sudo apt-get upgrade
+  - sudo apt-get install mongodb-server
+  - sudo service mongodb start
