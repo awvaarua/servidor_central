@@ -24,8 +24,26 @@ var self = module.exports = {
     });
   },
 
+  GetScripts: function(ip,res) {
+    Nodo.findOne({ip:ip},function (err, nodo) {      
+      res.send({data:nodo});
+    });
+  },
+
   Status: function(ip, res){
     Ssh.CheckStatus(ip, res);
+  },
+
+  ScriptStatus: function(ip, pid, res){
+    Ssh.CheckScriptStatus(ip, pid, res);
+  },
+
+  ScriptDelete: function(ip, pid, res){
+    Ssh.ScriptDelete(ip, pid, res, function(ip, pid, res){
+      Nodo.collection.update({ ip : ip },
+                            { $pull : { scripts : {pid : pid} } },
+                            function (err){});
+    });
   },
 
   Add: function(req, res, started) {

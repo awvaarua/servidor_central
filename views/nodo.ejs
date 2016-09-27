@@ -30,11 +30,11 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div id="scriptscontainer" class="col-md-12">
                 <% nodo.scripts.forEach(function(script, i) { %>
-                    <div class="panel panel-default">
+                    <div id="<%= script.pid %>" class="panel panel-default script">
                         <div class="panel-heading">
-                            <strong><%= script.tipo %></strong>
+                            <strong><%= script.tipo %></strong><span id="load_estado_<%= script.pid %>" class="loadscript pull-right"><img src="/img/load1_small.gif"/></span>
                         </div>
                         <div class="panel-body">
                             <div class="row">
@@ -47,7 +47,7 @@
                                     <div class="input-group">
                                       <input class="form-control" type="number" name="frec" value="<%= script.frec %>">
                                       <span class="input-group-btn">
-                                        <button type="button" class="btn btn-info buttonnode" disabled="true">Actualizar</button>
+                                        <button type="button" class="btn btn-info bt<%= script.pid %>" disabled="true">Actualizar</button>
                                       </span>
                                     </div>
                                 </div>
@@ -56,13 +56,13 @@
                                     <div class="input-group">
                                       <input class="form-control" type="text" name="frec" value="">
                                       <span class="input-group-btn">
-                                        <button type="button" class="btn btn-info buttonnode" disabled="true">Actualizar</button>
+                                        <button type="button" class="btn btn-info bt<%= script.pid %>" disabled="true">Actualizar</button>
                                       </span>
                                     </div>
                                 </div>
                                 <div class="col-md-2 col-md-offset-2 vcenter">
                                     <h5><strong>Acciones</strong></h5>
-                                    <button type="button" class="btn btn-danger buttonnode" disabled="true">Eliminar</button>
+                                    <button type="button" class="btn btn-danger" onclick='DeleteScriptNodo("<%= nodo.ip %>", "<%= script.pid %>");'>Eliminar</button>
                                 </div>
                             </div>
                         </div>

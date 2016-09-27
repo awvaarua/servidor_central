@@ -35,7 +35,6 @@ var self = module.exports = {
   },
 
   CheckStatus: function(ip, res){
-    console.log(ip);
     var error = "";
     ssh.connect({
       host: ip,
@@ -46,6 +45,45 @@ var self = module.exports = {
     }, function(error){
       console.log("Error al intentar conectar: " + error);
       res.send({ status:"offline"});
+    });
+    ssh.dispose();
+  },
+
+  CheckScriptStatus: function(ip, pid, res){
+    var error = "";
+    ssh.connect({
+      host: ip,
+      username: 'pi',
+      password: 'fura4468AB'
+    }).then(function() {
+      ssh.exec('kill -0 '+pid).then(function(std) {
+        res.send({ status:"online"});
+      }, function(error){
+        res.send({ status:"offline"});
+      });
+    }, function(error){
+      console.log("Error al intentar conectar: " + error);
+      res.send({ status:"offline"});
+    });
+    ssh.dispose();
+  },
+
+  ScriptDelete: function(ip, pid, res, callback){
+    ssh.connect({
+      host: ip,
+      username: 'pi',
+      password: 'fura4468AB'
+    }).then(function() {
+      ssh.exec('kill '+pid).then(function(std) {
+        callback(ip, pid, res);
+        res.send({ ok:"ok"});
+      }, function(error){
+        callback(ip, pid, res);
+        res.send({ ok:"ok"});
+      });
+    }, function(error){
+      console.log("Error al intentar conectar: " + error);
+      res.send({ ok:"false", message:error});
     });
     ssh.dispose();
   }

@@ -39,18 +39,8 @@ module.exports = function(app, passport) {
         Nodos.GetListado(res);
     });
 
-    // GESTION DE NODOS =========================
-    app.get('/nodo/:ip', isLoggedIn, function(req, res) {
-        Nodos.GetNodo(req.params.ip, res);
-    });
-
-    // GET NODO STATUS =========================
-    app.get('/nodo/status/:ip', isLoggedIn, function(req, res) {
-        Nodos.Status(req.params.ip, res);
-    });
-
     // NODOS PENDIENTES =========================
-    app.get('/nodos/pendientes', isLoggedIn, function(req, res) {
+    app.get('/pendientes/', isLoggedIn, function(req, res) {
         Pendientes.GetPendientes(res);
     });
 
@@ -64,26 +54,51 @@ module.exports = function(app, passport) {
 // API =========================================================================
 // =============================================================================    
     // RECIVE NEW CONECTION FROM SOME NODE =========================
-    app.post('/nodo/pendiente', function(req, res) {        
-        Pendientes.InsertPendiente(res, req.body.ip, req.body.date);
+    app.post('/pendiente/add', function(req, res) {        
+        Pendientes.InsertPendiente(res, req.body.ip, new Date());
     });
 
     // DELETE NODE PENDING =========================
-    app.post('/nodo/remove', function(req, res) {        
+    app.post('/pendiente/remove', function(req, res) {        
         Pendientes.DeletePendiente(res, req.body.ip);
     });
 
     // NODOS CONFIRMACIÓN =========================
-    app.post('/nodos/confirmacion', function(req, res) {
+    app.post('/pendiente/confirmacion', function(req, res) {
         res.setHeader('Content-Type', 'application/json');
         var started = [];
         Ssh.Init(req, res, 0, started, callback);
     });
 
     // NODO ADD DATA ==============================
-    app.post('/nodos/data/add', function(req, res) {
+    app.post('/data/add', function(req, res) {
         Data.Add(req.body);
         res.status(200).send('Ok');        
+    });
+
+    // GET NODE =============================
+    app.get('/nodo/:ip', isLoggedIn, function(req, res) {
+        Nodos.GetNodo(req.params.ip, res);
+    });
+
+    // GET NODO STATUS =========================
+    app.get('/nodo/:ip/status', isLoggedIn, function(req, res) {
+        Nodos.Status(req.params.ip, res);
+    });
+
+    // GET ALL SCRIPTS ABOUT NODE =========================
+    app.get('/nodo/:ip/scripts', isLoggedIn, function(req, res) {
+        Nodos.GetScripts(req.params.ip, res);
+    });
+
+    // GET NODE SCRIPT STATUS =========================
+    app.get('/nodo/:ip/script/:pid/status', isLoggedIn, function(req, res) {
+        Nodos.ScriptStatus(req.params.ip, req.params.pid, res);
+    });
+
+    // NODE SCRIPT DELETE =========================
+    app.post('/nodo/:ip/script/:pid/delete', isLoggedIn, function(req, res) {
+        Nodos.ScriptDelete(req.params.ip, req.params.pid, res);
     });
 
 // =============================================================================

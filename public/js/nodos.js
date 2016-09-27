@@ -1,6 +1,6 @@
 function NodosPendientes() {
 	$.ajax({
-	    url : '/nodos/pendientes',
+	    url : '/pendientes/',
 	    type : 'GET',
 	    success : function(response) {
 	        $('#page-wrapper').html(response);
@@ -19,18 +19,18 @@ function AddRow(tabla){
 	}
 	var fila = filas_por_tabla[tabla];
 	$('#tabla'+tabla+' tbody').append('<tr id="tb'+tabla+'_'+fila+'">'+
-                            '<td>'+
-                              '<select class="form-control">'+
-                                '<option value="0">Temperatura</option>'+
-                                '<option value="1">Humedad</option>'+
-                                '<option value="2">Luminosidad</option>'+
-                              '</select>'+
-                            '</td>'+
-                            '<td><input type="text" id="pins" class="form-control" /></td>'+
-                            '<td><input type="text" id="frec" class="form-control" /></td>'+
-                            '<td>'+
-                            '<button onclick="DeleteRow('+tabla+', '+fila+')" type="button" class="btn btn-danger glyphicon-minus '+
-                            'addBtnRemove"></button></td></tr>');
+                        '<td>'+
+                        '<select class="form-control">'+
+	                    '<option value="0">Temperatura</option>'+
+	                    '<option value="1">Humedad</option>'+
+	                    '<option value="2">Luminosidad</option>'+
+	                    '</select>'+
+                        '</td>'+
+                        '<td><input type="text" id="pins" class="form-control" /></td>'+
+                        '<td><input type="text" id="frec" class="form-control" /></td>'+
+                        '<td>'+
+                        '<button onclick="DeleteRow('+tabla+', '+fila+')" type="button" class="btn btn-danger glyphicon-minus '+
+                        'addBtnRemove"></button></td></tr>');
 }
 
 function DeleteRow(tabla, fila){
@@ -39,7 +39,7 @@ function DeleteRow(tabla, fila){
 
 function DeleteNodoPendiente(ip, i){
 	$.ajax({
-	    url : '/nodo/remove',
+	    url : '/pendiente/remove',
 	    type : 'POST',
 	    data: {ip:ip},
 	    success : function(response) {
@@ -70,7 +70,7 @@ function SendConfirmation(tabla, ip){
 	$('#panel_cuerpo'+tabla).html('<img class="loading" src="http://'+window.location.host+'/public/img/load.gif"></img>');
 
 	$.ajax({
-	    url : '/nodos/confirmacion/',
+	    url : '/pendiente/confirmacion/',
 	    type : 'POST',
 	    dataType: 'json',
 	    data: {confirmacion:confirmacion},
@@ -103,26 +103,65 @@ function GestionNodos() {
   return false;
 }
 
+function CheckScriptsStatus(ip){
+	$.ajax({
+        url : '/nodo/'+ip+'/scripts',
+        type : 'GET',
+        success : function(data) {
+        	data.data.scripts.forEach(function(script){
+        		$.ajax({
+			        url : '/nodo/'+ip+'/script/'+script.pid+'/status',
+			        type : 'GET',
+			        success : function(data) {
+		        		console.log(data.status);
+		        		if (data.status == "online") {
+		        			$('.bt'+script.pid).prop('disabled', false);
+		        			$('#load_estado_'+script.pid).html('<p><img src="/img/online.png"/> Ejecutándose</p>');
+		        		}else{
+		        			$('#load_estado_'+script.pid).html('<p><img src="/img/offline.png"/> Parado</p>');
+		        		}
+			        }
+			    });
+        	});
+        }
+    });
+}
+
 function CheckStatus(ip) {
     $.ajax({
-        url : '/nodo/status/'+ip,
+        url : '/nodo/'+ip+'/status',
         type : 'GET',
         success : function(response) {
-        	console.log(response);
             if (response.status == "online") {
             	$('#load_estado').remove();
             	$('#estado_nodo').append('<p><img src="/img/online.png"/> Online</p>');
             	$('.buttonnode').prop('disabled', false);
                 $('#countdown').removeClass('hide');
+                CheckScriptsStatus(ip);
             }else{
             	$('#load_estado').remove();
             	$('#estado_nodo').append('<p><img src="/img/offline.png"/> Offline</p>');
                 $('#countdown').html('<p>-</p>');
                 $('#countdown').removeClass('hide');
+                $('.loadscript').html('<p>-</p>');
             }
         }
     });
     return false;
+}
+
+function DeleteScriptNodo(ip, pid){
+	$.ajax({
+        url : '/nodo/'+ip+'/script/'+pid+'/delete',
+        type : 'POST',
+        success : function(response) {
+        	if (response.ok == "ok") {
+        		$('div#'+pid).remove();
+        	}else{
+        		console.log(response.message);
+        	}
+        }
+    });
 }
 
 $(document).on('change','#select_nodo',function(){
