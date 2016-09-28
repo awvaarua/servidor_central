@@ -1,37 +1,29 @@
 var Pendiente       = require('../app/models/pendiente');
 
 var self = module.exports = {
-  GetPendientes: function(res) {
+
+  GetPendientes: function(callback) {
     Pendiente.find({}, function (err, pendientes) {
+      if (err) {callback(err);}
       var listapendientes = [];      
       pendientes.forEach(function(pendiente) {
         listapendientes.push(pendiente);
       });
-      res.render('nodos-pendientes.ejs', {
-            pendientes : listapendientes
-        });
+      callback(null,listapendientes);
     });
   },
 
-  InsertPendiente: function(res, ip, date) {
-    Pendiente.collection.insert({ip:ip, date: date}, function (err) {
-      res.setHeader('Content-Type', 'application/json');
-      if (err) {
-        res.send(JSON.stringify({ ok: "false", err: err}));  
-      }
-      res.send(JSON.stringify({ ok: "true"}));
+  InsertPendiente: function(ip, callback) {
+    Pendiente.collection.insert({ip:ip, date: new Date()}, function (err) {
+      if (err) {callback(err);}
+      callback(null);
     });
   },
 
-  DeletePendiente: function(res, ip, data) {
-    if (typeof data === 'undefined') {
-      data = "";
-    }
+  DeletePendiente: function(ip, callback) {
     Pendiente.remove({ip:ip}, function (err) {
-      if (err) {
-        res.status(500).send('Algo va mal');
-      }
-      res.send({ ok:"true", data:data});
+      if (err) {callback(err);}
+      callback(null);
     });
   }
 };

@@ -2,7 +2,7 @@ var Users      = require('../db_operations/users.js');
 var Pendientes = require('../db_operations/pendientes.js');
 var Nodos = require('../db_operations/nodos.js');
 var Data = require('../db_operations/data.js');
-var Ssh        = require('../ssh_operations/init-node.js');
+var Ssh        = require('../ssh_operations/sshoperations.js');
 var fs = require('fs');
 
 module.exports = function(app, passport) {
@@ -26,22 +26,41 @@ module.exports = function(app, passport) {
 
     // USERS ADMIN =========================
     app.get('/users', isLoggedIn, isAdmin, function(req, res) {
-        Users.GetUsers(res);
+        Users.GetUsers(function(){
+            if(err){}
+            res.render('adminusers.ejs', {
+                users : userlist
+            });
+        });
     });
 
     // UPDATE USER =========================
     app.post('/user/update', isLoggedIn, isAdmin, function(req, res) {
-        Users.UpdateUser(res, req.body.email, req.body.tipo);
+        Users.UpdateUser(eq.body.email, req.body.tipo, function(){
+            //redirect
+        });
     });
 
     // GESTION DE NODOS =========================
     app.get('/nodos/', isLoggedIn, function(req, res) {
-        Nodos.GetListado(res);
+        Nodos.GetAllNodes(function(nodos, err){
+            if(err){}
+            res.render('gestionnodos.ejs', {
+                nodos : nodos
+            });
+        });
     });
 
     // NODOS PENDIENTES =========================
     app.get('/pendientes/', isLoggedIn, function(req, res) {
-        Pendientes.GetPendientes(res);
+        Pendientes.GetPendientes(function(err, listapendientes){
+            if (err) {
+                listapendientes = [];
+            }
+            res.render('nodos-pendientes.ejs', {
+                pendientes : listapendientes
+            });
+        });
     });
 
     // LOGOUT ==============================
@@ -52,22 +71,36 @@ module.exports = function(app, passport) {
 
 // =============================================================================
 // API =========================================================================
-// =============================================================================    
+// =============================================================================   
+
     // RECIVE NEW CONECTION FROM SOME NODE =========================
     app.post('/pendiente/add', function(req, res) {        
-        Pendientes.InsertPendiente(res, req.body.ip, new Date());
+        Pendientes.InsertPendiente(req.body.ip, function(err){
+            if(err){res.send({ ok: "false", err: err});}
+            res.send({ ok: "true"});
+        });
     });
 
     // DELETE NODE PENDING =========================
     app.post('/pendiente/remove', function(req, res) {        
-        Pendientes.DeletePendiente(res, req.body.ip);
+        Pendientes.DeletePendiente(req.body.ip, function(err){
+            if (err) {res.send({ ok:"false"});}
+            res.send({ ok:"true"});
+        });
     });
 
     // NODOS CONFIRMACIÓN =========================
     app.post('/pendiente/confirmacion', function(req, res) {
-        res.setHeader('Content-Type', 'application/json');
-        var started = [];
-        Ssh.Init(req, res, 0, started, callback);
+        Nodos.AddNode(req.body.confirmacion.ip, function(err){
+            if(err){res.send({ ok:"false", error:err});}
+            Nodos.AddScripts(req.body.confirmacion.ip, req.body.confirmacion.scripts, function(err, data){
+                if(err){res.send({ ok:"false", error:err});}
+                Pendientes.DeletePendiente(req.body.confirmacion.ip, function(err){
+                    if(err){res.send({ ok:"false", error:err});}
+                    res.send({ ok:"true", data:data});
+                });
+            });
+        });
     });
 
     // NODO ADD DATA ==============================
@@ -78,27 +111,52 @@ module.exports = function(app, passport) {
 
     // GET NODE =============================
     app.get('/nodo/:ip', isLoggedIn, function(req, res) {
-        Nodos.GetNodo(req.params.ip, res);
+        Nodos.GetNodo(req.params.ip, function(err, nodo){
+            if (err) {}
+            res.render('nodo.ejs', {
+                nodo : nodo
+            });
+        });
     });
 
     // GET NODO STATUS =========================
     app.get('/nodo/:ip/status', isLoggedIn, function(req, res) {
-        Nodos.Status(req.params.ip, res);
+        Ssh.CheckNodeStatus(req.params.ip, function(status){
+            res.send({ status:status });
+        });
+    });
+
+    // DELETE NODE =========================
+    app.get('/nodo/:ip/delete', isLoggedIn, function(req, res) {
+        Nodos.DeleteNodo(req.params.ip, function(){
+
+        });
     });
 
     // GET ALL SCRIPTS ABOUT NODE =========================
     app.get('/nodo/:ip/scripts', isLoggedIn, function(req, res) {
-        Nodos.GetScripts(req.params.ip, res);
+        Nodos.GetNodo(req.params.ip, function(err, nodo){
+            if (err) {res.send({ok:"false"});}
+            res.send({ok:"true", data:nodo});
+        });
     });
 
     // GET NODE SCRIPT STATUS =========================
     app.get('/nodo/:ip/script/:pid/status', isLoggedIn, function(req, res) {
-        Nodos.ScriptStatus(req.params.ip, req.params.pid, res);
+        Ssh.CheckScriptStatus(req.params.ip, req.params.pid, function(err, status){            
+            if(err){res.send({ status:"offline", error:error});}            
+            res.send({ status : status });
+        });
     });
 
     // NODE SCRIPT DELETE =========================
     app.post('/nodo/:ip/script/:pid/delete', isLoggedIn, function(req, res) {
-        Nodos.ScriptDelete(req.params.ip, req.params.pid, res);
+        Nodos.DeleteScript(req.params.ip, req.params.pid, function(err){
+            if (err) {
+                res.send({ ok:"false", message:err});
+            }
+            res.send({ ok:"ok"});
+        });
     });
 
 // =============================================================================
@@ -145,17 +203,16 @@ module.exports = function(app, passport) {
 // =============================================================================
 // UNLINK ACCOUNTS =============================================================
 // =============================================================================
-// used to unlink accounts. for social accounts, just remove the token
-// for local account, remove email and password
-// user account will stay active in case they want to reconnect in the future
 
     // local -----------------------------------
     app.post('/user/unlink', isLoggedIn, isAdmin, function(req, res) {
-        Users.DeleteUserByEmail(res, req.body.email);
+        Users.DeleteUserByEmail(req.body.email, function(err){
+            if (err) {}
+            //Redirect
+        });
     });
 
 };
-
 
 // =============================================================================
 // MIDDLEWARE ==================================================================
@@ -173,17 +230,4 @@ function isAdmin(req, res, next) {
         return next();
     }
     res.redirect('/login');
-}
-
-function callback(result, index, req, res, started){
-    if (result == "") {
-        if (index < req.body.confirmacion.scripts.length) {
-            Ssh.Init(req, res, index, started, callback);
-        }else{
-            Nodos.Add(req, res, started);            
-        }
-    }else{
-        //Parar todos los procesos iniciados
-        res.send({ ok:"false", message:result });
-    }
 }
