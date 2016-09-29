@@ -156,7 +156,21 @@ function DeleteScriptNodo(ip, pid){
         url : '/nodo/'+ip+'/script/'+pid+'/delete',
         type : 'POST',
         success : function(response) {
-        	if (response.ok == "ok") {
+        	if (response.ok == "true") {
+        		$('div#'+pid).remove();
+        	}else{
+        		console.log(response.message);
+        	}
+        }
+    });
+}
+
+function DeleteNodo(ip){
+	$.ajax({
+        url : '/nodo/'+ip+'/delete',
+        type : 'POST',
+        success : function(response) {
+        	if (response.ok == "true") {
         		$('div#'+pid).remove();
         	}else{
         		console.log(response.message);

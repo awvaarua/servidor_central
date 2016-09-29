@@ -24,38 +24,30 @@ var self = module.exports = {
 
   DeleteAllScripts: function(ip, callback) {
     Nodo.findOne({ip:ip},function (err, nodo) {
-      if (err) {callback(err);}
+      if (err) {callback(err);return;}
       nodo.scripts.forEach(function(script, i, array){
-        self.ScriptDelete(ip, script.pid, function(err){
-          if (err) {callback(err);}
-          if (index === array.length - 1) {
-            callback();
-          }
-        });
+        self.DeleteScript(ip, script.pid);
       });
     });
+    callback();
   },
 
   DeleteNodo: function(ip, callback) {
-    self.DeleteAllScripts(ip, function(err){
-      if(err){callback(err);}
+    self.DeleteAllScripts(ip, function(){
       Nodo.remove({ip:ip}, function (err) {
-        if (err) {
-          callback(err);
-        }else{
-          callback();
-        }
+        if (err) {callback(err);}
+        callback();
       });
     })
   },
 
   DeleteScript: function(ip, pid, callback){
-    Ssh.ScriptDelete(ip, pid, function(error){
-      if (error) {callback(error);}
-      Nodo.collection.update({ ip : ip },{ $pull : { scripts : {pid : pid} } }, function (err){
+    Ssh.DeleteScript(ip, pid, function(err){
+      if (err) {console.log("error1");callback(error);}
+      Nodo.findOneAndUpdate({ ip : ip },{ $pull : { scripts : {pid : pid} }}, { safe: true }, function (err, obj){
         if (err) {callback(err);}
-      });
-      callback();
+        callback();
+      });      
     });
   },
 

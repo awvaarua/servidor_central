@@ -26,7 +26,7 @@ module.exports = function(app, passport) {
 
     // USERS ADMIN =========================
     app.get('/users', isLoggedIn, isAdmin, function(req, res) {
-        Users.GetUsers(function(){
+        Users.GetUsers(function(err, userlist){
             if(err){}
             res.render('adminusers.ejs', {
                 users : userlist
@@ -36,8 +36,8 @@ module.exports = function(app, passport) {
 
     // UPDATE USER =========================
     app.post('/user/update', isLoggedIn, isAdmin, function(req, res) {
-        Users.UpdateUser(eq.body.email, req.body.tipo, function(){
-            //redirect
+        Users.UpdateUser(req.body.email, req.body.tipo, function(){
+            res.redirect('/users');
         });
     });
 
@@ -78,6 +78,14 @@ module.exports = function(app, passport) {
         Pendientes.InsertPendiente(req.body.ip, function(err){
             if(err){res.send({ ok: "false", err: err});}
             res.send({ ok: "true"});
+        });
+    });
+
+    // GET NODE PENDING =========================
+    app.get('/pendiente/:ip', function(req, res) {        
+        Pendientes.GetPendiente(req.params.ip, function(err, pendiente){
+            if (err) {res.send({ ok:"false"});}
+            res.send({ ok:"true", data:pendiente});
         });
     });
 
@@ -127,14 +135,23 @@ module.exports = function(app, passport) {
     });
 
     // DELETE NODE =========================
-    app.get('/nodo/:ip/delete', isLoggedIn, function(req, res) {
-        Nodos.DeleteNodo(req.params.ip, function(){
+    app.post('/nodo/:ip/delete', isLoggedIn, function(req, res) {
+        Nodos.DeleteNodo(req.params.ip, function(err){
+            if (err) {res.send({ ok:"false", error: err});}
+            res.send({ ok:"true" });
+        });
+    });
 
+    // RESTART NODE =========================
+    app.post('/nodo/:ip/restart', isLoggedIn, function(req, res) {
+        Ssh.RestartNode(req.params.ip, function(err){
+            if (err) {res.send({ ok:"false", error: err});}
+            res.send({ ok:"true" });
         });
     });
 
     // GET ALL SCRIPTS ABOUT NODE =========================
-    app.get('/nodo/:ip/scripts', isLoggedIn, function(req, res) {
+    app.get('/nodo/:ip/scripts', function(req, res) {
         Nodos.GetNodo(req.params.ip, function(err, nodo){
             if (err) {res.send({ok:"false"});}
             res.send({ok:"true", data:nodo});
@@ -155,14 +172,14 @@ module.exports = function(app, passport) {
             if (err) {
                 res.send({ ok:"false", message:err});
             }
-            res.send({ ok:"ok"});
+            res.send({ ok:"true"});
         });
     });
 
 // =============================================================================
 // PUBLIC IMAGES ===============================================================
 // =============================================================================    
-    // RECIVE NEW CONECTION FROM SOME NODE =========================
+    // RETURN IMAGE =========================
     app.get('/public/img/:name', function(req, res) {        
         var img = fs.readFileSync('./public/img/'+req.params.name);
         res.writeHead(200, {'Content-Type': 'image/gif' });
@@ -208,7 +225,7 @@ module.exports = function(app, passport) {
     app.post('/user/unlink', isLoggedIn, isAdmin, function(req, res) {
         Users.DeleteUserByEmail(req.body.email, function(err){
             if (err) {}
-            //Redirect
+            res.redirect('/users');
         });
     });
 

@@ -20,7 +20,7 @@
             	<h4>Acciones</h4>
                 <button type="button" class="btn btn-primary buttonnode" disabled="true">Reiniciar</button>
                 <button type="button" class="btn btn-primary buttonnode" disabled="true">Pendiente</button>
-                <button type="button" class="btn btn-danger buttonnode" disabled="true">Eliminar</button>
+                <button type="button" class="btn btn-danger buttonnode" onclick="DeleteNodo('<%= nodo.ip %>')">Eliminar</button>
             </div>
         </div> 
         <hr id="sep1">
@@ -62,7 +62,7 @@
                                 </div>
                                 <div class="col-md-2 col-md-offset-2 vcenter">
                                     <h5><strong>Acciones</strong></h5>
-                                    <button type="button" class="btn btn-danger" onclick='DeleteScriptNodo("<%= nodo.ip %>", "<%= script.pid %>");'>Eliminar</button>
+                                    <button type="button" class="btn btn-danger bt<%= script.pid %>" disabled="true" onclick='DeleteScriptNodo("<%= nodo.ip %>", "<%= script.pid %>");'>Eliminar</button>
                                 </div>
                             </div>
                         </div>

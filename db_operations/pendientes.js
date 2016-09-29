@@ -20,6 +20,14 @@ var self = module.exports = {
     });
   },
 
+  GetPendiente: function(ip, callback) {
+    Pendiente.findOne({ip:ip}, function (err, obj) {
+      if (err) {callback(err);}
+      console.log(obj)
+      callback(null, obj);
+    });
+  },
+
   DeletePendiente: function(ip, callback) {
     Pendiente.remove({ip:ip}, function (err) {
       if (err) {callback(err);}
