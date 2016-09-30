@@ -22,55 +22,58 @@ var self = module.exports = {
     });
   },
 
-  DeleteAllScripts: function(ip, callback) {
-    Nodo.findOne({ip:ip},function (err, nodo) {
-      if (err) {callback(err);return;}
-      nodo.scripts.forEach(function(script, i, array){
-        self.DeleteScript(ip, script.pid);
+  DeleteAllScripts: function(ip, scripts, index, info_array, callback){ 
+    if (index < scripts.length) {
+      self.DeleteScript(ip, scripts[index].pid, function(err, data){
+        if (err) {callback(err, data);}
+        info_array.push(data);
+        self.DeleteAllScripts(ip, scripts, index + 1, info_array, callback);
       });
-    });
-    callback();
+    }else{
+      callback(null, info_array);
+    }
   },
 
   DeleteNodo: function(ip, callback) {
-    self.DeleteAllScripts(ip, function(){
-      Nodo.remove({ip:ip}, function (err) {
-        if (err) {callback(err);}
-        callback();
+    self.GetNodo(ip, function(err, nodo){
+      self.DeleteAllScripts(ip, nodo.scripts, 0, [], function(err, data){
+        Nodo.remove({ip:ip}, function (err) {
+          if (err) {callback(err);}
+          callback(null, data);
+        });
       });
-    })
+    });
   },
 
   DeleteScript: function(ip, pid, callback){
-    Ssh.DeleteScript(ip, pid, function(err){
-      if (err) {console.log("error1");callback(error);}
-      Nodo.findOneAndUpdate({ ip : ip },{ $pull : { scripts : {pid : pid} }}, { safe: true }, function (err, obj){
+    Ssh.DeleteScript(ip, pid, function(err, data){
+      if (err) {callback(err);}
+      Nodo.collection.update({ ip : ip },{ $pull : { scripts : {pid : parseInt(pid)} } }, function (err){
         if (err) {callback(err);}
-        callback();
+        callback(null, data);
       });      
     });
   },
 
-  AddScripts: function(ip, scripts, callback){
-    var scripts_info = [];
-    scripts.forEach(function(script, i, array){
-      self.AddScript(ip, script, function(err, data){
-        if (err) {callback(err);}
-        scripts_info.push(data);
-        if (i === array.length - 1) {
-          callback(null, scripts_info);
-        }
-      })
-    });
-  },  
+  AddScripts: function(ip, scripts, index, info_array, callback){    
+    if (index < scripts.length) {
+      self.AddScript(ip, scripts[index], function(err, data){
+        if (err) {callback(err, null);}
+        info_array.push(data);
+        self.AddScripts(ip, scripts, index + 1, info_array, callback);
+      });
+    }else{
+      callback(null, info_array);
+    }
+  },
 
   AddScript: function(ip, script, callback){
     Ssh.StartScript(ip, script.tipo, script.frec, function(err, data){
       if (err) {callback(err);}
-      Nodo.collection.update({ ip : ip },{ $push : { scripts : {pid : data.pid, tipo : data.tipo, frec : data.frec} } }, function (err){
+      Nodo.collection.update({ ip : ip },{ $push : { scripts : {pid : parseInt(data.pid), tipo : data.tipo, frec : data.frec} } }, function (err){
         if (err) {callback(err);}
-      });
-      callback(null, data);
+        callback(null, data);
+      });      
     });
   },
 

@@ -70,12 +70,11 @@ function SendConfirmation(tabla, ip){
 	$('#panel_cuerpo'+tabla).html('<img class="loading" src="http://'+window.location.host+'/public/img/load.gif"></img>');
 
 	$.ajax({
-	    url : '/pendiente/confirmacion/',
+	    url : '/nodo/add/',
 	    type : 'POST',
 	    dataType: 'json',
 	    data: {confirmacion:confirmacion},
 	    success : function(response) {
-	    	console.log(response);
 	        if (response.ok == "true") {
 	        	$('#panel_cuerpo'+tabla).html('<div class="alert alert-success">'+
 	  					'<h1>Nodo iniciado correctamente</h1>'+
@@ -171,10 +170,20 @@ function DeleteNodo(ip){
         type : 'POST',
         success : function(response) {
         	if (response.ok == "true") {
-        		$('div#'+pid).remove();
-        	}else{
-        		console.log(response.message);
-        	}
+	        	$('#cuerpo_nodos').html('<div class="alert alert-success">'+
+	  					'<h1>Nodo eliminado correctamente</h1>'+
+	  					'<h4>Scripts eliminados</h4>'+
+	  					'<p>'+JSON.stringify(response.data)+'</p>'+
+						'</div>');
+	        	$("#select_nodo option[value='"+ip+"']").remove();
+	        }else{
+	        	$('#cuerpo_nodos').html('<div class="alert alert-danger">'+
+	  					'<h1>Se ha producido un error</h1>'+
+	  					'<h4>Error</h4>'+
+	  					'<h4>Scripts eliminados</h4>'+
+	  					'<p>'+response.error+'</p>'+
+						'</div>');
+	        }
         }
     });
 }

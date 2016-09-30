@@ -58,16 +58,19 @@ var self = module.exports = {
     ssh.dispose();
   },
 
-  DeleteScript: function(ip, pid){
+  DeleteScript: function(ip, pid, callback){
     ssh.connect({
       host: ip,
       username: 'pi',
       password: 'fura4468AB'
     }).then(function() {
       ssh.exec('kill '+pid).then(function(std) {
+        callback(null, pid);
       }, function(error){
+        callback(null, pid);
       });
     }, function(error){
+      callback(null, pid);
     });
     ssh.dispose();
   },
@@ -78,7 +81,8 @@ var self = module.exports = {
       username: 'pi',
       password: 'fura4468AB'
     }).then(function() {
-      ssh.exec('sudo reboot now').then(function(    
+      ssh.exec('sudo reboot now').then(function( ){
+        callback();
       }, function(error){
         callback();
       });
