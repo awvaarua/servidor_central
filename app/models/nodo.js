@@ -3,9 +3,13 @@ var mongoose = require('mongoose');
 // define the schema for our user model
 var userSchema = mongoose.Schema({
 
-    ip : String,
-    date: Date,
-    scripts: [{pid: Number, tipo: String, frec: Number}]
+	ip: String,
+	date: Date,
+	scripts: [{
+		pid: Number,
+		tipo: String,
+		frec: Number
+	}]
 
 });
 

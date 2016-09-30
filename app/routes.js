@@ -27,59 +27,66 @@ module.exports = function(app, passport) {
     var data = require('./routes/data');
     app.post('/data/add', data.dataAdd);
 
-// =============================================================================
-//  ADMIN PANE =================================================================
-// =============================================================================
+    // =============================================================================
+    //  ADMIN PANE =================================================================
+    // =============================================================================
 
     app.get('/', md.isLoggedIn, function(req, res) {
         res.render('index.ejs', {
-            user : req.user
+            user: req.user
         });
     });
 
     app.get('/admin', md.isLoggedIn, function(req, res) {
         res.render('index.ejs', {
-            user : req.user
+            user: req.user
         });
     });
 
-// =============================================================================
-// PUBLIC IMAGES ===============================================================
-// =============================================================================    
+    // =============================================================================
+    // PUBLIC IMAGES ===============================================================
+    // =============================================================================    
     // RETURN IMAGE =========================
     var fs = require('fs');
-    app.get('/public/img/:name', function(req, res) {        
-        var img = fs.readFileSync('./public/img/'+req.params.name);
-        res.writeHead(200, {'Content-Type': 'image/gif' });
+    app.get('/public/img/:name', function(req, res) {
+        var img = fs.readFileSync('./public/img/' + req.params.name);
+        res.writeHead(200, {
+            'Content-Type': 'image/gif'
+        });
         res.end(img, 'binary');
     });
 
-// =============================================================================
-// AUTHENTICATE ================================================================
-// =============================================================================
+    // =============================================================================
+    // AUTHENTICATE ================================================================
+    // =============================================================================
 
     // LOGIN ===============================
     app.get('/login', function(req, res) {
-        res.render('login.ejs', { message: req.flash('loginMessage') });
+        res.render('login.ejs', {
+            message: req.flash('loginMessage')
+        });
     });
 
     // LOGIN SEND =================================
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/admin', // redirect to the secure profile section
-        failureRedirect : '/login', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
+        successRedirect: '/admin', // redirect to the secure profile section
+        failureRedirect: '/login', // redirect back to the signup page if there is an error
+        failureFlash: true // allow flash messages
     }));
 
     // SIGNUP =================================
-    app.get('/signup', md.isLoggedIn, md.isAdmin, function(req, res) {            
-        res.render('signup.ejs', { message: req.flash('signupMessage'), messageOk: req.flash('signupMessageOk') });
+    app.get('/signup', md.isLoggedIn, md.isAdmin, function(req, res) {
+        res.render('signup.ejs', {
+            message: req.flash('signupMessage'),
+            messageOk: req.flash('signupMessageOk')
+        });
     });
 
     // SIGNUP SEND =================================
     app.post('/signup', md.isLoggedIn, md.isAdmin, passport.authenticate('local-signup', {
-        successRedirect : '/user/success', // redirect to the secure profile section
-        failureRedirect : '/signup', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
+        successRedirect: '/user/success', // redirect to the secure profile section
+        failureRedirect: '/signup', // redirect back to the signup page if there is an error
+        failureFlash: true // allow flash messages
     }));
 
     // LOGOUT =================================
