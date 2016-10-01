@@ -26,6 +26,20 @@ var self = module.exports = {
     });
   },
 
+  GetScript: function(ip, pid, callback) {
+    Nodo.findOne({
+      ip: ip
+    }, {
+      scripts: {
+        $elemMatch: {
+          pid: pid
+        }
+      }
+    }, function(err, script) {
+      callback(err, script);
+    });
+  },
+
   DeleteAllScripts: function(ip, scripts, index, info_array, callback) {
     if (index < scripts.length) {
       self.DeleteScript(ip, scripts[index].pid, function(err, data) {
@@ -56,7 +70,7 @@ var self = module.exports = {
   },
 
   DeleteScript: function(ip, pid, callback) {
-    Ssh.DeleteScript(ip, pid, function(err, data) {
+    Ssh.StopScript(ip, pid, function(err, data) {
       if (err) {
         callback(err);
       }
@@ -125,6 +139,40 @@ var self = module.exports = {
         callback(err);
       }
       callback();
+    });
+  },
+
+  UpdateScript: function(ip, pid, frec, callback) {
+    Ssh.StopScript(ip, pid, function(err, data) {
+      if (err) {
+        callback(err, null);
+      }
+      self.GetScript(ip, pid, function(err, script) {
+        if (err) {
+          callback(err, null);
+          return;
+        }
+        Ssh.StartScript(ip, script.tipo, frec, function(err, data) {
+          if (err) {
+            callback(err, null);
+          }
+          Nodo.collection.update({
+            ip: ip,
+            'scripts.pid': parseInt(pid)
+          }, {
+            $set: {
+              'scripts.$.pid': parseInt(data.pid),
+              'scripts.$.tipo': data.tipo,
+              'scripts.$.frec': data.frec
+            }
+          }, function(err) {
+            if (err) {
+              callback(err, null);
+            }
+            callback(null, data.pid);
+          });
+        });
+      });
     });
   }
 

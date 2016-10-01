@@ -62,7 +62,7 @@ var self = module.exports = {
     ssh.dispose();
   },
 
-  DeleteScript: function(ip, pid, callback) {
+  StopScript: function(ip, pid, callback) {
     ssh.connect({
       host: ip,
       username: 'pi',

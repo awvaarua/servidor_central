@@ -193,6 +193,63 @@ function DeleteNodo(ip) {
 	});
 }
 
+function ReiniciarNodo(ip) {
+	$.ajax({
+		url: '/nodo/' + ip + '/restart',
+		type: 'POST',
+		success: function(response) {
+			if (response.ok == "true") {
+				$('#cuerpo_nodos').html('<div class="alert alert-success">' +
+					'<h1>El nodo se está reiniciando...</h1>' +
+					'</div>');
+				$("#select_nodo option[value='" + ip + "']").remove();
+			} else {
+				$('#cuerpo_nodos').html('<div class="alert alert-danger">' +
+					'<h1>Imposible reiniciar</h1>' +
+					'<p>' + response.error + '</p>' +
+					'</div>');
+			}
+		}
+	});
+}
+
+function Update(ip, pid) {
+	$('.bt' + pid).prop('disabled', true);
+	var frec = $('#frec_' + pid).val();
+	$.ajax({
+		url: '/nodo/' + ip + '/script/' + pid + '/update',
+		data: {
+			frec: frec
+		},
+		type: 'POST',
+		success: function(response) {
+			if (response.ok == "true") {
+				$('#frec_' + pid).val(frec);
+				$('#pid_' + pid).html(response.data);
+				UpdatePidHTML(pid, response.data, ip);
+				$('.bt' + response.data).prop('disabled', false);
+			} else {
+				$('.bt' + script.pid).prop('disabled', false);
+				$('#cuerpo_nodos').html('<div class="alert alert-danger">' +
+					'<h1>Se ha producido un error</h1>' +
+					'<p>' + response.error + '</p>' +
+					'</div>');
+			}
+		}
+	});
+}
+
+function UpdatePidHTML(old, newpid, ip){
+	$('#' + old).attr('id',newpid);
+	$('#pid_' + old).attr('id','pid_' + newpid);
+	$('#frec_' + old).attr('id','frec_' + newpid);
+	$('.bt'+old ).removeClass( 'bt'+old ).addClass( 'bt'+newpid);
+	$('#act_frec_' + old).attr('onclick','Update("'+ip+'","'+newpid+'");');
+	$('#act_frec_' + old).attr('id','act_frec_' + newpid);	
+	$('#act_pins_' + old).attr('id','act_pins_' + newpid);
+	$('#delete_' + old).attr('id','delete_' + newpid);
+}
+
 $(document).on('change', '#select_nodo', function() {
 	var ip = $('#select_nodo').val();
 	if (ip == 0) {

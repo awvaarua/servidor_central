@@ -140,6 +140,22 @@ module.exports = {
                 ok: "true"
             });
         });
+    },
+
+    //=== SCRIPT UPDATE BY IP AND PID ===
+    scriptUpdate: function(req, res, next) {
+        Nodos.UpdateScript(req.params.ip, req.params.pid, req.body.frec, function(err, data) {
+            if (err) {
+                res.send({
+                    ok: "false",
+                    message: err
+                });
+            }
+            res.send({
+                ok: "true",
+                data:data
+            });
+        });
     }
 
 };
