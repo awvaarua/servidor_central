@@ -19,6 +19,7 @@ var self = module.exports = {
       ssh.putFile('/Users/ssb/Google Drive/Enginyeria Informatica/4 Quart any/TFG/git/nodo/scripts/' + Tipo + '.py', '/home/pi/Documents/Scripts/' + Tipo + '.py').then(function() {
         ssh.exec('nohup python /home/pi/Documents/Scripts/' + Tipo + '.py ' + script.frec + ' > /dev/null 2>&1 & echo $!').then(function(std) {
           script.pid = std;
+          script.tipo = Tipo;
           callback(null, script);
         }, function(err) {
           callback(err);

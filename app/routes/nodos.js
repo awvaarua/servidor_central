@@ -1,6 +1,7 @@
 var Nodos = require('../../db_operations/nodos.js');
 var Pendientes = require('../../db_operations/pendientes.js');
 var Ssh = require('../../ssh_operations/sshoperations.js');
+var Constantes = require('../../app/constantes/constantes.js');
 
 module.exports = {
 
@@ -46,7 +47,8 @@ module.exports = {
                 });
             }
             res.render('nodo.ejs', {
-                nodo: nodo
+                nodo: nodo,
+                tipos: Constantes.List()
             });
         });
     },

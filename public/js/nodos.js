@@ -273,7 +273,7 @@ function UpdatePidHTML(old, newpid, ip) {
 	$('#' + old).attr('id', newpid);
 	$('#pid_' + old).attr('id', 'pid_' + newpid);
 	$('#frec_' + old).attr('id', 'frec_' + newpid);
-	$('#pins_' + old).attr('id', 'frec_' + newpid);
+	$('#pins_' + old).attr('id', 'pins_' + newpid);
 	$('.bt' + old).removeClass('bt' + old).addClass('bt' + newpid);
 	$('#act_frec_' + old).attr('onclick', 'UpdateFrec("' + ip + '","' + newpid + '");');
 	$('#act_pins_' + old).attr('onclick', 'UpdatePin("' + ip + '","' + newpid + '");');
@@ -304,12 +304,12 @@ function AddScripts(tabla, ip) {
 		},
 		success: function(response) {
 			if (response.ok == "true") {
-				$('#panel_cuerpo' + tabla).html('<div class="alert alert-success">' +
-					'<h1>Nodo iniciado correctamente</h1>' +
+				$('#tabla0').html('<div id="alert0" class="alert alert-success">' +
+					'<h1>Scripts iniciados correctamente</h1>' +
 					'<p>' + JSON.stringify(response.data) + '</p>' +
 					'</div>');
 			} else {
-				$('#panel_cuerpo' + tabla).html('<div class="alert alert-danger">' +
+				$('#tabla0').html('<div id="alert0" class="alert alert-danger">' +
 					'<h1>Se ha producido un error</h1>' +
 					'<p>' + response.message + '</p>' +
 					'</div>');

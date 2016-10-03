@@ -6,11 +6,11 @@ var self = module.exports = {
 	Tipo: function(tpo) {
 		switch (tpo) {
 			case "0":
-				return "temperatura";
+				return "Temperatura";
 			case "1":
-				return "humedad";
+				return "Humedad";
 			default:
-				return "temperatura";
+				return "Temperatura";
 		}
 	},
 
@@ -21,7 +21,17 @@ var self = module.exports = {
 			case "Humedad":
 				return Humedad;
 			default:
-				return "temperatura";
+				return Temperatura;
 		}
+	},
+
+	List: function() {
+		return [{
+			nombre: 'Temperatura',
+			valor: '0'
+		}, {
+			nombre: 'Humedad',
+			valor: '1'
+		}];
 	}
 };

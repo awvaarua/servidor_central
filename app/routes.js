@@ -26,6 +26,9 @@ module.exports = function(app, passport) {
     app.post('/nodo/:ip/script/:pid/update', md.ipConfig, nodes.scriptUpdate);
     app.post('/nodo/:ip/scripts/add', md.ipConfig, nodes.scriptsAdd);
 
+    var alertas = require('./routes/alertas');
+    app.get('/alerts/', md.isLoggedIn, alertas.alertsGet);
+
     var data = require('./routes/data');
     app.post('/data/add', data.dataAdd);
 

@@ -27,9 +27,9 @@
                         <tr id="tb<%= i %>_0">
                             <td>
                               <select class="form-control">
-                                <option value="0">Temperatura</option>
-                                <option value="1">Humedad</option>
-                                <option value="2">Luminosidad</option>
+                                <% tipos.forEach(function(tipo) { %>
+                                  <option value="<%= tipo.valor %>"><%= tipo.nombre %></option>
+                                <% }); %>
                               </select>
                             </td>
                             <td><input type="number" id="pins" class="form-control" /></td>

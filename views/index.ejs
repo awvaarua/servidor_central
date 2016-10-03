@@ -32,6 +32,12 @@
     <!-- Nodos -->
     <link href="/css/nodos.css" rel="stylesheet" type="text/css">
 
+    <!--Bootstrap theme -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
+
+    <!--Bootstrap theme -->
+    <link rel="stylesheet" href="/bootstrap/css/theme-bootstrap.css">
+
 </head>
 
 <body>
@@ -78,6 +84,17 @@
                         </li>
                         <li>
                             <a onclick="GestionNodos();" href="#"><i class="fa fa-cog fa-fw"></i> Gestión de nodos</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-exclamation-triangle fa-fw"></i> Alertas<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a onclick="AddNewAlert();" href="#"><i class="fa fa-plus fa-fw"></i> Añadir alerta</a>
+                                </li>
+                                <li>
+                                    <a onclick="GestionAlertas();" href="#"><i class="fa fa-cog fa-fw"></i> Gestión alertas</a>
+                                </li>
+                            </ul>
                         </li>
                         <% if( user.local.admin == true) {%>
                             <li>
@@ -126,6 +143,15 @@
 
     <!-- countup -->
     <script src="/countup/countup/jquery.countup.js"></script>
+
+    <!-- tablesorter plugin -->
+    <script src="/tablesorter/jquery.tablesorter.min.js"></script>
+
+    <!-- tablesorter widget file - loaded after the plugin -->
+    <script src="/tablesorter/jquery.tablesorter.widgets.js"></script>
+
+    <!-- tablesorter widget file - loaded after the plugin -->
+    <script src="/js/alertas.js"></script>
 
 </body>
 
