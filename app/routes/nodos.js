@@ -147,6 +147,22 @@ module.exports = {
         });
     },
 
+    //=== ADD SCRIPTS TO EXISTENT NODE ===
+    scriptsAdd: function(req, res, next) {
+        Nodos.AddScripts(req.params.ip, req.body.scripts, 0, [], function(err, data) {
+            if (err) {
+                res.send({
+                    ok: "false",
+                    message: err
+                });
+            }
+            res.send({
+                ok: "true",
+                data: data
+            });
+        });
+    },
+
     //=== SCRIPT UPDATE BY IP AND PID ===
     scriptUpdate: function(req, res, next) {
         Ssh.StopScript(req.params.ip, req.params.pid, function(err) {
@@ -182,7 +198,7 @@ module.exports = {
                         }
                         res.send({
                             ok: "true",
-                            data: data
+                            data: newscript
                         });
                     });
                 });

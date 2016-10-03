@@ -2,11 +2,6 @@ var path = require('path');
 var node_SSH = require('node-ssh');
 var ssh = new node_SSH();
 var Constantes = require('../app/constantes/constantes.js');
-var connection = {
-      host: ip,
-      username: 'pi',
-      password: 'fura4468AB'
-    }
 
 var self = module.exports = {
 
@@ -16,7 +11,11 @@ var self = module.exports = {
   */
   StartScript: function(ip, script, callback) {
     var Tipo = Constantes.Tipo(script.tipo);
-    ssh.connect(connection).then(function() {
+    ssh.connect({
+      host: ip,
+      username: 'pi',
+      password: 'fura4468AB'
+    }).then(function() {
       ssh.putFile('/Users/ssb/Google Drive/Enginyeria Informatica/4 Quart any/TFG/git/nodo/scripts/' + Tipo + '.py', '/home/pi/Documents/Scripts/' + Tipo + '.py').then(function() {
         ssh.exec('nohup python /home/pi/Documents/Scripts/' + Tipo + '.py ' + script.frec + ' > /dev/null 2>&1 & echo $!').then(function(std) {
           script.pid = std;
@@ -38,7 +37,11 @@ var self = module.exports = {
   */
   CheckNodeStatus: function(ip, callback) {
     var error = "";
-    ssh.connect(connection).then(function() {
+    ssh.connect({
+      host: ip,
+      username: 'pi',
+      password: 'fura4468AB'
+    }).then(function() {
       callback('online');
     }, function(err) {
       callback('offline');
@@ -51,7 +54,11 @@ var self = module.exports = {
     OUT: error, string, represents online or offline status
   */
   CheckScriptStatus: function(ip, pid, callback) {
-    ssh.connect(connection).then(function() {
+    ssh.connect({
+      host: ip,
+      username: 'pi',
+      password: 'fura4468AB'
+    }).then(function() {
       ssh.exec('kill -0 ' + pid).then(function(std) {
         callback(null, 'online');
       }, function(err) {
@@ -69,7 +76,11 @@ var self = module.exports = {
     OUT: error
   */
   StopScript: function(ip, pid, callback) {
-    ssh.connect(connection).then(function() {
+    ssh.connect({
+      host: ip,
+      username: 'pi',
+      password: 'fura4468AB'
+    }).then(function() {
       ssh.exec('kill ' + pid).then(function(std) {
         callback(null, pid);
       }, function(error) {
@@ -86,7 +97,11 @@ var self = module.exports = {
     OUT: error
   */
   RestartNode: function(ip, callback) {
-    ssh.connect(connection).then(function() {
+    ssh.connect({
+      host: ip,
+      username: 'pi',
+      password: 'fura4468AB'
+    }).then(function() {
       ssh.exec('sudo reboot now').then(function() {
         callback();
       }, function(error) {

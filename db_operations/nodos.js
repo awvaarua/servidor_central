@@ -114,7 +114,7 @@ var self = module.exports = {
   },
 
   AddScript: function(ip, script, callback) {
-    Ssh.StartScript(ip, script.tipo, script.frec, function(err, data) {
+    Ssh.StartScript(ip, script, function(err, data) {
       if (err) {
         callback(err);
       }
@@ -125,7 +125,8 @@ var self = module.exports = {
           scripts: {
             pid: parseInt(data.pid),
             tipo: data.tipo,
-            frec: data.frec
+            frec: data.frec,
+            pin:  data.pin
           }
         }
       }, function(err) {
@@ -137,7 +138,7 @@ var self = module.exports = {
     });
   },
 
-  AddNode: function(ip, callback) {
+  AddNode: function(ip, callback) {    
     Nodo.collection.insert({
       ip: ip,
       scripts: [],
@@ -164,7 +165,8 @@ var self = module.exports = {
         $set: {
           'scripts.$.pid': parseInt(newscript.pid),
           'scripts.$.tipo': newscript.tipo,
-          'scripts.$.frec': newscript.frec
+          'scripts.$.frec': newscript.frec,
+          'scripts.$.pin': newscript.pin
         }
       }, function(err) {
         if (err) {
@@ -183,7 +185,10 @@ function GetNewScript(script, change) {
       script.pid = change.valor;
       return script;
     case "frec":
-      script.frec = change.valor;
+      script.frec = change.valor;      
+      return script;
+    case "pin":
+      script.pin = change.valor;
       return script;
     default:
       return script;

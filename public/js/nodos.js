@@ -64,8 +64,7 @@ function SendConfirmation(tabla, ip) {
 	$('#tabla' + tabla).find('tbody tr').each(function(tabla) {
 		var script = new Object();
 		script.tipo = $(this).find('td select').val();
-		script.pins = $(this).find('td input#pins').val().split(',');
-		script.pins = JSON.stringify(script.pins);
+		script.pin = $(this).find('td input#pins').val();
 		script.frec = $(this).find('td input#frec').val();
 		confirmacion.scripts.push(script);
 	});
@@ -118,7 +117,6 @@ function CheckScriptsStatus(ip) {
 					url: '/nodo/' + ip + '/script/' + script.pid + '/status',
 					type: 'GET',
 					success: function(data) {
-						console.log(data.status);
 						if (data.status == "online") {
 							$('.bt' + script.pid).prop('disabled', false);
 							$('#load_estado_' + script.pid).html('<p><img src="/img/online.png"/> Ejecutándose</p>');
@@ -212,7 +210,7 @@ function ReiniciarNodo(ip) {
 	});
 }
 
-function Update(ip, pid) {
+function UpdateFrec(ip, pid) {
 	$('.bt' + pid).prop('disabled', true);
 	var frec = $('#frec_' + pid).val();
 	$.ajax({
@@ -227,9 +225,39 @@ function Update(ip, pid) {
 		success: function(response) {
 			if (response.ok == "true") {
 				$('#frec_' + pid).val(frec);
-				$('#pid_' + pid).html(response.data);
-				UpdatePidHTML(pid, response.data, ip);
-				$('.bt' + response.data).prop('disabled', false);
+				$('#pid_' + pid).html(response.data.pid);
+				UpdatePidHTML(pid, response.data.pid, ip);
+				$('.bt' + response.data.pid).prop('disabled', false);
+			} else {
+				$('.bt' + pid).prop('disabled', false);
+				$('#cuerpo_nodos').html('<div class="alert alert-danger">' +
+					'<h1>Se ha producido un error</h1>' +
+					'<p>' + response.error + '</p>' +
+					'</div>');
+			}
+		}
+	});
+}
+
+function UpdatePin(ip, pid) {
+	$('.bt' + pid).prop('disabled', true);
+	var pin = $('#pins_' + pid).val();
+	$.ajax({
+		url: '/nodo/' + ip + '/script/' + pid + '/update',
+		data: {
+			cambio: {
+				tipo: "pin",
+				valor: pin
+			}
+		},
+		type: 'POST',
+		success: function(response) {
+			console.log(response);
+			if (response.ok == "true") {
+				$('#pins_' + pid).val(pin);
+				$('#pid_' + pid).html(response.data.pid);
+				UpdatePidHTML(pid, response.data.pid, ip);
+				$('.bt' + response.data.pid).prop('disabled', false);
 			} else {
 				$('.bt' + script.pid).prop('disabled', false);
 				$('#cuerpo_nodos').html('<div class="alert alert-danger">' +
@@ -245,11 +273,50 @@ function UpdatePidHTML(old, newpid, ip) {
 	$('#' + old).attr('id', newpid);
 	$('#pid_' + old).attr('id', 'pid_' + newpid);
 	$('#frec_' + old).attr('id', 'frec_' + newpid);
+	$('#pins_' + old).attr('id', 'frec_' + newpid);
 	$('.bt' + old).removeClass('bt' + old).addClass('bt' + newpid);
-	$('#act_frec_' + old).attr('onclick', 'Update("' + ip + '","' + newpid + '");');
+	$('#act_frec_' + old).attr('onclick', 'UpdateFrec("' + ip + '","' + newpid + '");');
+	$('#act_pins_' + old).attr('onclick', 'UpdatePin("' + ip + '","' + newpid + '");');
+	$('#delete_' + old).attr('onclick', 'DeleteScriptNodo("' + ip + '","' + newpid + '");');
 	$('#act_frec_' + old).attr('id', 'act_frec_' + newpid);
 	$('#act_pins_' + old).attr('id', 'act_pins_' + newpid);
 	$('#delete_' + old).attr('id', 'delete_' + newpid);
+}
+
+function AddScripts(tabla, ip) {
+	scripts = [];
+	$('#tabla' + tabla).find('tbody tr').each(function(tabla) {
+		var script = new Object();
+		script.tipo = $(this).find('td select').val();
+		script.pin = $(this).find('td input#pins').val();
+		script.frec = $(this).find('td input#frec').val();
+		scripts.push(script);
+	});
+
+	$('#panel_cuerpo' + tabla).html('<img class="loading" src="http://' + window.location.host + '/public/img/load.gif"></img>');
+
+	$.ajax({
+		url: '/nodo/'+ip+'/scripts/add/',
+		type: 'POST',
+		dataType: 'json',
+		data: {
+			scripts: scripts
+		},
+		success: function(response) {
+			if (response.ok == "true") {
+				$('#panel_cuerpo' + tabla).html('<div class="alert alert-success">' +
+					'<h1>Nodo iniciado correctamente</h1>' +
+					'<p>' + JSON.stringify(response.data) + '</p>' +
+					'</div>');
+			} else {
+				$('#panel_cuerpo' + tabla).html('<div class="alert alert-danger">' +
+					'<h1>Se ha producido un error</h1>' +
+					'<p>' + response.message + '</p>' +
+					'</div>');
+			}
+		}
+	});
+	return false;
 }
 
 $(document).on('change', '#select_nodo', function() {

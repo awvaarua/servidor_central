@@ -45,31 +45,67 @@
                                 <div class="col-md-2 vcenter">
                                     <h5><strong>Frecuencia</strong></h5>
                                     <div class="input-group">
-                                      <input id="frec_<%= script.pid %>" class="form-control" type="number" name="frec" value="<%= script.frec %>">
+                                      <input id="frec_<%= script.pid %>"  class="form-control" type="number" name="frec" value="<%= script.frec %>">
                                       <span class="input-group-btn">
-                                        <button id="act_frec_<%= script.pid %>" type="button" onclick="Update('<%= nodo.ip %>', '<%= script.pid %>');" class="btn btn-info bt<%= script.pid %>" disabled="true">Actualizar</button>
+                                        <button id="act_frec_<%= script.pid %>" type="button" onclick="UpdateFrec('<%= nodo.ip %>', '<%= script.pid %>');" class="btn btn-info bt<%= script.pid %>" disabled="true">Actualizar</button>
                                       </span>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-md-offset-1 vcenter">
-                                    <h5><strong>Pins</strong></h5>
+                                    <h5><strong>Pin</strong></h5>
                                     <div class="input-group">
-                                      <input class="form-control" type="text" name="frec" value="">
+                                      <input id="pins_<%= script.pid %>" class="form-control" type="number" name="pins" value="<%= script.pin %>">
                                       <span class="input-group-btn">
-                                        <button id="act_pins_<%= script.pid %>" type="button" class="btn btn-info bt<%= script.pid %>" disabled="true">Actualizar</button>
+                                        <button id="act_pins_<%= script.pid %>" type="button" class="btn btn-info bt<%= script.pid %>" onclick="UpdatePin('<%= nodo.ip %>', '<%= script.pid %>');" disabled="true">Actualizar</button>
                                       </span>
                                     </div>
                                 </div>
                                 <div class="col-md-2 col-md-offset-2 vcenter">
                                     <h5><strong>Acciones</strong></h5>
-                                    <button id="delete_<%= script.pid %>" type="button" class="btn btn-danger bt<%= script.pid %>" disabled="true" onclick='DeleteScriptNodo("<%= nodo.ip %>", "<%= script.pid %>");'>Eliminar</button>
+                                    <button id="delete_<%= script.pid %>" type="button" class="btn btn-danger bt<%= script.pid %>" onclick='DeleteScriptNodo("<%= nodo.ip %>", "<%= script.pid %>");'>Eliminar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 <% }); %>
             </div>
-        </div> 
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Añadir scripts</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">                
+                <table class="table table-bordered table-hover" id="tabla0">
+                    <thead>
+                        <tr>
+                            <th>Tipo sensor</th>
+                            <th>Pins</th>
+                            <th>Frecuencia</th>
+                            <th style="width:10px"><button id="addBtn_0" onclick="AddRow(0);" type="button" class="btn btn-success glyphicon-plus addBtn"></button></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="tb0_0">
+                            <td>
+                              <select class="form-control">
+                                <option value="0">Temperatura</option>
+                                <option value="1">Humedad</option>
+                                <option value="2">Luminosidad</option>
+                              </select>
+                            </td>
+                            <td><input type="number" id="pins" class="form-control" /></td>
+                            <td><input type="number" id="frec" class="form-control" /></td>
+                            <td>
+                            <button id="addBtnRemove_0" onclick="DeleteRow(0,0);" type="button" class="btn btn-danger glyphicon-minus addBtnRemove"></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>        <button type="button" onclick="AddScripts(0,'<%= nodo.ip %>');" class="btn btn-success btn-md pull-right">
+            <span class="glyphicon glyphicon-play"></span> Iniciar
+        </button>
      </div>
     <!-- /.panel-body -->
 </div>

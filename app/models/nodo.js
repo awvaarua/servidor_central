@@ -8,7 +8,8 @@ var userSchema = mongoose.Schema({
 	scripts: [{
 		pid: Number,
 		tipo: String,
-		frec: Number
+		frec: Number,
+		pin: Number
 	}]
 
 });

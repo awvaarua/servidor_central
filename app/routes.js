@@ -24,6 +24,7 @@ module.exports = function(app, passport) {
     app.get('/nodo/:ip/script/:pid/status', md.isLoggedIn, nodes.scriptStatus);
     app.post('/nodo/:ip/script/:pid/delete', md.isLoggedIn, nodes.scriptDelete);
     app.post('/nodo/:ip/script/:pid/update', md.ipConfig, nodes.scriptUpdate);
+    app.post('/nodo/:ip/scripts/add', md.ipConfig, nodes.scriptsAdd);
 
     var data = require('./routes/data');
     app.post('/data/add', data.dataAdd);
