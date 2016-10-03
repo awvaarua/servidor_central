@@ -35,8 +35,16 @@ var self = module.exports = {
           pid: pid
         }
       }
-    }, function(err, script) {
-      callback(err, script);
+    }, function(err, nodo) {
+      if (err) {
+        callback(err, null);
+        return;
+      }
+      if (nodo == null) {
+        callback("not found", null);
+      }
+      callback(null, nodo.scripts[0]);
+
     });
   },
 
@@ -142,38 +150,42 @@ var self = module.exports = {
     });
   },
 
-  UpdateScript: function(ip, pid, frec, callback) {
-    Ssh.StopScript(ip, pid, function(err, data) {
+  UpdateScript: function(ip, pid, cambio, callback) {
+    self.GetScript(ip, pid, function(err, script) {
       if (err) {
         callback(err, null);
+        return;
       }
-      self.GetScript(ip, pid, function(err, script) {
+      var newscript = GetNewScript(script, cambio);
+      Nodo.collection.update({
+        ip: ip,
+        'scripts.pid': parseInt(pid)
+      }, {
+        $set: {
+          'scripts.$.pid': parseInt(newscript.pid),
+          'scripts.$.tipo': newscript.tipo,
+          'scripts.$.frec': newscript.frec
+        }
+      }, function(err) {
         if (err) {
           callback(err, null);
-          return;
         }
-        Ssh.StartScript(ip, script.tipo, frec, function(err, data) {
-          if (err) {
-            callback(err, null);
-          }
-          Nodo.collection.update({
-            ip: ip,
-            'scripts.pid': parseInt(pid)
-          }, {
-            $set: {
-              'scripts.$.pid': parseInt(data.pid),
-              'scripts.$.tipo': data.tipo,
-              'scripts.$.frec': data.frec
-            }
-          }, function(err) {
-            if (err) {
-              callback(err, null);
-            }
-            callback(null, data.pid);
-          });
-        });
+        callback(null, newscript);
       });
     });
   }
 
 };
+
+function GetNewScript(script, change) {
+  switch (change.tipo) {
+    case "pid":
+      script.pid = change.valor;
+      return script;
+    case "frec":
+      script.frec = change.valor;
+      return script;
+    default:
+      return script;
+  }
+}

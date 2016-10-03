@@ -202,7 +202,6 @@ function ReiniciarNodo(ip) {
 				$('#cuerpo_nodos').html('<div class="alert alert-success">' +
 					'<h1>El nodo se está reiniciando...</h1>' +
 					'</div>');
-				$("#select_nodo option[value='" + ip + "']").remove();
 			} else {
 				$('#cuerpo_nodos').html('<div class="alert alert-danger">' +
 					'<h1>Imposible reiniciar</h1>' +
@@ -219,7 +218,10 @@ function Update(ip, pid) {
 	$.ajax({
 		url: '/nodo/' + ip + '/script/' + pid + '/update',
 		data: {
-			frec: frec
+			cambio: {
+				tipo: "frec",
+				valor: frec
+			}
 		},
 		type: 'POST',
 		success: function(response) {
@@ -239,15 +241,15 @@ function Update(ip, pid) {
 	});
 }
 
-function UpdatePidHTML(old, newpid, ip){
-	$('#' + old).attr('id',newpid);
-	$('#pid_' + old).attr('id','pid_' + newpid);
-	$('#frec_' + old).attr('id','frec_' + newpid);
-	$('.bt'+old ).removeClass( 'bt'+old ).addClass( 'bt'+newpid);
-	$('#act_frec_' + old).attr('onclick','Update("'+ip+'","'+newpid+'");');
-	$('#act_frec_' + old).attr('id','act_frec_' + newpid);	
-	$('#act_pins_' + old).attr('id','act_pins_' + newpid);
-	$('#delete_' + old).attr('id','delete_' + newpid);
+function UpdatePidHTML(old, newpid, ip) {
+	$('#' + old).attr('id', newpid);
+	$('#pid_' + old).attr('id', 'pid_' + newpid);
+	$('#frec_' + old).attr('id', 'frec_' + newpid);
+	$('.bt' + old).removeClass('bt' + old).addClass('bt' + newpid);
+	$('#act_frec_' + old).attr('onclick', 'Update("' + ip + '","' + newpid + '");');
+	$('#act_frec_' + old).attr('id', 'act_frec_' + newpid);
+	$('#act_pins_' + old).attr('id', 'act_pins_' + newpid);
+	$('#delete_' + old).attr('id', 'delete_' + newpid);
 }
 
 $(document).on('change', '#select_nodo', function() {

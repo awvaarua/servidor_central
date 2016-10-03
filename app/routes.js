@@ -8,8 +8,8 @@ module.exports = function(app, passport) {
     app.post('/user/unlink', md.isLoggedIn, md.isAdmin, users.userDelete);
 
     var pendientes = require('./routes/pendientes');
-    app.post('/pendiente/add', md.isLoggedIn, pendientes.pendienteAdd);
-    app.get('/pendiente/:ip', md.isLoggedIn, pendientes.pendiente);
+    app.post('/pendiente/add/:ip', md.ipConfig, pendientes.pendienteAdd);
+    app.get('/pendiente/:ip', md.ipConfig, pendientes.pendiente);
     app.post('/pendiente/remove', md.isLoggedIn, pendientes.pendienteDelete);
     app.get('/pendientes/', md.isLoggedIn, pendientes.pendientes);
 
@@ -20,10 +20,10 @@ module.exports = function(app, passport) {
     app.get('/nodo/:ip/status', md.isLoggedIn, nodes.nodeStatus);
     app.post('/nodo/:ip/delete', md.isLoggedIn, nodes.nodeDelete);
     app.post('/nodo/:ip/restart', md.isLoggedIn, nodes.nodeRestart);
-    app.get('/nodo/:ip/scripts', md.isLoggedIn, nodes.nodeScripts);
+    app.get('/nodo/:ip/scripts', md.ipConfig, nodes.nodeScripts);
     app.get('/nodo/:ip/script/:pid/status', md.isLoggedIn, nodes.scriptStatus);
     app.post('/nodo/:ip/script/:pid/delete', md.isLoggedIn, nodes.scriptDelete);
-    app.post('/nodo/:ip/script/:pid/update', md.isLoggedIn, nodes.scriptUpdate);
+    app.post('/nodo/:ip/script/:pid/update', md.ipConfig, nodes.scriptUpdate);
 
     var data = require('./routes/data');
     app.post('/data/add', data.dataAdd);

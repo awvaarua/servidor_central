@@ -40,6 +40,11 @@ module.exports = {
     node: function(req, res, next) {
         Nodos.GetNodo(req.params.ip, function(err, nodo) {
             if (err) {}
+            if (nodo == null) {
+                res.render('nodo_notfound.ejs', {
+                    nodo: nodo
+                });
+            }
             res.render('nodo.ejs', {
                 nodo: nodo
             });
@@ -144,16 +149,43 @@ module.exports = {
 
     //=== SCRIPT UPDATE BY IP AND PID ===
     scriptUpdate: function(req, res, next) {
-        Nodos.UpdateScript(req.params.ip, req.params.pid, req.body.frec, function(err, data) {
+        Ssh.StopScript(req.params.ip, req.params.pid, function(err) {
             if (err) {
                 res.send({
                     ok: "false",
                     message: err
                 });
             }
-            res.send({
-                ok: "true",
-                data:data
+            Nodos.UpdateScript(req.params.ip, req.params.pid, req.body.cambio, function(err, script) {
+                if (err) {
+                    res.send({
+                        ok: "false",
+                        message: err
+                    });
+                }
+                Ssh.StartScript(req.params.ip, script, function(err, newscript) {
+                    if (err) {
+                        res.send({
+                            ok: "false",
+                            message: err
+                        });
+                    }
+                    Nodos.UpdateScript(req.params.ip, req.params.pid, {
+                        tipo: "pid",
+                        valor: newscript.pid
+                    }, function(err, script) {
+                        if (err) {
+                            res.send({
+                                ok: "false",
+                                message: err
+                            });
+                        }
+                        res.send({
+                            ok: "true",
+                            data: data
+                        });
+                    });
+                });
             });
         });
     }
