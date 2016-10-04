@@ -1,7 +1,7 @@
 var path = require('path');
 var node_SSH = require('node-ssh');
 var ssh = new node_SSH();
-var Constantes = require('../app/constantes/constantes.js');
+var Constantes = require('../constantes/constantes.js');
 
 var self = module.exports = {
 
@@ -22,13 +22,13 @@ var self = module.exports = {
           script.tipo = Tipo;
           callback(null, script);
         }, function(err) {
-          callback(err);
+          callback(err, null);
         });
       }, function(err) {
-        callback(err);
+        callback(err, null);
       });
     }, function(err) {
-      callback(err);
+      callback(err, null);
     });
   },
 

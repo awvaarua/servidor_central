@@ -28,6 +28,8 @@ module.exports = function(app, passport) {
 
     var alertas = require('./routes/alertas');
     app.get('/alerts/', md.isLoggedIn, alertas.alertsGet);
+    app.get('/alerta/add', md.isLoggedIn, alertas.alertaAddView);
+    app.post('/alerta/add', md.isLoggedIn, alertas.alertAdd);
 
     var data = require('./routes/data');
     app.post('/data/add', data.dataAdd);

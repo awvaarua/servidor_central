@@ -1,11 +1,11 @@
-var Pendientes = require('../../db_operations/pendientes.js');
-var Constantes = require('../../app/constantes/constantes.js');
+var Pendientes = require('../operations/pendientes.js');
+var Constantes = require('../constantes/constantes.js');
 
 module.exports = {
 
     //=== ADD NEW  ===
     pendienteAdd: function(req, res, next) {
-        Pendientes.InsertPendiente(req.body.ip, function(err) {
+        Pendientes.InsertPendiente(req.params.ip, function(err) {
             if (err) {
                 res.send({
                     ok: "false",

@@ -85,9 +85,10 @@ function SendConfirmation(tabla, ip) {
 					'<p>' + JSON.stringify(response.data) + '</p>' +
 					'</div>');
 			} else {
+				console.log(response.error);
 				$('#panel_cuerpo' + tabla).html('<div class="alert alert-danger">' +
 					'<h1>Se ha producido un error</h1>' +
-					'<p>' + response.message + '</p>' +
+					'<p>' + response.error.message + '</p>' +
 					'</div>');
 			}
 		}

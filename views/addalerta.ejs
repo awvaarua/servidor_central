@@ -1,0 +1,69 @@
+<% if(messageOk.length > 0){ %>
+    <div class="general container">
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class="alert alert-success">
+              Alerta registrada correctamente
+            </div>
+        </div>
+    </div>
+ <% } else{ %>  
+   <div class="general container">
+        <div class="col-sm-6 col-sm-offset-3">
+
+            <h1><span class="fa fa-sign-in"></span> Añadir alerta</h1>
+
+            <% if (message.length > 0) { %>
+                <div class="alert alert-danger"><%= message %></div>
+            <% } %>
+
+            <!-- LOGIN FORM -->
+            <form id="newalert" action="/signup" name="nueva_alerta">
+                <div class="form-group">
+                    <label>IP</label>
+                    <input type="text" class="form-control" name="ip">
+                </div>
+                <div class="form-group">
+                    <label for="sel_sensor">Tipo sensor</label>
+                    <select class="form-control" id="sel_sensor" name="tipo_sensor">
+                        <option value="0">Temperatura</option>
+                        <option value="1">Humedad</option>
+                    </select>
+                </div>
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label for="sel_condicion">Seleccionar condición</label>
+                        <select class="form-control" id="sel_condicion" name="condicion">
+                            <option value="0">></option>
+                            <option value="1"><</option>
+                            <option value="2"><=</option>
+                            <option value="3">>=</option>
+                            <option value="4">=</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="valor">Valor</label>
+                        <input type="number" class="form-control" name="valor">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-warning btn-lg">Registrar usuario</button>
+            </form>
+
+            <script type="text/javascript">
+            $("#newuser").submit(function(event) {
+                /* stop form from submitting normally */
+                event.preventDefault();
+
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        $('#page-wrapper').html(data);
+                    }
+                }) 
+            });
+        </script>
+
+        </div>
+    </div>
+<% } %>

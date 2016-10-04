@@ -1,7 +1,7 @@
-var Nodos = require('../../db_operations/nodos.js');
-var Pendientes = require('../../db_operations/pendientes.js');
-var Ssh = require('../../ssh_operations/sshoperations.js');
-var Constantes = require('../../app/constantes/constantes.js');
+var Nodos = require('../operations/nodos.js');
+var Pendientes = require('../operations/pendientes.js');
+var Ssh = require('../ssh_operations/sshoperations.js');
+var Constantes = require('../constantes/constantes.js');
 
 module.exports = {
 
@@ -13,6 +13,7 @@ module.exports = {
                     ok: "false",
                     error: err
                 });
+                return;
             }
             Nodos.AddScripts(req.body.confirmacion.ip, req.body.confirmacion.scripts, 0, [], function(err, data) {
                 if (err) {
@@ -20,6 +21,7 @@ module.exports = {
                         ok: "false",
                         error: err
                     });
+                    return;
                 }
                 Pendientes.DeletePendiente(req.body.confirmacion.ip, function(err) {
                     if (err) {
@@ -81,6 +83,7 @@ module.exports = {
                     error: err,
                     data: data
                 });
+                return;
             }
             res.send({
                 ok: "true",
@@ -97,6 +100,7 @@ module.exports = {
                     ok: "false",
                     error: err
                 });
+                return;
             }
             res.send({
                 ok: "true"
@@ -111,6 +115,7 @@ module.exports = {
                 res.send({
                     ok: "false"
                 });
+                return;
             }
             res.send({
                 ok: "true",
@@ -127,6 +132,7 @@ module.exports = {
                     status: "offline",
                     error: error
                 });
+                return;
             }
             res.send({
                 status: status
@@ -142,6 +148,7 @@ module.exports = {
                     ok: "false",
                     message: err
                 });
+                return;
             }
             res.send({
                 ok: "true"
@@ -155,8 +162,9 @@ module.exports = {
             if (err) {
                 res.send({
                     ok: "false",
-                    message: err
+                    message: err.message
                 });
+                return;
             }
             res.send({
                 ok: "true",

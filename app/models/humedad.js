@@ -6,6 +6,7 @@ var userSchema = mongoose.Schema({
 	ip: String,
 	date: Date,
 	val: Number
+	
 });
 
 module.exports = mongoose.model('Humedad', userSchema);

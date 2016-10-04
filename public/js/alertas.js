@@ -12,6 +12,17 @@ function GestionAlertas() {
   return false;
 }
 
+function AddNewAlert() {
+  $.ajax({
+    url: '/alerta/add',
+    type: 'GET',
+    success: function(response) {
+      $('#page-wrapper').html(response);
+    }
+  });
+  return false;
+}
+
 function Init(){
 	$(function() {
 

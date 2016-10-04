@@ -1,4 +1,4 @@
-var Constantes = require('../app/constantes/constantes.js');
+var Constantes = require('../constantes/constantes.js');
 
 var self = module.exports = {
 

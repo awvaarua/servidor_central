@@ -1,4 +1,4 @@
-var Pendiente = require('../app/models/pendiente');
+var Pendiente = require('../models/pendiente');
 
 var self = module.exports = {
 

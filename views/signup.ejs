@@ -36,22 +36,21 @@
                 <button type="submit" class="btn btn-warning btn-lg">Registrar usuario</button>
             </form>
 
-            <script src="/jquery/jquery.min.js"></script>
             <script type="text/javascript">
-            $("#newuser").submit(function(event) {
-                /* stop form from submitting normally */
-                event.preventDefault();
+                $("#newuser").submit(function(event) {
+                    /* stop form from submitting normally */
+                    event.preventDefault();
 
-                $.ajax({
-                    type: 'POST',
-                    url: $(this).attr('action'),
-                    data: $(this).serialize(),
-                    success: function(data) {
-                        $('#page-wrapper').html(data);
-                    }
-                }) 
-            });
-        </script>
+                    $.ajax({
+                        type: 'POST',
+                        url: $(this).attr('action'),
+                        data: $(this).serialize(),
+                        success: function(data) {
+                            $('#page-wrapper').html(data);
+                        }
+                    }) 
+                });
+            </script>
 
         </div>
     </div>

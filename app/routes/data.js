@@ -1,4 +1,4 @@
-var Data = require('../../db_operations/data.js');
+var Data = require('../operations/data.js');
 
 module.exports = {
 

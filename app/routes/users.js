@@ -1,4 +1,4 @@
-var Users = require('../../db_operations/users.js');
+var Users = require('../operations/users.js');
 
 module.exports = {
 
