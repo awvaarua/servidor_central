@@ -5,13 +5,20 @@
         <th>IP</th>
         <th>Tipo Sensor</th>
         <th>Condición</th>
+        <th>Valor</th>
         <th>Mensjae</th>
-        <th>Acción</th>
+        <th>Frecuencia</th>
         <th>Contactos</th>
         <th>Acciones</th>
     </thead>
     <tbody>
-      <tr><td>192.168.1.168</td><td>Temperatura</td><td>valor < 3</td><td>La temperatura que registra :ip es de :valor ºC</td><td>Enviar telegram</td><td>Contactos</td><td>Eliminar</td></tr>
+      <% alertas.forEach(function(alerta, i) { %>
+        <tr>
+          <td><%= alerta.ip %></td><td><%= alerta.tipo %></td><td><%= alerta.condicion %></td><td><%= alerta.valor %></td><td><%= alerta.mensaje %></td><td><%= alerta.frecuencia %><td><%= alerta.usuarios %></td>
+          <td><button type="button" class="btn btn-danger btn-md" onclick="DeleteNodoPendiente('192.168.1.129',0);">
+            <span class="glyphicon glyphicon-trash"></span> Eliminar</button></td>
+          </tr>
+      <% }); %>
     </tbody>
   </table>
 </div>

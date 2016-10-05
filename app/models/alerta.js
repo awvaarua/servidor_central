@@ -3,11 +3,13 @@ var mongoose = require('mongoose');
 var alertSchema = mongoose.Schema({
 
     ip: String,
-    tipo_sensor: Number,
-    descripcion: String,
-    tipo_accion: Number,
+    tipo: Number,
+    condicion: Number,
+    valor: Number,
     mensaje: String,
-    last_event: Date
+    last_event: Date,
+    usuarios: [],
+    frecuencia: Number
 
 });
 

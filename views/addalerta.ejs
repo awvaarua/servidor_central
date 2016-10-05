@@ -45,7 +45,11 @@
                 </div>
                 <div class="form-group">
                     <label for="sel_sensor">Valor</label>
-                    <input id="alerta_valor" type="text" class="form-control" name="valor" placeholder="Valor con el que se comparará">
+                    <input id="alerta_valor" type="number" class="form-control" name="valor" placeholder="Valor con el que se comparará">
+                </div>
+                <div class="form-group">
+                    <label for="sel_frecuencia">Frecuencia</label>
+                    <input id="alerta_frecuencia" type="number" class="form-control" name="valor" placeholder="Tiempo que debe pasar para que se vuelva a enviar una alerta">
                 </div>
                 <div class="form-group" id="fields">
                     <label class="control-label" for="field1">Usuarios a los que enviar el mensaje</label>
@@ -75,6 +79,7 @@
                 alerta.mensaje = $('#alerta_mensaje').val();
                 alerta.condicion = $('#alerta_condicion').val();
                 alerta.valor = $('#alerta_valor').val();
+                alerta.frecuencia = $('#alerta_frecuencia').val();
                 var usuarios = [];
                 $('#userlist li').each(function(idx, li){
                     usuarios.push($(li).text());
