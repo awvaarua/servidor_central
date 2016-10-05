@@ -26,7 +26,6 @@ function AddNewAlert() {
 var usuarios = 0;
 function AddUserToList(){
 	var nombre = $('#user_input').val();
-	$('#user_input').val("");
 	if(nombre.charAt(0) != '@'){
 		nombre = '@'+nombre;
 	}

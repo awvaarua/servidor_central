@@ -8,9 +8,11 @@ module.exports = {
 	},
 
 	alertAdd: function (req, res, next) {
-		Alertas.AddAlerta(req.body.alerta, function (err, data) {
-
-		});
+		console.log(req.body);
+		res.render('addalerta.ejs', {
+            message: req.flash('signupMessage'),
+            messageOk: "Alerta añadida correctamente"
+        });
 	},
 
 	alertaAddView: function (req, res, next) {

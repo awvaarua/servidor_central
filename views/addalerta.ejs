@@ -17,46 +17,73 @@
             <% } %>
 
             <!-- LOGIN FORM -->
-            <form id="newalert" action="/signup" name="nueva_alerta">
+            <form id="newalert" action="/alerta/add" name="nueva_alerta">
                 <div class="form-group">
                     <label>IP</label>
-                    <input type="text" class="form-control" name="ip">
+                    <input id="alerta_ip" type="text" class="form-control" name="ip">
                 </div>
                 <div class="form-group">
                     <label for="sel_sensor">Tipo sensor</label>
-                    <select class="form-control" id="sel_sensor" name="tipo_sensor">
+                    <select id="alerta_tipo" class="form-control" id="sel_sensor" name="tipo_sensor">
                         <option value="0">Temperatura</option>
                         <option value="1">Humedad</option>
                     </select>
                 </div>
-                <div class="form-inline">
-                    <div class="form-group">
-                        <label for="sel_condicion">Seleccionar condición</label>
-                        <select class="form-control" id="sel_condicion" name="condicion">
-                            <option value="0">></option>
-                            <option value="1"><</option>
-                            <option value="2"><=</option>
-                            <option value="3">>=</option>
-                            <option value="4">=</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="valor">Valor</label>
-                        <input type="number" class="form-control" name="valor">
-                    </div>
+                <div class="form-group">
+                    <label>Mensaje</label>
+                    <input id="alerta_mensaje" type="text" class="form-control" name="descripcion" placeholder='":ip" se substituirá por la ip del nodo. ":valor" se substituirá por el valor recibido'>
                 </div>
-                <button type="submit" class="btn btn-warning btn-lg">Registrar usuario</button>
+                <div class="form-group">
+                    <label for="sel_sensor">Condición</label>
+                    <select id="alerta_condicion" class="form-control" id="sel_sensor" name="tipo_condicion">
+                        <option value="0"><</option>
+                        <option value="1"><=</option>
+                        <option value="2">></option>
+                        <option value="3">>=</option>
+                        <option value="4">=</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sel_sensor">Valor</label>
+                    <input id="alerta_valor" type="text" class="form-control" name="valor" placeholder="Valor con el que se comparará">
+                </div>
+                <div class="form-group" id="fields">
+                    <label class="control-label" for="field1">Usuarios a los que enviar el mensaje</label>
+                    <div class="controls">
+                        <div class="entry input-group col-xs-6">
+                            <input id="user_input" class="form-control" name="fields" type="text" placeholder="@usuario" />
+                            <span class="input-group-btn">
+                                <button id="add_user_alert" onclick="AddUserToList();" class="btn btn-success btn-add" type="button">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <ul id="userlist" class="list-group">                        
+                    </ul>
+                </div>
+                <button type="submit" class="btn btn-warning btn-lg">Añadir alerta</button>
             </form>
 
             <script type="text/javascript">
-            $("#newuser").submit(function(event) {
+            $("#newalert").submit(function(event) {
                 /* stop form from submitting normally */
                 event.preventDefault();
-
+                var alerta = new Object();
+                alerta.ip = $('#alerta_ip').val();
+                alerta.tipo = $('#alerta_tipo').val();
+                alerta.mensaje = $('#alerta_mensaje').val();
+                alerta.condicion = $('#alerta_condicion').val();
+                alerta.valor = $('#alerta_valor').val();
+                var usuarios = [];
+                $('#userlist li').each(function(idx, li){
+                    usuarios.push($(li).text());
+                });
+                alerta.usuarios = usuarios;
                 $.ajax({
                     type: 'POST',
                     url: $(this).attr('action'),
-                    data: $(this).serialize(),
+                    data: alerta,
                     success: function(data) {
                         $('#page-wrapper').html(data);
                     }

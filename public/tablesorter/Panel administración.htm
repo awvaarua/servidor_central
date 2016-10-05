@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<!-- saved from url=(0028)http://localhost:8080/admin# -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Panel administración</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="./Panel administración_files/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="./Panel administración_files/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="./Panel administración_files/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="./Panel administración_files/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="./Panel administración_files/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Usuarios -->
+    <link href="./Panel administración_files/usuarios.css" rel="stylesheet" type="text/css">
+
+    <!-- Nodos -->
+    <link href="./Panel administración_files/nodos.css" rel="stylesheet" type="text/css">
+
+    <!-- Alertas -->
+    <link href="./Panel administración_files/alerta.css" rel="stylesheet" type="text/css">
+
+    <!--Bootstrap theme -->
+    <link rel="stylesheet" href="./Panel administración_files/bootstrap-theme.min.css">
+
+    <!--Bootstrap theme -->
+    <link rel="stylesheet" href="./Panel administración_files/theme-bootstrap.css">
+
+</head>
+
+<body>
+
+    <div id="wrapper" class="in">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://localhost:8080/index.html">Home</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right in">
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle active" data-toggle="dropdown" href="http://localhost:8080/admin#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user in">
+                        <li><a href="http://localhost:8080/admin#" class="active"><i class="fa fa-user fa-fw"></i>sanso.barcelo94@gmail.com</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="http://localhost:8080/logout"><i class="fa fa-sign-out fa-fw"></i>Cerrar sesión</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar in" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav in" id="side-menu">
+                        <li>
+                            <a onclick="NodosPendientes();" href="http://localhost:8080/admin#" class="active"><i class="fa fa-pause fa-fw"></i> Nodos pendientes</a>
+                        </li>
+                        <li>
+                            <a onclick="GestionNodos();" href="http://localhost:8080/admin#" class="active"><i class="fa fa-cog fa-fw"></i> Gestión de nodos</a>
+                        </li>
+                        <li>
+                            <a href="http://localhost:8080/admin#" class="active"><i class="fa fa-exclamation-triangle fa-fw"></i> Alertas<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse in">
+                                <li>
+                                    <a onclick="AddNewAlert();" href="http://localhost:8080/admin#" class="active"><i class="fa fa-plus fa-fw"></i> Añadir alerta</a>
+                                </li>
+                                <li>
+                                    <a onclick="GestionAlertas();" href="http://localhost:8080/admin#" class="active"><i class="fa fa-cog fa-fw"></i> Gestión alertas</a>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                            <li>
+                                <a href="http://localhost:8080/admin#" class="active"><i class="fa fa-user fa-fw"></i> Usuarios<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level collapse in">
+                                    <li>
+                                        <a onclick="AddNewUser();" href="http://localhost:8080/admin#" class="active"><i class="fa fa-user-plus fa-fw"></i> Añadir usuario</a>
+                                    </li>
+                                    <li>
+                                        <a onclick="GestionUsuarios();" href="http://localhost:8080/admin#" class="active"><i class="fa fa-user fa-fw"></i> Gestión usuarios</a>
+                                    </li>
+                                </ul>
+                                <!-- /.nav-second-level -->
+                            </li>
+                         
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper" style="min-height: 636px;">  
+   <div class="general container">
+        <div class="col-sm-6 col-sm-offset-3">
+
+            <h1><span class="fa fa-sign-in"></span> Añadir alerta</h1>
+
+            
+
+            <!-- LOGIN FORM -->
+            <form id="newalert" action="http://localhost:8080/signup" name="nueva_alerta">
+                <div class="form-group">
+                    <label>IP</label>
+                    <input type="text" class="form-control" name="ip">
+                </div>
+                <div class="form-group">
+                    <label for="sel_sensor">Tipo sensor</label>
+                    <select class="form-control" id="sel_sensor" name="tipo_sensor">
+                        <option value="0">Temperatura</option>
+                        <option value="1">Humedad</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Mensaje</label>
+                    <input type="text" class="form-control" name="descripcion" placeholder="&quot;:ip&quot; se substituirá por la ip del nodo. &quot;:valor&quot; se substituirá por el valor recibido">
+                </div>
+                <div class="form-group">
+                    <label for="sel_sensor">Condición</label>
+                    <select class="form-control" id="sel_sensor" name="tipo_condicion">
+                        <option value="0">&lt;</option>
+                        <option value="1">&lt;=</option>
+                        <option value="2">&gt;</option>
+                        <option value="3">&gt;=</option>
+                        <option value="4">=</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sel_sensor">Valor</label>
+                    <input type="text" class="form-control" name="valor" placeholder="Valor con el que se comparará">
+                </div>
+                <div class="form-group" id="fields">
+                    <label class="control-label" for="field1">Usuarios a los que enviar el mensaje</label>
+                    <div class="controls">
+                        <div class="entry input-group col-xs-6">
+                            <input id="user_input" class="form-control" name="fields" type="text" placeholder="@usuario">
+                            <span class="input-group-btn">
+                                <button id="add_user_alert" onclick="AddUserToList();" class="btn btn-success btn-add" type="button">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <ul id="userlist" class="list-group">                        
+                    <li id="user_list_1" class="list-group-item">@ip<span class="pull-right"><button onclick="DeleteFromList(1)" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button></span></li><li id="user_list_2" class="list-group-item">@sebastia<span class="pull-right"><button onclick="DeleteFromList(2)" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button></span></li></ul>
+                </div>
+                <button type="submit" class="btn btn-warning btn-lg">Registrar usuario</button>
+            </form>
+
+            <script type="text/javascript">
+            $("#newuser").submit(function(event) {
+                /* stop form from submitting normally */
+                event.preventDefault();
+
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        $('#page-wrapper').html(data);
+                    }
+                }) 
+            });
+        </script>
+
+        </div>
+    </div>
+</div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="./Panel administración_files/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./Panel administración_files/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="./Panel administración_files/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="./Panel administración_files/sb-admin-2.js"></script>
+
+    <!-- usuarios -->
+    <script src="./Panel administración_files/usuarios.js"></script>
+
+    <!-- pendientes -->
+    <script src="./Panel administración_files/nodos.js"></script>
+
+    <!-- alertas -->
+    <script src="./Panel administración_files/alertas.js"></script>
+
+    <!-- countup -->
+    <script src="./Panel administración_files/jquery.countup.js"></script>
+
+    <!-- tablesorter plugin -->
+    <script src="./Panel administración_files/jquery.tablesorter.min.js"></script>
+
+    <!-- tablesorter widget file - loaded after the plugin -->
+    <script src="./Panel administración_files/jquery.tablesorter.widgets.js"></script>
+
+
+
+<style>body.tablesorter-disableSelection { -ms-user-select: none; -moz-user-select: -moz-none;-khtml-user-select: none; -webkit-user-select: none; user-select: none; }.tablesorter-resizable-container { position: relative; height: 1px; }.tablesorter-resizable-handle { position: absolute; display: inline-block; width: 8px;top: 1px; cursor: ew-resize; z-index: 3; user-select: none; -moz-user-select: none; }</style></body></html>
