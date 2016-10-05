@@ -32,6 +32,21 @@ module.exports = {
             message: req.flash('signupMessage'),
             messageOk: req.flash('signupMessageOk')
         });
+	},
+
+	alertRemove: function (req, res, next) {
+		Alertas.RemoveAlerta(req.params.id, function (err) {
+			if (err) {
+				res.send({
+                    ok: "false",
+                    error: err
+                });
+				return;
+			}
+			res.send({
+				ok: "true"
+			});
+		});
 	}
 
 };

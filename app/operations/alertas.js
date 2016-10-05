@@ -21,8 +21,8 @@ var self = module.exports = {
         });
     },
 
-    GetAllAlertas: function(callback){
-        Alerta.find({}, function(err, alertas){
+    GetAllAlertas: function (callback) {
+        Alerta.find({}, function (err, alertas) {
             if (err) {
                 callback(err);
                 return;
@@ -31,8 +31,20 @@ var self = module.exports = {
             alertas.forEach(function (alerta) {
                 listado.push(alerta);
             });
-            callback(null,listado);
+            callback(null, listado);
         })
+    },
+
+    RemoveAlerta: function (id, callback) {
+        Alerta.remove({
+            _id: id
+        }, function (err) {
+            if(err){
+                callback(err);
+                return;
+            }
+            callback(null);
+        });
     }
 
 }

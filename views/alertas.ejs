@@ -13,9 +13,9 @@
     </thead>
     <tbody>
       <% alertas.forEach(function(alerta, i) { %>
-        <tr>
+        <tr id="alerta_<%= i %>">
           <td><%= alerta.ip %></td><td><%= alerta.tipo %></td><td><%= alerta.condicion %></td><td><%= alerta.valor %></td><td><%= alerta.mensaje %></td><td><%= alerta.frecuencia %><td><%= alerta.usuarios %></td>
-          <td><button type="button" class="btn btn-danger btn-md" onclick="DeleteNodoPendiente('192.168.1.129',0);">
+          <td><button type="button" class="btn btn-danger btn-md" onclick="DeleteAlerta(<%= i %>, '<%= alerta.id %>');">
             <span class="glyphicon glyphicon-trash"></span> Eliminar</button></td>
           </tr>
       <% }); %>
