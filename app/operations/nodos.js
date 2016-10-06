@@ -5,7 +5,7 @@ var Ssh = require('../ssh_operations/sshoperations.js');
 var self = module.exports = {
 
   GetAllNodes: function (callback) {
-    Nodo.find({}, 'ip', function (err, nodos) {
+    Nodo.find({}, 'nombre ip mac', function (err, nodos) {
       if (err) {
         callback("", err);
       }
@@ -17,9 +17,9 @@ var self = module.exports = {
     });
   },
 
-  GetNodo: function (ip, callback) {
+  GetNodo: function (mac, callback) {
     Nodo.findOne({
-      ip: ip
+      mac: mac
     }, function (err, nodo) {
       callback(err, nodo);
     });
@@ -98,30 +98,29 @@ var self = module.exports = {
     });
   },
 
-  AddScripts: function (ip, scripts, index, info_array, callback) {
-    console.log(scripts);
+  AddScripts: function (mac, ip, scripts, index, info_array, callback) {
     if (index < scripts.length) {
-      self.AddScript(ip, scripts[index], function (err, data) {
+      self.AddScript(mac, ip, scripts[index], function (err, data) {
         if (err) {
           callback(err, null);
           return;
         }
         info_array.push(data);
-        self.AddScripts(ip, scripts, index + 1, info_array, callback);
+        self.AddScripts(mac, ip, scripts, index + 1, info_array, callback);
       });
     } else {
       callback(null, info_array);
     }
   },
 
-  AddScript: function (ip, script, callback) {
+  AddScript: function (mac, ip, script, callback) {
     Ssh.StartScript(ip, script, function (err, data) {
       if (err) {
         callback(err);
         return;
       }
       Nodo.collection.update({
-        ip: ip
+        mac: mac
       }, {
           $push: {
             scripts: {
@@ -140,9 +139,12 @@ var self = module.exports = {
     });
   },
 
-  AddNode: function (ip, callback) {
+  AddNode: function (node, callback) {
     Nodo.collection.insert({
-      ip: ip,
+      ip: node.ip,
+      nombre: node.nombre,
+      descripcion: node.descripcion,
+      mac: parseInt(node.mac),
       scripts: [],
       date: new Date()
     }, {}, function (err) {

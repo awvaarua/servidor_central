@@ -8,23 +8,23 @@ module.exports = function(app, passport) {
     app.post('/user/unlink', md.isLoggedIn, md.isAdmin, users.userDelete);
 
     var pendientes = require('./routes/pendientes');
-    app.post('/pendiente/add/:ip', md.ipConfig, pendientes.pendienteAdd);
-    app.get('/pendiente/:ip', md.ipConfig, pendientes.pendiente);
-    app.post('/pendiente/remove', md.isLoggedIn, pendientes.pendienteDelete);
+    app.post('/pendiente/add/:mac', md.getIp, pendientes.pendienteAdd);
+    app.get('/pendiente/:mac', pendientes.pendiente);
+    app.post('/pendiente/:mac/remove', md.isLoggedIn, pendientes.pendienteDelete);
     app.get('/pendientes/', md.isLoggedIn, pendientes.pendientes);
 
     var nodes = require('./routes/nodos');
     app.post('/nodo/add', md.isLoggedIn, nodes.nodeAdd);
-    app.get('/nodo/:ip', md.isLoggedIn, nodes.node);
+    app.get('/nodo/:mac', md.isLoggedIn, nodes.node);
     app.get('/nodos/', md.isLoggedIn, nodes.nodes);
-    app.get('/nodo/:ip/status', md.isLoggedIn, nodes.nodeStatus);
+    app.get('/nodo/:mac/status', md.isLoggedIn, nodes.nodeStatus);
     app.post('/nodo/:ip/delete', md.isLoggedIn, nodes.nodeDelete);
-    app.post('/nodo/:ip/restart', md.isLoggedIn, nodes.nodeRestart);
-    app.get('/nodo/:ip/scripts', md.ipConfig, nodes.nodeScripts);
-    app.get('/nodo/:ip/script/:pid/status', md.isLoggedIn, nodes.scriptStatus);
+    app.post('/nodo/:mac/restart', md.isLoggedIn, nodes.nodeRestart);
+    app.get('/nodo/:mac/scripts', nodes.nodeScripts);
+    app.get('/nodo/:mac/script/:pid/status', md.isLoggedIn, nodes.scriptStatus);
     app.post('/nodo/:ip/script/:pid/delete', md.isLoggedIn, nodes.scriptDelete);
-    app.post('/nodo/:ip/script/:pid/update', md.ipConfig, nodes.scriptUpdate);
-    app.post('/nodo/:ip/scripts/add', md.ipConfig, nodes.scriptsAdd);
+    app.post('/nodo/:ip/script/:pid/update', md.macConfig, nodes.scriptUpdate);
+    app.post('/nodo/:ip/scripts/add', md.macConfig, nodes.scriptsAdd);
 
     var alertas = require('./routes/alertas');
     app.get('/alerts/', md.isLoggedIn, alertas.alertsGet);

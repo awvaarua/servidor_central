@@ -5,7 +5,7 @@ module.exports = {
 
     //=== ADD NEW  ===
     pendienteAdd: function(req, res, next) {
-        Pendientes.InsertPendiente(req.params.ip, function(err) {
+        Pendientes.InsertPendiente(req.params.ip, req.params.mac, function(err) {
             if (err) {
                 res.send({
                     ok: "false",
@@ -20,7 +20,7 @@ module.exports = {
 
     //=== GET PENDIENTE BY IP ===
     pendiente: function(req, res, next) {
-        Pendientes.GetPendiente(req.params.ip, function(err, pendiente) {
+        Pendientes.GetPendiente(req.params.mac, function(err, pendiente) {
             if (err) {
                 res.send({
                     ok: "false"
@@ -48,7 +48,7 @@ module.exports = {
 
     //=== DELETE PENDIENTE BY IP===
     pendienteDelete: function(req, res, next) {
-        Pendientes.DeletePendiente(req.body.ip, function(err) {
+        Pendientes.DeletePendiente(req.params.mac, function(err) {
             if (err) {
                 res.send({
                     ok: "false"

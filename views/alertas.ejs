@@ -37,24 +37,32 @@
                               <% alerta.usuarios.forEach(function(usuario, i) { %>
                                 <li class="list-group-item"><%= usuario %><span class="pull-right"><button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button></span></li>
                               <% }); %>
-                              <hr>
-                              <div id="userlistadd" class="entry input-group col-xs-6">
-                                <input id="user_input" class="form-control" name="fields" type="text" placeholder="@usuario" />
-                                <span class="input-group-btn">
-                                    <button id="add_user_alert" onclick="AddUserToList();" class="btn btn-success btn-add" type="button">
-                                        <span class="glyphicon glyphicon-plus"></span>
-                                    </button>
-                                </span>
-                            </div>
+                                <hr>
+                                <div id="userlistadd" class="entry input-group col-xs-6">
+                                    <input id="user_input" class="form-control" name="fields" type="text" placeholder="@usuario" />
+                                    <span class="input-group-btn">
+                                        <button id="add_user_alert" onclick="AddUserToList();" class="btn btn-success btn-add" type="button">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </span>
+                                </div>
                             </ul>
                           </div>
                         <td id="sel_condition">
-                          <button type="button" class="btn btn-info btn-md" onclick="">
-                            <span class="glyphicon glyphicon-refresh"></span> Actualizar
-                          </button>
-                          <button type="button" class="btn btn-danger btn-md" onclick="DeleteAlerta(<%= i %>, '<%= alerta.id %>');">
-                            <span class="glyphicon glyphicon-trash"></span> Eliminar
-                          </button>
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Ver acciones
+                                <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <button type="button" class="btn btn-info btn-md" onclick="">
+                                        <span class="glyphicon glyphicon-refresh"></span> Actualizar
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-md" onclick="DeleteAlerta(<%= i %>, '<%= alerta.id %>');">
+                                        <span class="glyphicon glyphicon-trash"></span> Eliminar
+                                    </button>
+                                </ul>
+                            </div>
+                        
+                          
                         </td>
                     </tr>
                   <% }); %>

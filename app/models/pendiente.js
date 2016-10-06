@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var userSchema = mongoose.Schema({
 
 	ip: String,
+	mac: Number,
 	date: Date
 
 });

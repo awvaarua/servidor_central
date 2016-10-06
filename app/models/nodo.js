@@ -5,6 +5,9 @@ var userSchema = mongoose.Schema({
 
 	ip: String,
 	date: Date,
+	mac: Number,
+	nombre: String,
+	descripcion: String,
 	scripts: [{
 		pid: Number,
 		tipo: String,

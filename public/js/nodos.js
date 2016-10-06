@@ -32,19 +32,18 @@ function AddRow(tabla) {
 		'<td>' +
 		'<button onclick="DeleteRow(' + tabla + ', ' + fila + ')" type="button" class="btn btn-danger glyphicon-minus ' +
 		'addBtnRemove"></button></td></tr>');
+		$('#tabla' + tabla +' tr').remove("<td>New Column</td>");
+		$('#tabla' + tabla +' tr').append("<td>New Column</td>");
 }
 
 function DeleteRow(tabla, fila) {
 	$('#tb' + tabla + '_' + fila).remove();
 }
 
-function DeleteNodoPendiente(ip, i) {
+function DeleteNodoPendiente(mac, i) {
 	$.ajax({
-		url: '/pendiente/remove',
+		url: '/pendiente/'+mac+'/remove',
 		type: 'POST',
-		data: {
-			ip: ip
-		},
 		success: function(response) {
 			$('#panel' + i).remove();
 			return false;
@@ -56,11 +55,14 @@ function DeleteNodoPendiente(ip, i) {
 	return false;
 }
 
-function SendConfirmation(tabla, ip) {
+function SendConfirmation(tabla, ip, mac) {
 
 	var confirmacion = new Object();
 	confirmacion.ip = ip;
+	confirmacion.mac = mac;
 	confirmacion.scripts = [];
+	confirmacion.nombre = $('#pendiente_nombre_'+mac+'_'+tabla).val();
+	confirmacion.descripcion = $('#pendiente_descripcion_'+mac+'_'+tabla).val();
 	$('#tabla' + tabla).find('tbody tr').each(function(tabla) {
 		var script = new Object();
 		script.tipo = $(this).find('td select').val();
@@ -108,14 +110,14 @@ function GestionNodos() {
 	return false;
 }
 
-function CheckScriptsStatus(ip) {
+function CheckScriptsStatus(mac) {
 	$.ajax({
-		url: '/nodo/' + ip + '/scripts',
+		url: '/nodo/' + mac + '/scripts',
 		type: 'GET',
 		success: function(data) {
 			data.data.scripts.forEach(function(script) {
 				$.ajax({
-					url: '/nodo/' + ip + '/script/' + script.pid + '/status',
+					url: '/nodo/' + mac + '/script/' + script.pid + '/status',
 					type: 'GET',
 					success: function(data) {
 						if (data.status == "online") {
@@ -131,9 +133,9 @@ function CheckScriptsStatus(ip) {
 	});
 }
 
-function CheckStatus(ip) {
+function CheckStatus(mac) {
 	$.ajax({
-		url: '/nodo/' + ip + '/status',
+		url: '/nodo/' + mac + '/status',
 		type: 'GET',
 		success: function(response) {
 			if (response.status == "online") {
@@ -141,7 +143,7 @@ function CheckStatus(ip) {
 				$('#estado_nodo').append('<p><img src="/img/online.png"/> Online</p>');
 				$('.buttonnode').prop('disabled', false);
 				$('#countdown').removeClass('hide');
-				CheckScriptsStatus(ip);
+				CheckScriptsStatus(mac);
 			} else {
 				$('#load_estado').remove();
 				$('#estado_nodo').append('<p><img src="/img/offline.png"/> Offline</p>');
@@ -321,16 +323,16 @@ function AddScripts(tabla, ip) {
 }
 
 $(document).on('change', '#select_nodo', function() {
-	var ip = $('#select_nodo').val();
-	if (ip == 0) {
+	var mac = $('#select_nodo').val();
+	if (mac == 0) {
 		$('#cuerpo_nodos').html("");
 	} else {
 		$.ajax({
-			url: '/nodo/' + ip,
+			url: '/nodo/' + mac,
 			type: 'GET',
 			success: function(response) {
 				$('#cuerpo_nodos').html(response);
-				CheckStatus(ip);
+				CheckStatus(mac);
 				return false;
 			}
 		});

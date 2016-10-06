@@ -4,7 +4,7 @@
 	<select id="select_nodo" class="form-control">
 		<option value="0">Seleccionar</option>
 		<% nodos.forEach(function(nodo, i) { %>
-			<option value="<%= nodo.ip %>"><%= nodo.ip %></option>
+			<option value="<%= nodo.mac %>"><%= nodo.nombre %> - <%= nodo.ip %></option>
 		<% }); %> 		
 	</select>
 	<div id="cuerpo_nodos">

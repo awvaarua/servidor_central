@@ -15,9 +15,10 @@ var self = module.exports = {
     });
   },
 
-  InsertPendiente: function(ip, callback) {
+  InsertPendiente: function(ip, mac, callback) {
     Pendiente.collection.insert({
       ip: ip,
+      mac: parseInt(mac),
       date: new Date()
     }, function(err) {
       if (err) {
@@ -27,9 +28,9 @@ var self = module.exports = {
     });
   },
 
-  GetPendiente: function(ip, callback) {
+  GetPendiente: function(mac, callback) {
     Pendiente.findOne({
-      ip: ip
+      mac: parseInt(mac)
     }, function(err, obj) {
       if (err) {
         callback(err);
@@ -39,9 +40,9 @@ var self = module.exports = {
     });
   },
 
-  DeletePendiente: function(ip, callback) {
+  DeletePendiente: function(mac, callback) {
     Pendiente.remove({
-      ip: ip
+      mac: parseInt(mac)
     }, function(err) {
       if (err) {
         callback(err);

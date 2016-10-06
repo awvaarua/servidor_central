@@ -6,13 +6,25 @@
       <div class="panel-heading">
         <h4 class="panel-title">
           <a data-toggle="collapse" href="#collapse<%= i %>">
-            <%= pendiente.ip %><span class="pull-right"><%= pendiente.date %></span>
+            <strong>IP:</strong> <%= pendiente.ip %> <span class="pull-right"><strong>MAC:</strong> <%= pendiente.mac %></span>
           </a>
         </h4>
       </div>
       <div id="collapse<%= i %>" class="panel-collapse collapse">
         <div class="panel-body centered" id="panel_cuerpo<%= i %>">
           <div class="row">
+            <div class="col-lg-3">
+              <div class="form-group">
+                  <label for="sel_sensor">Nombre</label>
+                  <input id="pendiente_nombre_<%= pendiente.mac %>_<%= i %>" type="text" class="form-control" name="nombre" placeholder="Nombre identificativo">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                  <label for="sel_sensor">Descripcion</label>
+                  <input id="pendiente_descripcion_<%= pendiente.mac %>_<%= i %>" type="text" class="form-control" name="text" placeholder="Información sobre la ubicación, color...">
+              </div>
+            </div>
             <div class="col-lg-12">                
                 <table class="table table-bordered table-hover" id="tabla<%= i %>">
                     <thead>
@@ -41,10 +53,10 @@
                 </table>
             </div>
           </div>
-          <button type="button" class="btn btn-danger btn-md" onclick="DeleteNodoPendiente('<%= pendiente.ip %>',<%= i %>);">
+          <button type="button" class="btn btn-danger btn-md" onclick="DeleteNodoPendiente('<%= pendiente.mac %>',<%= i %>);">
             <span class="glyphicon glyphicon-trash"></span> Eliminar
           </button>
-          <button type="button" onclick="SendConfirmation(<%= i %>,'<%= pendiente.ip %>');" class="btn btn-success btn-md pull-right">
+          <button type="button" onclick="SendConfirmation(<%= i %>,'<%= pendiente.ip %>', '<%= pendiente.mac %>');" class="btn btn-success btn-md pull-right">
             <span class="glyphicon glyphicon-play"></span> Iniciar
           </button>
         </div>
