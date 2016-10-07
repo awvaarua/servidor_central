@@ -25,6 +25,7 @@ module.exports = {
 	getIp: function (req, res, next) {
 		var ip = req.ip.split(':');
 		req.params.ip = ip[ip.length - 1];
+		req.params.ip = '192.168.1.129';
 		return next();
 	}
 

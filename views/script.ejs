@@ -1,0 +1,30 @@
+<div class="panel-group" id="panel<%= posicion %>">
+    <div class="panel panel-default">
+        <div class="panel-heading scriptheading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse<%= posicion %>">
+                    <strong><%= script.nombre %></strong>
+                </a>
+            </h4>
+        </div>
+        <div id="collapse<%= posicion %>" class="panel-collapse collapse in panelscripts">
+            <div class="panel-body centered script_cuerpo" id="panel_cuerpo<%= posicion %>">
+                <div class="row">
+                    <% script.argumentos.forEach(function(arg, i) { %>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="sel_sensor"><%= arg.nombre %></label>
+                                <input id="" type="<%= arg.tipo %>" class="form-control" name="text" placeholder="<%= arg.descripcion %>">
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-danger btn-md pull-right adddelete" onclick="UnpaintScriptid(<%= posicion %>);">
+                        <span class="glyphicon glyphicon-trash"></span> Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

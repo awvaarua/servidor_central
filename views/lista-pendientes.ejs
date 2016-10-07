@@ -1,0 +1,13 @@
+<div class="general">
+	<h3>Selecciona el nodo a iniciar</h3>
+	
+	<select id="select_pendiente" class="form-control">
+		<option value="0">Seleccionar</option>
+		<% pendientes.forEach(function(pendiente, i) { %>
+			<option value="<%= pendiente.mac %>"><%= pendiente.ip %> - <%= pendiente.mac %></option>
+		<% }); %> 		
+	</select>
+	<div id="cuerpo_nodos">
+		
+	</div>
+</div>

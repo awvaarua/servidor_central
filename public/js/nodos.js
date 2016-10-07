@@ -2,7 +2,7 @@ function NodosPendientes() {
 	$.ajax({
 		url: '/pendientes/',
 		type: 'GET',
-		success: function(response) {
+		success: function (response) {
 			$('#page-wrapper').html(response);
 			return false;
 		}
@@ -10,45 +10,16 @@ function NodosPendientes() {
 	return false;
 }
 
-var filas_por_tabla = [];
-
-function AddRow(tabla) {
-	if (typeof filas_por_tabla[tabla] === 'undefined') {
-		filas_por_tabla[tabla] = 1;
-	} else {
-		filas_por_tabla[tabla] = filas_por_tabla[tabla] + 1;
-	}
-	var fila = filas_por_tabla[tabla];
-	$('#tabla' + tabla + ' tbody').append('<tr id="tb' + tabla + '_' + fila + '">' +
-		'<td>' +
-		'<select class="form-control">' +
-		'<option value="0">Temperatura</option>' +
-		'<option value="1">Humedad</option>' +
-		'<option value="2">Luminosidad</option>' +
-		'</select>' +
-		'</td>' +
-		'<td><input type="text" id="pins" class="form-control" /></td>' +
-		'<td><input type="text" id="frec" class="form-control" /></td>' +
-		'<td>' +
-		'<button onclick="DeleteRow(' + tabla + ', ' + fila + ')" type="button" class="btn btn-danger glyphicon-minus ' +
-		'addBtnRemove"></button></td></tr>');
-		$('#tabla' + tabla +' tr').remove("<td>New Column</td>");
-		$('#tabla' + tabla +' tr').append("<td>New Column</td>");
-}
-
-function DeleteRow(tabla, fila) {
-	$('#tb' + tabla + '_' + fila).remove();
-}
-
-function DeleteNodoPendiente(mac, i) {
+function DeleteNodoPendiente(mac) {
 	$.ajax({
-		url: '/pendiente/'+mac+'/remove',
+		url: '/pendiente/' + mac + '/remove',
 		type: 'POST',
-		success: function(response) {
-			$('#panel' + i).remove();
+		success: function (response) {
+			$('.panel-group').remove();
+			$("#select_pendiente option[value='"+mac+"']").remove();
 			return false;
 		},
-		error: function(response, err) {
+		error: function (response, err) {
 			return false;
 		}
 	});
@@ -61,9 +32,9 @@ function SendConfirmation(tabla, ip, mac) {
 	confirmacion.ip = ip;
 	confirmacion.mac = mac;
 	confirmacion.scripts = [];
-	confirmacion.nombre = $('#pendiente_nombre_'+mac+'_'+tabla).val();
-	confirmacion.descripcion = $('#pendiente_descripcion_'+mac+'_'+tabla).val();
-	$('#tabla' + tabla).find('tbody tr').each(function(tabla) {
+	confirmacion.nombre = $('#pendiente_nombre_' + mac + '_' + tabla).val();
+	confirmacion.descripcion = $('#pendiente_descripcion_' + mac + '_' + tabla).val();
+	$('#tabla' + tabla).find('tbody tr').each(function (tabla) {
 		var script = new Object();
 		script.tipo = $(this).find('td select').val();
 		script.pin = $(this).find('td input#pins').val();
@@ -80,7 +51,7 @@ function SendConfirmation(tabla, ip, mac) {
 		data: {
 			confirmacion: confirmacion
 		},
-		success: function(response) {
+		success: function (response) {
 			if (response.ok == "true") {
 				$('#panel_cuerpo' + tabla).html('<div class="alert alert-success">' +
 					'<h1>Nodo iniciado correctamente</h1>' +
@@ -102,7 +73,7 @@ function GestionNodos() {
 	$.ajax({
 		url: '/nodos/',
 		type: 'GET',
-		success: function(response) {
+		success: function (response) {
 			$('#page-wrapper').html(response);
 			return false;
 		}
@@ -114,12 +85,12 @@ function CheckScriptsStatus(mac) {
 	$.ajax({
 		url: '/nodo/' + mac + '/scripts',
 		type: 'GET',
-		success: function(data) {
-			data.data.scripts.forEach(function(script) {
+		success: function (data) {
+			data.data.scripts.forEach(function (script) {
 				$.ajax({
 					url: '/nodo/' + mac + '/script/' + script.pid + '/status',
 					type: 'GET',
-					success: function(data) {
+					success: function (data) {
 						if (data.status == "online") {
 							$('.bt' + script.pid).prop('disabled', false);
 							$('#load_estado_' + script.pid).html('<p><img src="/img/online.png"/> Ejecutándose</p>');
@@ -137,7 +108,7 @@ function CheckStatus(mac) {
 	$.ajax({
 		url: '/nodo/' + mac + '/status',
 		type: 'GET',
-		success: function(response) {
+		success: function (response) {
 			if (response.status == "online") {
 				$('#load_estado').remove();
 				$('#estado_nodo').append('<p><img src="/img/online.png"/> Online</p>');
@@ -160,7 +131,7 @@ function DeleteScriptNodo(ip, pid) {
 	$.ajax({
 		url: '/nodo/' + ip + '/script/' + pid + '/delete',
 		type: 'POST',
-		success: function(response) {
+		success: function (response) {
 			if (response.ok == "true") {
 				$('div#' + pid).remove();
 			} else {
@@ -174,7 +145,7 @@ function DeleteNodo(ip) {
 	$.ajax({
 		url: '/nodo/' + ip + '/delete',
 		type: 'POST',
-		success: function(response) {
+		success: function (response) {
 			if (response.ok == "true") {
 				$('#cuerpo_nodos').html('<div class="alert alert-success">' +
 					'<h1>Nodo eliminado correctamente</h1>' +
@@ -198,7 +169,7 @@ function ReiniciarNodo(ip) {
 	$.ajax({
 		url: '/nodo/' + ip + '/restart',
 		type: 'POST',
-		success: function(response) {
+		success: function (response) {
 			if (response.ok == "true") {
 				$('#cuerpo_nodos').html('<div class="alert alert-success">' +
 					'<h1>El nodo se está reiniciando...</h1>' +
@@ -225,7 +196,7 @@ function UpdateFrec(ip, pid) {
 			}
 		},
 		type: 'POST',
-		success: function(response) {
+		success: function (response) {
 			if (response.ok == "true") {
 				$('#frec_' + pid).val(frec);
 				$('#pid_' + pid).html(response.data.pid);
@@ -254,7 +225,7 @@ function UpdatePin(ip, pid) {
 			}
 		},
 		type: 'POST',
-		success: function(response) {
+		success: function (response) {
 			console.log(response);
 			if (response.ok == "true") {
 				$('#pins_' + pid).val(pin);
@@ -288,7 +259,7 @@ function UpdatePidHTML(old, newpid, ip) {
 
 function AddScripts(tabla, ip) {
 	scripts = [];
-	$('#tabla' + tabla).find('tbody tr').each(function(tabla) {
+	$('#tabla' + tabla).find('tbody tr').each(function (tabla) {
 		var script = new Object();
 		script.tipo = $(this).find('td select').val();
 		script.pin = $(this).find('td input#pins').val();
@@ -299,13 +270,13 @@ function AddScripts(tabla, ip) {
 	$('#panel_cuerpo' + tabla).html('<img class="loading" src="http://' + window.location.host + '/public/img/load.gif"></img>');
 
 	$.ajax({
-		url: '/nodo/'+ip+'/scripts/add/',
+		url: '/nodo/' + ip + '/scripts/add/',
 		type: 'POST',
 		dataType: 'json',
 		data: {
 			scripts: scripts
 		},
-		success: function(response) {
+		success: function (response) {
 			if (response.ok == "true") {
 				$('#tabla0').html('<div id="alert0" class="alert alert-success">' +
 					'<h1>Scripts iniciados correctamente</h1>' +
@@ -322,7 +293,7 @@ function AddScripts(tabla, ip) {
 	return false;
 }
 
-$(document).on('change', '#select_nodo', function() {
+$(document).on('change', '#select_nodo', function () {
 	var mac = $('#select_nodo').val();
 	if (mac == 0) {
 		$('#cuerpo_nodos').html("");
@@ -330,7 +301,7 @@ $(document).on('change', '#select_nodo', function() {
 		$.ajax({
 			url: '/nodo/' + mac,
 			type: 'GET',
-			success: function(response) {
+			success: function (response) {
 				$('#cuerpo_nodos').html(response);
 				CheckStatus(mac);
 				return false;
@@ -340,6 +311,22 @@ $(document).on('change', '#select_nodo', function() {
 	return false;
 });
 
+$(document).on('change', '#select_pendiente', function () {
+	var mac = $('#select_pendiente').val();
+	if (mac == 0) {
+		$('#cuerpo_nodos').html("");
+	} else {
+		$.ajax({
+			url: '/pendiente/' + mac,
+			type: 'GET',
+			success: function (response) {
+				$('#cuerpo_nodos').html(response);
+				return false;
+			}
+		});
+	}
+	return false;
+});
 
 function getTime(start) {
 	var d = new Date(start);
@@ -347,4 +334,26 @@ function getTime(start) {
 	$('#countdown').countup({
 		start: new Date(d)
 	});
+}
+
+var num_scripts = 0;
+
+function PaintScriptid() {
+	$('.panelscripts').removeClass('in');
+	var id = $('#select_scripts').val();
+	if (id == 0) { return; }
+	$.ajax({
+		url: '/script/' + id + '/render/' + num_scripts,
+		type: 'GET',
+		success: function (response) {
+			$('#lista_scripts').append(response);
+			return false;
+		}
+	});
+	num_scripts++;
+}
+
+function UnpaintScriptid(pos) {
+	num_scripts--;
+	$('#panel'+pos).remove();
 }

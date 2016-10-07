@@ -24,3 +24,19 @@
 #alert0{
 	margin-bottom: 0px;
 }
+
+.adddelete{
+	    margin: 5px;
+}
+
+.pendienteheading{
+	color: white !important;
+    background-image: none !important;
+    background-color: #337ab7 !important;
+}
+
+.scriptheading{
+	color: white !important;
+    background-image: none !important;
+    background-color: rgba(92, 184, 92, 0.72) !important;
+}

@@ -32,6 +32,10 @@ module.exports = function(app, passport) {
     app.post('/alerta/add', md.isLoggedIn, alertas.alertAdd);
     app.post('/alerta/:id/remove', md.isLoggedIn, alertas.alertRemove);
 
+    var scripts = require('./routes/scripts');
+    app.get('/scripts', md.isLoggedIn, scripts.scriptsGet);
+    app.get('/script/:id/render/:posicion', md.isLoggedIn, scripts.scriptRender);
+
     var data = require('./routes/data');
     app.post('/data/add', data.dataAdd);
 

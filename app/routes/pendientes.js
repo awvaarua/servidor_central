@@ -1,4 +1,5 @@
 var Pendientes = require('../operations/pendientes.js');
+var Scripts = require('../operations/scripts.js');
 var Constantes = require('../constantes/constantes.js');
 
 module.exports = {
@@ -18,18 +19,19 @@ module.exports = {
         });
     },
 
-    //=== GET PENDIENTE BY IP ===
+    //=== GET PENDIENTE BY MAC ===
     pendiente: function(req, res, next) {
         Pendientes.GetPendiente(req.params.mac, function(err, pendiente) {
-            if (err) {
-                res.send({
-                    ok: "false"
+            Scripts.GetAllScripts(function(err, scripts){
+                if(err){
+                    scripts = [];
+                }
+                res.render('pendiente.ejs', {
+                    pendiente: pendiente,
+                    scripts: scripts,
+                    tipos: Constantes.List()
                 });
-            }
-            res.send({
-                ok: "true",
-                data: pendiente
-            });
+            });            
         });
     },
 
@@ -39,7 +41,7 @@ module.exports = {
             if (err) {
                 listapendientes = [];
             }
-            res.render('nodos-pendientes.ejs', {
+            res.render('lista-pendientes.ejs', {
                 pendientes: listapendientes,
                 tipos: Constantes.List()
             });
