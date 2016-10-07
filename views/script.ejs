@@ -9,12 +9,15 @@
         </div>
         <div id="collapse<%= posicion %>" class="panel-collapse collapse in panelscripts">
             <div class="panel-body centered script_cuerpo" id="panel_cuerpo<%= posicion %>">
+                <input id="<%= script._id %>" class="script_id" hidden>
+                <input id="<%= script.fichero %>" class="script_fichero" hidden>
+                <input id="<%= script.nombre %>" class="script_nombre" hidden>
                 <div class="row">
                     <% script.argumentos.forEach(function(arg, i) { %>
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="sel_sensor"><%= arg.nombre %></label>
-                                <input id="" type="<%= arg.tipo %>" class="form-control" name="text" placeholder="<%= arg.descripcion %>">
+                                <input id="<%= arg.orden %>" type="<%= arg.tipo %>" class="form-control argument" name="<%= arg.nombre %>" placeholder="<%= arg.descripcion %>">
                             </div>
                         </div>
                     <% }); %>

@@ -10,9 +10,13 @@ var userSchema = mongoose.Schema({
 	descripcion: String,
 	scripts: [{
 		pid: Number,
-		tipo: String,
-		frec: Number,
-		pin: Number
+		nombre: String,
+		fichero: String,
+		argumentos: [{
+			nombre: String,
+			valor: String,
+			orden: Number
+		}]
 	}]
 
 });

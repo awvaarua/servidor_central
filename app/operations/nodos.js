@@ -21,7 +21,11 @@ var self = module.exports = {
     Nodo.findOne({
       mac: mac
     }, function (err, nodo) {
-      callback(err, nodo);
+      if(err){
+        callback(err, null);
+        return;
+      }
+      callback(null, nodo);
     });
   },
 
@@ -114,27 +118,27 @@ var self = module.exports = {
   },
 
   AddScript: function (mac, ip, script, callback) {
-    Ssh.StartScript(ip, script, function (err, data) {
+    Ssh.StartScript(ip, script, function (err, pid) {
       if (err) {
         callback(err);
         return;
       }
       Nodo.collection.update({
-        mac: mac
+        mac: parseInt(mac)
       }, {
           $push: {
             scripts: {
-              pid: parseInt(data.pid),
-              tipo: data.tipo,
-              frec: parseInt(data.frec),
-              pin: parseInt(data.pin)
+              pid: parseInt(pid),
+              nombre: script.nombre,
+              fichero: script.fichero,
+              argumentos: script.argumentos
             }
           }
         }, function (err) {
           if (err) {
             callback(err);
           }
-          callback(null, data);
+          callback(null);
         });
     });
   },

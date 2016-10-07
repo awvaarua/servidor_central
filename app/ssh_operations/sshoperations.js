@@ -2,6 +2,7 @@ var path = require('path');
 var node_SSH = require('node-ssh');
 var ssh = new node_SSH();
 var Constantes = require('../constantes/constantes.js');
+var Scripts = require('../operations/scripts.js');
 
 var self = module.exports = {
 
@@ -10,17 +11,14 @@ var self = module.exports = {
     OUT: error, script with updated pid
   */
   StartScript: function(ip, script, callback) {
-    var Tipo = Constantes.Tipo(script.tipo);
     ssh.connect({
       host: ip,
       username: 'pi',
       password: 'fura4468AB'
     }).then(function() {
-      ssh.putFile('/Users/ssb/Google Drive/Enginyeria Informatica/4 Quart any/TFG/git/nodo/scripts/' + Tipo + '.py', '/home/pi/Documents/Scripts/' + Tipo + '.py').then(function() {
-        ssh.exec('nohup python /home/pi/Documents/Scripts/' + Tipo + '.py ' + script.frec + ' > /dev/null 2>&1 & echo $!').then(function(std) {
-          script.pid = std;
-          script.tipo = Tipo;
-          callback(null, script);
+      ssh.putFile('/home/ssb/TFG/nodo/scripts/' + script.fichero, '/home/pi/Documents/Scripts/' + script.fichero).then(function() {
+        ssh.exec('nohup python /home/pi/Documents/Scripts/' + script.fichero  + script.frecuencia + ' > /dev/null 2>&1 & echo $!').then(function(std) {
+          callback(null, std);
         }, function(err) {
           callback(err, null);
         });

@@ -11,28 +11,20 @@ module.exports = {
             if (err) {
                 res.send({
                     ok: "false",
-                    error: err
+                    error: "Error al insertar el nodo en la base de datos: "+err
                 });
                 return;
             }
-            Nodos.AddScripts(req.body.confirmacion.mac, req.body.confirmacion.ip, req.body.confirmacion.scripts, 0, [], function(err, data) {
+            Pendientes.DeletePendiente(req.body.confirmacion.mac, function(err) {
                 if (err) {
                     res.send({
                         ok: "false",
-                        error: "Se ha añadido, pero en el inicio de los scripts se ha producido el siguiente error: "+err
+                        error: "El nodo se ha creado correctamente, pero no se ha podido eliminar de pendientes: " + err
                     });
+                    return;
                 }
-                Pendientes.DeletePendiente(req.body.confirmacion.mac, function(err) {
-                    if (err) {
-                        res.send({
-                            ok: "false",
-                            error: err
-                        });
-                    }
-                    res.send({
-                        ok: "true",
-                        data: data
-                    });
+                res.send({
+                    ok: "true"
                 });
             });
         });
@@ -70,7 +62,7 @@ module.exports = {
             if (err) {
                 res.send({
                     ok: "false",
-                    error: err
+                    error: "Error al recuperar el nodo de la BBDD: "+err
                 });
                 return;
             }
@@ -203,26 +195,25 @@ module.exports = {
     },
 
     //=== ADD SCRIPTS TO EXISTENT NODE ===
-    scriptsAdd: function(req, res, next) {
+    scriptAdd: function(req, res, next) {
         Nodos.GetNodo(req.params.mac, function(err, nodo) {
             if (err) {
                 res.send({
                     ok: "false",
-                    message: err.message
+                    message: "Error al recuperar el nodo: "+err.message
                 });
                 return;
             }
-            Nodos.AddScripts(nodo.ip, req.body.scripts, 0, [], function(err, data) {
+            Nodos.AddScript(req.params.mac, nodo.ip, req.body.script, function(err) {
                 if (err) {
                     res.send({
                         ok: "false",
-                        message: err.message
+                        message: "Error al añadir el script: "+err.message
                     });
                     return;
                 }
                 res.send({
-                    ok: "true",
-                    data: data
+                    ok: "true"
                 });
             });
         });

@@ -16,7 +16,7 @@ function DeleteNodoPendiente(mac) {
 		type: 'POST',
 		success: function (response) {
 			$('.panel-group').remove();
-			$("#select_pendiente option[value='"+mac+"']").remove();
+			$("#select_pendiente option[value='" + mac + "']").remove();
 			return false;
 		},
 		error: function (response, err) {
@@ -26,7 +26,85 @@ function DeleteNodoPendiente(mac) {
 	return false;
 }
 
-function SendConfirmation(tabla, ip, mac) {
+function SendConfirmation(ip, mac) {
+
+	var confirmacion = new Object();
+	confirmacion.ip = ip;
+	confirmacion.mac = mac;
+	confirmacion.scripts = new Array(0);
+	confirmacion.nombre = $('#pendiente_nombre').val();
+	confirmacion.descripcion = $('#pendiente_descripcion').val();
+
+	$('#pendiente_comun').html('<img class="loading" src="http://' + window.location.host + '/public/img/load.gif"></img>');
+	$('#pendiente_comun1').remove();
+
+	$.ajax({
+		url: '/nodo/add/',
+		type: 'POST',
+		dataType: 'json',
+		data: {
+			confirmacion: confirmacion
+		},
+		success: function (response) {
+			if (response.ok == "true") {
+				$('#pendiente_comun').html('<div class="alert alert-success">' +
+					'<h1>Nodo iniciado correctamente</h1>' +
+					'</div>');
+				ProcesarScripts(ip, mac);
+			} else {
+				$('#pendiente_comun').html('<div class="alert alert-danger">' +
+					'<h1>Se ha producido un error</h1>' +
+					'<p>' + response.error.message + '</p>' +
+					'</div>');
+			}
+		}
+	});
+	return false;
+}
+
+function ProcesarScripts(ip, mac){
+
+	$('.panelscripts').each(function (i, panel) {
+		var script = new Object();
+		script.argumentos = [];
+		script.script_id = $(panel).find('.script_id').attr('id');
+		script.fichero = $(panel).find('.script_fichero').attr('id');
+		script.nombre = $(panel).find('.script_nombre').attr('id');
+
+		$(panel).find('.argument').each(function (j, input) {
+			script.argumentos.push({
+				nombre: $(input).attr('name'),
+				valor: $(input).val(),
+				orden: $(input).attr('id')
+			});
+		});
+
+		$(panel).html('<img class="loading" src="http://' + window.location.host + '/public/img/load.gif"></img>');
+
+		$.ajax({
+			url: '/nodo/'+mac+'/script/add',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				script: script
+			},
+			success: function (response) {
+				if (response.ok == "true") {
+					$(panel).html('<div class="alert alert-success">' +
+						'<h1>Script iniciado</h1>' +
+						'</div>');
+				} else {
+					$(panel).html('<div class="alert alert-danger">' +
+						'<h1>Se ha producido un error</h1>' +
+						'<p>' + response.message + '</p>' +
+						'</div>');
+				}
+			}
+		});
+	});
+}
+
+function SendConfirmationOld(tabla, ip, mac) {
 
 	var confirmacion = new Object();
 	confirmacion.ip = ip;
@@ -355,5 +433,5 @@ function PaintScriptid() {
 
 function UnpaintScriptid(pos) {
 	num_scripts--;
-	$('#panel'+pos).remove();
+	$('#panel' + pos).remove();
 }

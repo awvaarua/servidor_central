@@ -6,17 +6,17 @@
             </h4>
         </div>
         <div class="panel-body centered">
-            <div class="row">
+            <div id="pendiente_comun" class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="sel_sensor">Nombre</label>
-                        <input id="pendiente_nombre_<%= pendiente.mac %>" type="text" class="form-control" name="nombre" placeholder="Nombre identificativo">
+                        <input id="pendiente_nombre" type="text" class="form-control" name="nombre" placeholder="Nombre identificativo">
                     </div>
                 </div>
                 <div class="col-lg-7">
                     <div class="form-group">
                         <label for="sel_sensor">Descripcion</label>
-                        <input id="pendiente_descripcion_<%= pendiente.mac %>" type="text" class="form-control" name="text" placeholder="Información sobre la ubicación, color...">
+                        <input id="pendiente_descripcion" type="text" class="form-control" name="text" placeholder="Información sobre la ubicación, color...">
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -31,7 +31,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div id="pendiente_comun1" class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
                         <button type="button" onclick="PaintScriptid();" class="btn btn-success btn-md pull-right">
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="pull-right">
-                <button type="button" onclick="SendConfirmation(,'<%= pendiente.ip %>', '<%= pendiente.mac %>');" class="btn btn-success btn-md pull-right adddelete">
+                <button type="button" onclick="SendConfirmation('<%= pendiente.ip %>', '<%= pendiente.mac %>');" class="btn btn-success btn-md pull-right adddelete">
                     <span class="glyphicon glyphicon-play"></span> Iniciar
                 </button>
                 <button type="button" class="btn btn-danger btn-md pull-right adddelete" onclick="DeleteNodoPendiente('<%= pendiente.mac %>');">
