@@ -18,7 +18,7 @@ module.exports = function(app, passport) {
     app.get('/nodo/:mac', md.isLoggedIn, nodes.node);
     app.get('/nodos/', md.isLoggedIn, nodes.nodes);
     app.get('/nodo/:mac/status', md.isLoggedIn, nodes.nodeStatus);
-    app.post('/nodo/:ip/delete', md.isLoggedIn, nodes.nodeDelete);
+    app.post('/nodo/:mac/delete', md.isLoggedIn, nodes.nodeDelete);
     app.post('/nodo/:mac/restart', md.isLoggedIn, nodes.nodeRestart);
     app.get('/nodo/:mac/scripts', nodes.nodeScripts);
     app.get('/nodo/:mac/script/:pid/status', md.isLoggedIn, nodes.scriptStatus);

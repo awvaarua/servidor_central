@@ -21,7 +21,7 @@ var self = module.exports = {
     Nodo.findOne({
       mac: mac
     }, function (err, nodo) {
-      if(err){
+      if (err) {
         callback(err, null);
         return;
       }
@@ -51,25 +51,35 @@ var self = module.exports = {
       });
   },
 
-  DeleteAllScripts: function (ip, scripts, index, info_array, callback) {
+  DeleteAllScripts: function (mac, ip, scripts, index, info_array, callback) {
     if (index < scripts.length) {
-      self.DeleteScript(ip, scripts[index].pid, function (err, data) {
+      self.DeleteScript(mac, ip, scripts[index].pid, function (err, data) {
         if (err) {
           callback(err, data);
         }
         info_array.push(data);
-        self.DeleteAllScripts(ip, scripts, index + 1, info_array, callback);
+        self.DeleteAllScripts(mac, ip, scripts, index + 1, info_array, callback);
       });
     } else {
       callback(null, info_array);
     }
   },
 
-  DeleteNodo: function (ip, callback) {
-    self.GetNodo(ip, function (err, nodo) {
-      self.DeleteAllScripts(ip, nodo.scripts, 0, [], function (err, data) {
+  DeleteNodo: function (mac, callback) {
+
+    self.GetNodo(mac, function (err, nodo) {
+      if(err){
+        callback(err, null);
+        return;
+      }
+      
+      self.DeleteAllScripts(mac, nodo.ip, nodo.scripts, 0, [], function (err, data) {
+        if(err){
+          callback(err, null);
+          return;
+        }
         Nodo.remove({
-          ip: ip
+          mac: parseInt(mac)
         }, function (err) {
           if (err) {
             callback(err);
@@ -80,13 +90,13 @@ var self = module.exports = {
     });
   },
 
-  DeleteScript: function (ip, pid, callback) {
+  DeleteScript: function (mac, ip, pid, callback) {
     Ssh.StopScript(ip, pid, function (err, data) {
       if (err) {
         callback(err);
       }
       Nodo.collection.update({
-        ip: ip
+        mac: parseInt(mac)
       }, {
           $pull: {
             scripts: {

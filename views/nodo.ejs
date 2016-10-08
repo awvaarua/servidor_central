@@ -18,9 +18,9 @@
             </div>
             <div class="col-md-4 col-md-offset-1">
             	<h4>Acciones</h4>
-                <button type="button" class="btn btn-primary buttonnode" onclick="ReiniciarNodo('<%= nodo.ip %>')" disabled="true">Reiniciar</button>
+                <button type="button" class="btn btn-primary buttonnode" onclick="ReiniciarNodo('<%= nodo.mac %>')" disabled="true">Reiniciar</button>
                 <button type="button" class="btn btn-primary buttonnode" disabled="true">Pendiente</button>
-                <button type="button" class="btn btn-danger buttonnode" onclick="DeleteNodo('<%= nodo.ip %>')">Eliminar</button>
+                <button type="button" class="btn btn-danger buttonnode" onclick="DeleteNodo('<%= nodo.mac %>')">Eliminar</button>
             </div>
         </div> 
         <hr id="sep1">
@@ -34,78 +34,85 @@
                 <% nodo.scripts.forEach(function(script, i) { %>
                     <div id="<%= script.pid %>" class="panel panel-default script">
                         <div class="panel-heading">
-                            <strong><%= script.tipo %></strong><span id="load_estado_<%= script.pid %>" class="loadscript pull-right"><img src="/img/load1_small.gif"/></span>
+                            <strong><%= script.nombre %></strong><span id="load_estado_<%= script.pid %>" class="loadscript pull-right"><img src="/img/load1_small.gif"/></span>
                         </div>
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-1 vcenter">
+                                <div class="col-xs-2 col-sm-2 col-md-1 vcenter">
                                     <h5><strong>PID</strong></h5>
                                     <p id="pid_<%= script.pid %>"><%= script.pid %></p>
                                 </div>
-                                <div class="col-md-2 vcenter">
-                                    <h5><strong>Frecuencia</strong></h5>
-                                    <div class="input-group">
-                                      <input id="frec_<%= script.pid %>"  class="form-control" type="number" name="frec" value="<%= script.frec %>">
-                                      <span class="input-group-btn">
-                                        <button id="act_frec_<%= script.pid %>" type="button" onclick="UpdateFrec('<%= nodo.ip %>', '<%= script.pid %>');" class="btn btn-info bt<%= script.pid %>" disabled="true">Actualizar</button>
-                                      </span>
+                                <div class="col-xs-10 col-sm-10 col-md-11">
+                                    <div class="pull-right">
+                                        <h5><strong>Acciones</strong></h5>
+                                        <button id="delete_<%= script.pid %>" type="button" class="btn btn-danger bt<%= script.pid %>" onclick='DeleteScriptNodo("<%= nodo.ip %>", "<%= script.pid %>");'>Eliminar</button>
                                     </div>
                                 </div>
-                                <div class="col-md-4 col-md-offset-1 vcenter">
-                                    <h5><strong>Pin</strong></h5>
-                                    <div class="input-group">
-                                      <input id="pins_<%= script.pid %>" class="form-control" type="number" name="pins" value="<%= script.pin %>">
-                                      <span class="input-group-btn">
-                                        <button id="act_pins_<%= script.pid %>" type="button" class="btn btn-info bt<%= script.pid %>" onclick="UpdatePin('<%= nodo.ip %>', '<%= script.pid %>');" disabled="true">Actualizar</button>
-                                      </span>
+                            </div>
+                            <div class="row">
+                                <% script.argumentos.forEach(function(argumento, i) { %>
+                                    <div class="col-md-4 vcenter">
+                                        <h5><strong><%= argumento.nombre %></strong></h5>
+                                        <div class="input-group">
+                                        <input id="frec_<%= script.pid %>"  class="form-control" type="number" name="frec" value="<%= argumento.valor %>">
+                                        <span class="input-group-btn">
+                                            <button id="act_frec_<%= script.pid %>" type="button" onclick="UpdateFrec('<%= nodo.ip %>', '<%= script.pid %>');" class="btn btn-info bt<%= script.pid %>" disabled="true">Actualizar</button>
+                                        </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-2 col-md-offset-2 vcenter">
-                                    <h5><strong>Acciones</strong></h5>
-                                    <button id="delete_<%= script.pid %>" type="button" class="btn btn-danger bt<%= script.pid %>" onclick='DeleteScriptNodo("<%= nodo.ip %>", "<%= script.pid %>");'>Eliminar</button>
-                                </div>
+                                <% }); %>
                             </div>
                         </div>
                     </div>
                 <% }); %>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Añadir scripts</h2>
+        <button id="" type="button" onclick="OpenClose();" class="btn btn-info">Añadir scripts</button>
+        <div id="add_scripts_nodo" hidden>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Añadir scripts</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="sel_sensor">Añadir scripts</label>
+                        <select id="select_scripts" class="form-control">
+                            <option value="0">Seleccionar tipo de script</option>
+                            <% listado_scripts.forEach(function(script, i) { %>
+                                <option value="<%= script.id %>"><%= script.nombre %></option>
+                            <% }); %> 
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div id="pendiente_comun1" class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <button type="button" onclick="PaintScriptid();" class="btn btn-success btn-md pull-right">
+                            <span class="glyphicon glyphicon-plus"></span> Añadir
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div id="lista_scripts" class="col-lg-12">
+                    <h3>Lista de scripts</h3>
+                    
+                </div>
+            </div>
+            <hr id="sep1">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="iniciar pull-right">
+                        <button type="button" onclick="AddScripts(0,'1');" class="btn btn-success btn-md pull-right">
+                            <span class="glyphicon glyphicon-play"></span> Iniciar
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12">                
-                <table class="table table-bordered table-hover" id="tabla0">
-                    <thead>
-                        <tr>
-                            <th>Tipo sensor</th>
-                            <th>Pins</th>
-                            <th>Frecuencia</th>
-                            <th style="width:10px"><button id="addBtn_0" onclick="AddRow(0);" type="button" class="btn btn-success glyphicon-plus addBtn"></button></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr id="tb0_0">
-                            <td>
-                              <select class="form-control">
-                                <% tipos.forEach(function(tipo) { %>
-                                  <option value="<%= tipo.valor %>"><%= tipo.nombre %></option>
-                                <% }); %>
-                              </select>
-                            </td>
-                            <td><input type="number" id="pins" class="form-control" /></td>
-                            <td><input type="number" id="frec" class="form-control" /></td>
-                            <td>
-                            <button id="addBtnRemove_0" onclick="DeleteRow(0,0);" type="button" class="btn btn-danger glyphicon-minus addBtnRemove"></button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>        <button type="button" onclick="AddScripts(0,'<%= nodo.ip %>');" class="btn btn-success btn-md pull-right">
-            <span class="glyphicon glyphicon-play"></span> Iniciar
-        </button>
      </div>
     <!-- /.panel-body -->
 </div>

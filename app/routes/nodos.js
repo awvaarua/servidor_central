@@ -2,6 +2,7 @@ var Nodos = require('../operations/nodos.js');
 var Pendientes = require('../operations/pendientes.js');
 var Ssh = require('../ssh_operations/sshoperations.js');
 var Constantes = require('../constantes/constantes.js');
+var Scripts = require('../operations/scripts.js');
 
 module.exports = {
 
@@ -39,9 +40,14 @@ module.exports = {
                     nodo: nodo
                 });
             }
-            res.render('nodo.ejs', {
-                nodo: nodo,
-                tipos: Constantes.List()
+            Scripts.GetAllScripts(function(err, scripts){
+                if(err){
+                    
+                }
+                res.render('nodo.ejs', {
+                    nodo: nodo,
+                    listado_scripts: scripts
+                });
             });
         });
     },
@@ -76,27 +82,18 @@ module.exports = {
 
     //=== DELETE NODE BY IP ===
     nodeDelete: function(req, res, next) {
-        Nodos.GetNodo(req.params.mac, function(err, nodo) {
+        Nodos.DeleteNodo(req.params.mac, function(err, data) {
             if (err) {
-                    res.send({
-                        status: "false",
-                        error: error
-                    });
-                    return;
-            }
-            Nodos.DeleteNodo(nodo.ip, function(err, data) {
-                if (err) {
-                    res.send({
-                        ok: "false",
-                        error: err,
-                        data: data
-                    });
-                    return;
-                }
                 res.send({
-                    ok: "true",
+                    ok: "false",
+                    error: err,
                     data: data
                 });
+                return;
+            }
+            res.send({
+                ok: "true",
+                data: data
             });
         });
     },

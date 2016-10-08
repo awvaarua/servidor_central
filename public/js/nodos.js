@@ -219,9 +219,9 @@ function DeleteScriptNodo(ip, pid) {
 	});
 }
 
-function DeleteNodo(ip) {
+function DeleteNodo(mac) {
 	$.ajax({
-		url: '/nodo/' + ip + '/delete',
+		url: '/nodo/' + mac + '/delete',
 		type: 'POST',
 		success: function (response) {
 			if (response.ok == "true") {
@@ -243,9 +243,9 @@ function DeleteNodo(ip) {
 	});
 }
 
-function ReiniciarNodo(ip) {
+function ReiniciarNodo(mac) {
 	$.ajax({
-		url: '/nodo/' + ip + '/restart',
+		url: '/nodo/' + mac + '/restart',
 		type: 'POST',
 		success: function (response) {
 			if (response.ok == "true") {
@@ -405,6 +405,10 @@ $(document).on('change', '#select_pendiente', function () {
 	}
 	return false;
 });
+
+function OpenClose(){
+	$("#add_scripts_nodo").toggle();
+}
 
 function getTime(start) {
 	var d = new Date(start);

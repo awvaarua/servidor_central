@@ -21,5 +21,11 @@ var userSchema = mongoose.Schema({
 
 });
 
+userSchema.methods.sort = function () {
+	scripts.forEach(function(script) {
+		script.argumentos.sort(function(a, b){return a.orden - b.orden})
+	}, this);
+}
+
 // create the model for users
 module.exports = mongoose.model('Nodo', userSchema);
