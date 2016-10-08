@@ -104,49 +104,6 @@ function ProcesarScripts(ip, mac){
 	});
 }
 
-function SendConfirmationOld(tabla, ip, mac) {
-
-	var confirmacion = new Object();
-	confirmacion.ip = ip;
-	confirmacion.mac = mac;
-	confirmacion.scripts = [];
-	confirmacion.nombre = $('#pendiente_nombre_' + mac + '_' + tabla).val();
-	confirmacion.descripcion = $('#pendiente_descripcion_' + mac + '_' + tabla).val();
-	$('#tabla' + tabla).find('tbody tr').each(function (tabla) {
-		var script = new Object();
-		script.tipo = $(this).find('td select').val();
-		script.pin = $(this).find('td input#pins').val();
-		script.frec = $(this).find('td input#frec').val();
-		confirmacion.scripts.push(script);
-	});
-
-	$('#panel_cuerpo' + tabla).html('<img class="loading" src="http://' + window.location.host + '/public/img/load.gif"></img>');
-
-	$.ajax({
-		url: '/nodo/add/',
-		type: 'POST',
-		dataType: 'json',
-		data: {
-			confirmacion: confirmacion
-		},
-		success: function (response) {
-			if (response.ok == "true") {
-				$('#panel_cuerpo' + tabla).html('<div class="alert alert-success">' +
-					'<h1>Nodo iniciado correctamente</h1>' +
-					'<p>' + JSON.stringify(response.data) + '</p>' +
-					'</div>');
-			} else {
-				console.log(response.error);
-				$('#panel_cuerpo' + tabla).html('<div class="alert alert-danger">' +
-					'<h1>Se ha producido un error</h1>' +
-					'<p>' + response.error.message + '</p>' +
-					'</div>');
-			}
-		}
-	});
-	return false;
-}
-
 function GestionNodos() {
 	$.ajax({
 		url: '/nodos/',
