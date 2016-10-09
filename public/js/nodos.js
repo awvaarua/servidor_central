@@ -130,6 +130,7 @@ function CheckScriptsStatus(mac) {
 							$('.bt' + script.pid).prop('disabled', false);
 							$('#load_estado_' + script.pid).html('<p><img src="/img/online.png"/> Ejecutándose</p>');
 						} else {
+							$('.bt' + script.pid).prop('disabled', false);
 							$('#load_estado_' + script.pid).html('<p><img src="/img/offline.png"/> Parado</p>');
 						}
 					}
@@ -236,7 +237,7 @@ function Update(mac, pid, orden) {
 		success: function (response) {
 			if (response.ok == "true") {
 				$('#pid_' + pid).html(response.data.pid);
-				//UpdatePidHTML(pid, response.data.pid, ip);
+				UpdatePidHTML(pid, response.data.pid, mac);
 				$('.bt' + response.data.pid).prop('disabled', false);
 			} else {
 				$('.bt' + pid).prop('disabled', false);
@@ -249,18 +250,21 @@ function Update(mac, pid, orden) {
 	});
 }
 
-function UpdatePidHTML(old, newpid, ip) {
+function UpdatePidHTML(old, newpid, mac) {
 	$('#' + old).attr('id', newpid);
+	$('#load_estado_' + old).attr('id', newpid);
 	$('#pid_' + old).attr('id', 'pid_' + newpid);
-	$('#frec_' + old).attr('id', 'frec_' + newpid);
-	$('#pins_' + old).attr('id', 'pins_' + newpid);
 	$('.bt' + old).removeClass('bt' + old).addClass('bt' + newpid);
-	$('#act_frec_' + old).attr('onclick', 'UpdateFrec("' + ip + '","' + newpid + '");');
-	$('#act_pins_' + old).attr('onclick', 'UpdatePin("' + ip + '","' + newpid + '");');
-	$('#delete_' + old).attr('onclick', 'DeleteScriptNodo("' + ip + '","' + newpid + '");');
-	$('#act_frec_' + old).attr('id', 'act_frec_' + newpid);
-	$('#act_pins_' + old).attr('id', 'act_pins_' + newpid);
+	$('#delete_' + old).attr('onclick', 'DeleteScriptNodo("' + mac + '","' + newpid + '");');
 	$('#delete_' + old).attr('id', 'delete_' + newpid);
+	$('#'+newpid).find('.arg').each(function(i, arg){
+		var orden = $(arg).attr('id').split('_')[1];
+		 $(arg).attr('id', newpid+ '_' + orden);
+	});
+	$('#'+newpid).find('.argbt').each(function(i, arg){
+		var orden = $(arg).attr('id');
+		 $(arg).attr('onclick', 'Update("' + mac + '","' + newpid + '", "'+orden+'");');
+	});
 }
 
 function AddScripts(tabla, ip) {

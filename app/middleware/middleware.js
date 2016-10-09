@@ -1,3 +1,4 @@
+var fs = require('fs');
 module.exports = {
 
 	isLoggedIn: function (req, res, next) {
@@ -27,6 +28,29 @@ module.exports = {
 		req.params.ip = ip[ip.length - 1];
 		req.params.ip = '192.168.1.129';
 		return next();
+	},
+
+	fileExistAndRemove: function (req, res, next) {
+		var tmp_path = req.file.path;
+		var target_path = './uploads/' + req.file.filename
+		fs.access(target_path, fs.R_OK | fs.W_OK, function (err) {
+			if(!err){
+				fs.unlink(tmp_path, function() {
+					res.send({
+						ok: "false",
+						error: "El fichero ya existe. Cambia el nombre."
+					});
+				});
+			}else{
+				fs.rename(tmp_path, target_path, function(err) {
+					if (err) throw err;
+						fs.unlink(tmp_path, function() {
+							next();
+						});
+				});
+			}
+		});
+		
 	}
 
 };

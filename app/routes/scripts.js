@@ -19,6 +19,18 @@ module.exports = {
 				posicion: req.params.posicion
 			});
 		});
+	},
+
+	scriptsAddView: function (req, res, next) {
+		res.render('addscript.ejs', {
+			messageOk: "",
+		});
+	},
+
+	fileUpload: function (req, res, next) {
+		res.send({
+			ok: "true"
+		});
 	}
 
 };

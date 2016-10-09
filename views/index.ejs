@@ -35,11 +35,17 @@
     <!-- Alertas -->
     <link href="/css/alerta.css" rel="stylesheet" type="text/css">
 
+    <!-- Scripts -->
+    <link href="/css/script.css" rel="stylesheet" type="text/css">
+
     <!--Bootstrap theme -->
     <link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.min.css">
 
     <!--Bootstrap theme -->
     <link rel="stylesheet" href="/bootstrap/css/theme-bootstrap.css">
+
+    <!--Dropzone -->
+    <link rel="stylesheet" href="/dropzone/dropzone.css">
 
 </head>
 
@@ -99,6 +105,17 @@
                                 </li>
                             </ul>
                         </li>
+                        <li>
+                            <a href="#"><i class="fa fa-cog fa-fw"></i> Scripts<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a onclick="AddNewScript();" href="#"><i class="fa fa-plus fa-fw"></i> Añadir script</a>
+                                </li>
+                                <li>
+                                    <a onclick="" href="#"><i class="fa fa-cog fa-fw"></i> Gestión scripts</a>
+                                </li>
+                            </ul>
+                        </li>
                         <% if( user.local.admin == true) {%>
                             <li>
                                 <a href="#"><i class="fa fa-user fa-fw"></i> Usuarios<span class="fa arrow"></span></a>
@@ -155,6 +172,13 @@
 
     <!-- tablesorter widget file - loaded after the plugin -->
     <script src="/tablesorter/jquery.tablesorter.widgets.js"></script>
+
+    <!-- dropzone -->
+    <script src="/dropzone/dropzone.js"></script>
+
+    <!-- scripts -->
+    <script src="/js/scripts.js"></script>
+    
 
 </body>
 

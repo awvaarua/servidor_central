@@ -33,7 +33,19 @@ module.exports = function(app, passport) {
     app.post('/alerta/:id/remove', md.isLoggedIn, alertas.alertRemove);
 
     var scripts = require('./routes/scripts');
+    var multer = require('multer');
+    var storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, 'temp/')
+        },
+        filename: function (req, file, cb) {
+            cb(null, file.originalname)
+        }
+    })
+    var upload = multer({ storage: storage });
     app.get('/scripts', md.isLoggedIn, scripts.scriptsGet);
+    app.get('/script/add', md.isLoggedIn, scripts.scriptsAddView);
+    app.post('/script/file/upload/', md.isLoggedIn, upload.single( 'file' ), md.fileExistAndRemove, scripts.fileUpload);
     app.get('/script/:id/render/:posicion', md.isLoggedIn, scripts.scriptRender);
 
     var data = require('./routes/data');
