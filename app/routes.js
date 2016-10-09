@@ -22,8 +22,8 @@ module.exports = function(app, passport) {
     app.post('/nodo/:mac/restart', md.isLoggedIn, nodes.nodeRestart);
     app.get('/nodo/:mac/scripts', nodes.nodeScripts);
     app.get('/nodo/:mac/script/:pid/status', md.isLoggedIn, nodes.scriptStatus);
-    app.post('/nodo/:ip/script/:pid/delete', md.isLoggedIn, nodes.scriptDelete);
-    app.post('/nodo/:ip/script/:pid/update', md.macConfig, nodes.scriptUpdate);
+    app.post('/nodo/:mac/script/:pid/delete', md.isLoggedIn, nodes.scriptDelete);
+    app.post('/nodo/:mac/script/:pid/update', nodes.scriptUpdate);
     app.post('/nodo/:mac/script/add', md.macConfig, nodes.scriptAdd);
 
     var alertas = require('./routes/alertas');

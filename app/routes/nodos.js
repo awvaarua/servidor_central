@@ -170,11 +170,11 @@ module.exports = {
             if (err) {
                     res.send({
                         status: "offline",
-                        error: error
+                        error: err
                     });
                     return;
             }
-            Nodos.DeleteNodo(nodo.ip, function(err, data) {
+            Nodos.DeleteScript(req.params.mac, nodo.ip, req.params.pid, function(err, data) {
                 if (err) {
                     res.send({
                         ok: "false",
@@ -224,6 +224,7 @@ module.exports = {
                     ok: "false",
                     message: err
                 });
+                return;
             }
             Ssh.StopScript(nodo.ip, req.params.pid, function(err) {
                 if (err) {
@@ -231,34 +232,38 @@ module.exports = {
                         ok: "false",
                         message: err
                     });
+                    return;
                 }
-                Nodos.UpdateScript(nodo.ip, req.params.pid, req.body.cambio, function(err, script) {
+                Nodos.UpdateScript(req.params.mac, req.params.pid, req.body.cambio, function(err, script) {
                     if (err) {
                         res.send({
                             ok: "false",
                             message: err
                         });
+                        return;
                     }
-                    Ssh.StartScript(nodo.ip, script, function(err, newscript) {
+                    Ssh.StartScript(nodo.ip, script, function(err, newpid) {
                         if (err) {
                             res.send({
                                 ok: "false",
                                 message: err
                             });
+                            return;
                         }
-                        Nodos.UpdateScript(nodo.ip, req.params.pid, {
+                        Nodos.UpdateScript(req.params.mac, req.params.pid, {
                             tipo: "pid",
-                            valor: newscript.pid
-                        }, function(err, script) {
+                            valor: newpid
+                        }, function(err, scriptfinal) {
                             if (err) {
                                 res.send({
                                     ok: "false",
                                     message: err
                                 });
+                                return;
                             }
                             res.send({
                                 ok: "true",
-                                data: newscript
+                                data: scriptfinal
                             });
                         });
                     });

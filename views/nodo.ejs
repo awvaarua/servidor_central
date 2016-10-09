@@ -45,7 +45,7 @@
                                 <div class="col-xs-10 col-sm-10 col-md-11">
                                     <div class="pull-right">
                                         <h5><strong>Acciones</strong></h5>
-                                        <button id="delete_<%= script.pid %>" type="button" class="btn btn-danger bt<%= script.pid %>" onclick='DeleteScriptNodo("<%= nodo.ip %>", "<%= script.pid %>");'>Eliminar</button>
+                                        <button id="delete_<%= script.pid %>" type="button" class="btn btn-danger bt<%= script.pid %>" onclick='DeleteScriptNodo("<%= nodo.mac %>", "<%= script.pid %>");'>Eliminar</button>
                                     </div>
                                 </div>
                             </div>
@@ -54,9 +54,9 @@
                                     <div class="col-md-4 vcenter">
                                         <h5><strong><%= argumento.nombre %></strong></h5>
                                         <div class="input-group">
-                                        <input id="frec_<%= script.pid %>"  class="form-control" type="number" name="frec" value="<%= argumento.valor %>">
+                                        <input id="<%= script.pid %>_<%= argumento.orden %>"  class="form-control" type="number" name="frec" value="<%= argumento.valor %>">
                                         <span class="input-group-btn">
-                                            <button id="act_frec_<%= script.pid %>" type="button" onclick="UpdateFrec('<%= nodo.ip %>', '<%= script.pid %>');" class="btn btn-info bt<%= script.pid %>" disabled="true">Actualizar</button>
+                                            <button id="act_frec_<%= script.pid %>" type="button" onclick="Update('<%= nodo.mac %>', '<%= script.pid %>', '<%= argumento.orden %>');" class="btn btn-info bt<%= script.pid %>">Actualizar</button>
                                         </span>
                                         </div>
                                     </div>

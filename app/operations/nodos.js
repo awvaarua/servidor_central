@@ -29,24 +29,18 @@ var self = module.exports = {
     });
   },
 
-  GetScript: function (ip, pid, callback) {
+  GetScript: function (mac, pid, callback) {
+    ;
     Nodo.findOne({
-      ip: ip
-    }, {
-        scripts: {
-          $elemMatch: {
-            pid: pid
-          }
-        }
-      }, function (err, nodo) {
+      mac: parseInt(mac),
+      'scripts.pid': parseInt(pid)
+    }, { 'scripts.$': 1 },
+      function (err, nodo) {
         if (err) {
           callback(err, null);
           return;
         }
-        if (nodo == null) {
-          callback("not found", null);
-        }
-        callback(null, nodo.scripts[0]);
+        callback(null, nodo);
 
       });
   },
@@ -68,13 +62,13 @@ var self = module.exports = {
   DeleteNodo: function (mac, callback) {
 
     self.GetNodo(mac, function (err, nodo) {
-      if(err){
+      if (err) {
         callback(err, null);
         return;
       }
-      
+
       self.DeleteAllScripts(mac, nodo.ip, nodo.scripts, 0, [], function (err, data) {
-        if(err){
+        if (err) {
           callback(err, null);
           return;
         }
@@ -133,6 +127,9 @@ var self = module.exports = {
         callback(err);
         return;
       }
+      script.argumentos.forEach(function(arg){
+        arg.orden = parseInt(arg.orden);
+      });
       Nodo.collection.update({
         mac: parseInt(mac)
       }, {
@@ -169,46 +166,49 @@ var self = module.exports = {
     });
   },
 
-  UpdateScript: function (ip, pid, cambio, callback) {
-    self.GetScript(ip, pid, function (err, script) {
+  UpdateScript: function (mac, pid, cambio, callback) {
+    self.GetNodo(mac, function (err, nodo) {
       if (err) {
         callback(err, null);
         return;
       }
-      var newscript = GetNewScript(script, cambio);
-      Nodo.collection.update({
-        ip: ip,
-        'scripts.pid': parseInt(pid)
-      }, {
-          $set: {
-            'scripts.$.pid': parseInt(newscript.pid),
-            'scripts.$.tipo': newscript.tipo,
-            'scripts.$.frec': newscript.frec,
-            'scripts.$.pin': newscript.pin
-          }
-        }, function (err) {
-          if (err) {
-            callback(err, null);
-          }
-          callback(null, newscript);
-        });
+      Update(nodo, pid, cambio, function(err, script){
+        if(err){
+          callback(err);
+          return;
+        }
+        callback(null, script);
+      })
     });
   }
 
 };
 
-function GetNewScript(script, change) {
+function Update(nodo, pid, change, callback) {
   switch (change.tipo) {
     case "pid":
-      script.pid = change.valor;
-      return script;
-    case "frec":
-      script.frec = change.valor;
-      return script;
-    case "pin":
-      script.pin = change.valor;
-      return script;
+      nodo.scripts.forEach(function(script){
+        if(script.pid == parseInt(pid)){
+          script.pid = parseInt(change.valor);
+          nodo.save(callback(null, script));
+          return;
+        }
+      });
+      break;
+    case "argumentos":
+      nodo.scripts.forEach(function(script){
+        if(script.pid == parseInt(pid)){
+          script.argumentos.forEach(function(arg){
+            if(arg.orden == parseInt(change.orden)){
+              arg.valor = change.valor;
+              nodo.save(callback(null, script));
+              return;
+            }
+          });
+        }
+      });
+      break;
     default:
-      return script;
+      callback("Tipo no encontrado");
   }
 }

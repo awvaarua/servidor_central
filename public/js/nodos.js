@@ -162,9 +162,10 @@ function CheckStatus(mac) {
 	return false;
 }
 
-function DeleteScriptNodo(ip, pid) {
+function DeleteScriptNodo(mac, pid) {
+	$('div#' + pid).find('.panel-body').html('<img class="loading" src="http://' + window.location.host + '/public/img/load.gif"></img>');
 	$.ajax({
-		url: '/nodo/' + ip + '/script/' + pid + '/delete',
+		url: '/nodo/' + mac + '/script/' + pid + '/delete',
 		type: 'POST',
 		success: function (response) {
 			if (response.ok == "true") {
@@ -219,59 +220,29 @@ function ReiniciarNodo(mac) {
 	});
 }
 
-function UpdateFrec(ip, pid) {
+function Update(mac, pid, orden) {
 	$('.bt' + pid).prop('disabled', true);
-	var frec = $('#frec_' + pid).val();
+	var val = $('#' + pid + '_' + orden).val();
 	$.ajax({
-		url: '/nodo/' + ip + '/script/' + pid + '/update',
+		url: '/nodo/' + mac + '/script/' + pid + '/update',
 		data: {
 			cambio: {
-				tipo: "frec",
-				valor: frec
+				tipo : "argumentos",
+				orden: orden,
+				valor: val
 			}
 		},
 		type: 'POST',
 		success: function (response) {
 			if (response.ok == "true") {
-				$('#frec_' + pid).val(frec);
 				$('#pid_' + pid).html(response.data.pid);
-				UpdatePidHTML(pid, response.data.pid, ip);
+				//UpdatePidHTML(pid, response.data.pid, ip);
 				$('.bt' + response.data.pid).prop('disabled', false);
 			} else {
 				$('.bt' + pid).prop('disabled', false);
 				$('#cuerpo_nodos').html('<div class="alert alert-danger">' +
 					'<h1>Se ha producido un error</h1>' +
-					'<p>' + response.error + '</p>' +
-					'</div>');
-			}
-		}
-	});
-}
-
-function UpdatePin(ip, pid) {
-	$('.bt' + pid).prop('disabled', true);
-	var pin = $('#pins_' + pid).val();
-	$.ajax({
-		url: '/nodo/' + ip + '/script/' + pid + '/update',
-		data: {
-			cambio: {
-				tipo: "pin",
-				valor: pin
-			}
-		},
-		type: 'POST',
-		success: function (response) {
-			console.log(response);
-			if (response.ok == "true") {
-				$('#pins_' + pid).val(pin);
-				$('#pid_' + pid).html(response.data.pid);
-				UpdatePidHTML(pid, response.data.pid, ip);
-				$('.bt' + response.data.pid).prop('disabled', false);
-			} else {
-				$('.bt' + script.pid).prop('disabled', false);
-				$('#cuerpo_nodos').html('<div class="alert alert-danger">' +
-					'<h1>Se ha producido un error</h1>' +
-					'<p>' + response.error + '</p>' +
+					'<p>' + response.message + '</p>' +
 					'</div>');
 			}
 		}
