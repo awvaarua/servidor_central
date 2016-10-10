@@ -11,18 +11,43 @@ function AddNewScript(){
 }
 
 function AddArgument(){
-    var arg = "<div class=\"argument input-group\">" +
+    var arg = "<div class=\"argumento input-group\">" +
     "                                <div class=\"col-xs-6 col-md-6 col-lg-6\">" +
-    "                                    <input id=\"user_input\" class=\"form-control\" name=\"fields\" type=\"text\" placeholder=\"Nombre que se mostrará\" />" +
+    "                                    <input id=\"nombre_arg\" class=\"form-control\" name=\"fields\" type=\"text\" placeholder=\"Nombre que se mostrará\" />" +
     "                                </div>" +
     "                                <div class=\"col-xs-6 col-md-6 col-lg-6\">" +
-    "                                    <select id=\"alerta_condicion\" class=\"form-control\" id=\"sel_sensor\" name=\"tipo_condicion\">" +
-    "                                        <option value=\"numeric\">Tipo</option>" +
-    "                                        <option value=\"numeric\">Numérico</option>" +
+    "                                    <select id=\"tipo_arg\" class=\"form-control\" id=\"sel_sensor\" name=\"tipo_condicion\">" +
+    "                                        <option value=\"text\">Tipo</option>" +
+    "                                        <option value=\"number\">Numérico</option>" +
     "                                        <option value=\"text\">Texto</option>" +
     "                                    </select>" +
     "                                </div>" +
     "                            </div>";
     $('.argumentos_add').append(arg);
 
+}
+
+
+function GuardarDatosScript(filename){
+    var script = {};
+    script.fichero = filename;
+    script.nombre = $('#script_nombre').val();
+    script.argumentos = [];
+    $('.argumentos_add').find('.argumento').each(function(i, arg){
+        var argumento = {};
+        argumento.orden = i;
+        argumento.nombre = $(arg).find('#nombre_arg').val();
+        argumento.tipo = $(arg).find('#tipo_arg').val();
+        script.argumentos.push(argumento);
+    });
+    $.ajax({
+		url: '/script/add',
+		type: 'POST',
+        data: script,
+		success: function (response) {
+			$('#page-wrapper').html(response);
+			return false;
+		}
+	});
+    console.log(script);
 }

@@ -27,9 +27,24 @@ module.exports = {
 		});
 	},
 
+	scriptAdd: function (req, res, next) {
+		Scripts.AddScript(req.body, function(err){
+			if(err){
+				res.send({
+					ok: "false",
+					error: err
+				});	
+			}
+			res.send({
+				ok: "true",
+			});
+		});
+	},
+
 	fileUpload: function (req, res, next) {
 		res.send({
-			ok: "true"
+			ok: "true",
+			filename: req.file.filename
 		});
 	}
 

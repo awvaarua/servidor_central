@@ -24,6 +24,15 @@ var self = module.exports = {
             }
             callback(null, script);
         })
+    },
+
+    AddScript: function (script, callback) {
+        Script.collection.insert(script, function(err){
+            if (err) {
+                callback(err);
+            }
+            callback(null);
+        });
     }
 
 }

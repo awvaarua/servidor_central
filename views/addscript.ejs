@@ -1,59 +1,57 @@
-<% if(messageOk.length > 0){ %>
- <% } else{ %>
-    <div class="general container">
-        <div class="col-sm-6 col-sm-offset-3 "><h1><span class="fa fa-sign-in"></span> Añadir script</h1>
-            <form class="form-horizontal" id="add_script_form" action="#" method="post">
-                    <div class="form-group">
-                        <label>Nombre</label>
-                        <input id="alerta_mensaje" type="text" class="form-control" name="nombre" placeholder='Nombre con el que se identificará el script'>
+
+<div class="general container">
+    <div class="col-sm-6 col-sm-offset-3 "><h1><span class="fa fa-sign-in"></span> Añadir script</h1>
+        <form class="form-horizontal" id="add_script_form" action="#" method="post">
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input id="script_nombre" type="text" class="form-control" name="nombre" placeholder='Nombre con el que se identificará el script'>
+                </div>
+                <div class="form-group">
+                    <label>Lista de argumentos<span>
+                    <button id="add_user_alert" onclick="AddArgument();" class="btn btn-success btn-add" type="button">
+                                <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                    </span></label>
+                    <hr id="sep1">
+                    <div class="argumentos_add">
                     </div>
-                    <div class="form-group">
-                        <label>Lista de argumentos<span>
-                        <button id="add_user_alert" onclick="AddArgument();" class="btn btn-success btn-add" type="button">
-                                    <span class="glyphicon glyphicon-plus"></span>
-                        </button>
-                        </span></label>
-                        <hr id="sep1">
-                        <div class="argumentos_add">
-                        </div>
-                        <hr id="sep1">
-                    </div>
-                    <div class="form-group">
-                        <div id="myDropzone" class="dropzone co"></div>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-warning btn-lg pull-right">Añadir alerta</button>
-                    </div>
-            </form>
-        </div>
+                    <hr id="sep1">
+                </div>
+                <div class="form-group">
+                    <div id="myDropzone" class="dropzone co"></div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-warning btn-lg pull-right">Añadir alerta</button>
+                </div>
+        </form>
     </div>
-  <script>
+</div>
+<script>
     Dropzone.autoDiscover = false;
-    var myDropzone = new Dropzone(
-        "div#myDropzone",
-        {
-            url: "/script/file/upload/",
-            autoProcessQueue: false,
-            addRemoveLinks: true,
-            maxFiles:1
-        });
-        myDropzone.on('success', function( file, resp ){
-            if(resp.ok == "false"){
+        var myDropzone = new Dropzone("div#myDropzone",
+            {
+                url: "/script/file/upload/",
+                autoProcessQueue: false,
+                addRemoveLinks: true,
+                maxFiles:1,
+                dictDefaultMessage: "Arrastra el fichero aquí o clica"
+            });
+            myDropzone.on('success', function( file, resp ){
+                if(resp.ok == "false"){
+                    this.removeAllFiles();
+                    alert(resp.error);
+                }else{
+                    GuardarDatosScript(resp.filename);
+                }
+            });
+            myDropzone.on("maxfilesexceeded", function(file) {
                 this.removeAllFiles();
-                alert(resp.error);
-            }else{
-                
-            }
-        });
-        myDropzone.on("maxfilesexceeded", function(file) {
-            this.removeAllFiles();
-            this.addFile(file);
-        });
-  </script>
-  <script type="text/javascript">
-    $("#add_script_form").submit(function(event) {
-        event.preventDefault();
-        myDropzone.processQueue();
+                this.addFile(file);
     });
 </script>
-<% } %>
+<script type="text/javascript">
+$("#add_script_form").submit(function(event) {
+    event.preventDefault();
+    myDropzone.processQueue();
+});
+</script>
