@@ -1,0 +1,13 @@
+<div class="general">
+	<h3>Selecciona el script a visualizar</h3>
+	
+	<select id="select_script" class="form-control">
+		<option value="0">Seleccionar</option>
+		<% scripts.forEach(function(script, i) { %>
+			<option value="<%= script._id %>"><%= script.nombre %> - <%= script.fichero %></option>
+		<% }); %> 		
+	</select>
+	<div id="cuerpo_script">
+		
+	</div>
+</div>

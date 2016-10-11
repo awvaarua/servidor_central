@@ -3,7 +3,7 @@ var Script = require('../models/script');
 var self = module.exports = {
 
     GetAllScripts: function (callback) {
-        Script.find({}, 'nombre', function (err, scripts) {
+        Script.find({}, 'nombre fichero', function (err, scripts) {
             if (err) {
                 callback(err);
                 return;

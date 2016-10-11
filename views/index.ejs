@@ -89,10 +89,15 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a onclick="NodosPendientes();" href="#"><i class="fa fa-pause fa-fw"></i> Nodos pendientes</a>
-                        </li>
-                        <li>
-                            <a onclick="GestionNodos();" href="#"><i class="fa fa-cog fa-fw"></i> Gestión de nodos</a>
+                            <a href="#"><i class="fa fa-bullseye fa-fw"></i> Nodos<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a onclick="NodosPendientes();" href="#"><i class="fa fa-pause fa-fw"></i> Nodos pendientes</a>
+                                </li>
+                                <li>
+                                    <a onclick="GestionNodos();" href="#"><i class="fa fa-cog fa-fw"></i> Gestión de nodos</a>
+                                </li>
+                            </ul>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-exclamation-triangle fa-fw"></i> Alertas<span class="fa arrow"></span></a>
@@ -106,13 +111,13 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-cog fa-fw"></i> Scripts<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-code fa-fw"></i> Scripts<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a onclick="AddNewScript();" href="#"><i class="fa fa-plus fa-fw"></i> Añadir script</a>
                                 </li>
                                 <li>
-                                    <a onclick="" href="#"><i class="fa fa-cog fa-fw"></i> Gestión scripts</a>
+                                    <a onclick="GestionScripts();" href="#"><i class="fa fa-cog fa-fw"></i> Gestión scripts</a>
                                 </li>
                             </ul>
                         </li>

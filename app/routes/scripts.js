@@ -11,6 +11,16 @@ module.exports = {
 		});
 	},
 
+	scriptGet: function (req, res, next) {
+		Scripts.GetScript(req.params.id, function (err, script) {
+			if (err) { }
+			console.log(script);
+			res.render('scriptadmin.ejs', {
+				script: script
+			});
+		});
+	},
+
     scriptRender: function (req, res, next) {
 		Scripts.GetScript(req.params.id, function (err, script) {
 			if (err) { }

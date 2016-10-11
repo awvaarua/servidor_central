@@ -43,10 +43,11 @@ module.exports = function(app, passport) {
         }
     })
     var upload = multer({ storage: storage });
-    app.get('/scripts', md.isLoggedIn, scripts.scriptsGet);
+    app.get('/scripts/', md.isLoggedIn, scripts.scriptsGet);
     app.get('/script/add', md.isLoggedIn, scripts.scriptsAddView);
     app.post('/script/add', md.isLoggedIn, scripts.scriptAdd);
     app.post('/script/file/upload/', md.isLoggedIn, upload.single( 'file' ), md.fileExistAndRemove, scripts.fileUpload);
+    app.get('/script/:id', md.isLoggedIn, scripts.scriptGet);
     app.get('/script/:id/render/:posicion', md.isLoggedIn, scripts.scriptRender);
 
     var data = require('./routes/data');

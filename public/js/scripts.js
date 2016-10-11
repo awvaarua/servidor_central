@@ -10,6 +10,18 @@ function AddNewScript(){
 	return false;
 }
 
+function GestionScripts(){
+    $.ajax({
+		url: '/scripts/',
+		type: 'GET',
+		success: function (response) {
+			$('#page-wrapper').html(response);
+			return false;
+		}
+	});
+	return false;
+}
+
 function AddArgument(){
     var arg = "<div class=\"argumento input-group\">" +
     "                                <div class=\"col-xs-6 col-md-6 col-lg-6\">" +

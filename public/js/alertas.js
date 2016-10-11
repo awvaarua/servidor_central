@@ -11,6 +11,23 @@ function GestionAlertas() {
   return false;
 }
 
+$(document).on('change', '#select_script', function () {
+	var id = $('#select_script').val();
+	if (id == 0) {
+		$('#cuerpo_script').html("");
+	} else {
+		$.ajax({
+			url: '/script/' + id,
+			type: 'GET',
+			success: function (response) {
+				$('#cuerpo_script').html(response);
+				return false;
+			}
+		});
+	}
+	return false;
+});
+
 function DeleteAlerta(i, id) {
 	$.ajax({
 		url: '/alerta/'+id+'/remove',

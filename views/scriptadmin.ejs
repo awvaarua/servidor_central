@@ -1,0 +1,46 @@
+<hr id="sep">
+<div class="panel panel-default">
+    <div class="panel-heading">
+    	<strong><%= script.nombre %></strong>
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div class="row">
+            <div id="estado_nodo" class="col-xs-4 col-sm-4 col-md-4">
+            	<h4>Fichero</h4>
+                <strong><%= script.fichero %></strong>
+            </div>
+            <div class="col-xs-8 col-sm-8 col-md-8">
+                <button type="button" class="btn btn-danger pull-right" onclick="">Eliminar</button>
+            </div>
+        </div> 
+        <hr id="sep1">
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Lista de argumentos</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div id="argumentsconainer" class="col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Orden</th>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% script.argumentos.forEach(function(argumento, i) { %>
+                                <tr>
+                                    <td><%= argumento.orden %></td>
+                                    <td><%= argumento.nombre %></td>
+                                    <td><%= argumento.tipo %></td>
+                                </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <!-- /.panel-body -->
+</div>
