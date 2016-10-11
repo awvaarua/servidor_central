@@ -7,67 +7,69 @@
                     <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filtrar</button>
                 </div>
             </div>
-            <table class="table">
-                <thead>
-                    <tr class="filters">
-                        <th><input type="text" class="form-control" placeholder="IP" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Tipo sensor" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Condición" disabled></th>
-                        <th><input type="numeric" class="form-control" placeholder="Valor" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Mensaje" disabled></th>
-                        <th><input type="numeric" class="form-control" placeholder="Frecuencia" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Usuarios" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Acciones" disabled></th>
-                    </tr>
-                </thead>
-                <tbody>
-                  <% alertas.forEach(function(alerta, i) { %>
-                    <tr id="alerta_<%= i %>">
-                        <td id="sel_condition"><%= alerta.ip %></td>
-                        <td id="sel_condition"><%= alerta.tipo %></td>
-                        <td id="sel_condition"><%= alerta.condicion %></td>
-                        <td id="sel_condition"><%= alerta.valor %></td>
-                        <td id="sel_condition"><%= alerta.mensaje %></td>
-                        <td id="sel_condition"><%= alerta.frecuencia %></td>
-                        <td id="sel_condition">
-                          <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Listar usuarios
-                            <span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                              <% alerta.usuarios.forEach(function(usuario, i) { %>
-                                <li class="list-group-item"><%= usuario %><span class="pull-right"><button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button></span></li>
-                              <% }); %>
-                                <hr>
-                                <div id="userlistadd" class="entry input-group col-xs-6">
-                                    <input id="user_input" class="form-control" name="fields" type="text" placeholder="@usuario" />
-                                    <span class="input-group-btn">
-                                        <button id="add_user_alert" onclick="AddUserToList();" class="btn btn-success btn-add" type="button">
-                                            <span class="glyphicon glyphicon-plus"></span>
-                                        </button>
-                                    </span>
-                                </div>
-                            </ul>
-                          </div>
-                        <td id="sel_condition">
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr class="filters">
+                            <th><input type="text" class="form-control" placeholder="IP" disabled></th>
+                            <th><input type="text" class="form-control" placeholder="Tipo sensor" disabled></th>
+                            <th><input type="text" class="form-control" placeholder="Condición" disabled></th>
+                            <th><input type="numeric" class="form-control" placeholder="Valor" disabled></th>
+                            <th><input type="text" class="form-control" placeholder="Mensaje" disabled></th>
+                            <th><input type="numeric" class="form-control" placeholder="Frecuencia" disabled></th>
+                            <th><input type="text" class="form-control" placeholder="Usuarios" disabled></th>
+                            <th><input type="text" class="form-control" placeholder="Acciones" disabled></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% alertas.forEach(function(alerta, i) { %>
+                        <tr id="alerta_<%= i %>">
+                            <td id="sel_condition"><%= alerta.ip %></td>
+                            <td id="sel_condition"><%= alerta.tipo %></td>
+                            <td id="sel_condition"><%= alerta.condicion %></td>
+                            <td id="sel_condition"><%= alerta.valor %></td>
+                            <td id="sel_condition"><%= alerta.mensaje %></td>
+                            <td id="sel_condition"><%= alerta.frecuencia %></td>
+                            <td id="sel_condition">
                             <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Ver acciones
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Listar usuarios
                                 <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
-                                    <button type="button" class="btn btn-info btn-md" onclick="">
-                                        <span class="glyphicon glyphicon-refresh"></span> Actualizar
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-md" onclick="DeleteAlerta(<%= i %>, '<%= alerta.id %>');">
-                                        <span class="glyphicon glyphicon-trash"></span> Eliminar
-                                    </button>
+                                <% alerta.usuarios.forEach(function(usuario, i) { %>
+                                    <li class="list-group-item"><%= usuario %><span class="pull-right"><button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button></span></li>
+                                <% }); %>
+                                    <hr>
+                                    <div id="userlistadd" class="entry input-group col-xs-6">
+                                        <input id="user_input" class="form-control" name="fields" type="text" placeholder="@usuario" />
+                                        <span class="input-group-btn">
+                                            <button id="add_user_alert" onclick="AddUserToList();" class="btn btn-success btn-add" type="button">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
                                 </ul>
                             </div>
-                        
-                          
-                        </td>
-                    </tr>
-                  <% }); %>
-                </tbody>
-            </table>
+                            <td id="sel_condition">
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Ver acciones
+                                    <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <button type="button" class="btn btn-info btn-md" onclick="">
+                                            <span class="glyphicon glyphicon-refresh"></span> Actualizar
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-md" onclick="DeleteAlerta(<%= i %>, '<%= alerta.id %>');">
+                                            <span class="glyphicon glyphicon-trash"></span> Eliminar
+                                        </button>
+                                    </ul>
+                                </div>
+                            
+                            
+                            </td>
+                        </tr>
+                    <% }); %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

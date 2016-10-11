@@ -33,8 +33,11 @@
     margin: auto;
 }
 
-table {
-    overflow: scroll; /* Scrollbar are always visible */
-    overflow: auto;   /* Scrollbar is displayed as it's needed */
+.table-container
+{
+	width: 100%;
+	overflow-y: auto;
+	_overflow: auto;
+	margin: 0 0 1em;
 }
 

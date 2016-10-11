@@ -39,7 +39,13 @@
             myDropzone.on('success', function( file, resp ){
                 if(resp.ok == "false"){
                     this.removeAllFiles();
-                    alert(resp.error);
+                    var dialog = new BootstrapDialog({
+                        title: 'Error',
+                        message: resp.error
+                    });
+                    dialog.realize();
+                    dialog.getModalHeader().css('background-color', 'red');
+                    dialog.open();
                 }else{
                     GuardarDatosScript(resp.filename);
                 }
