@@ -2,9 +2,9 @@ var mongoose = require('mongoose');
 
 var alertSchema = mongoose.Schema({
 
-    ip: String,
-    tipo: Number,
-    condicion: Number,
+    mac: Number,
+    fichero: String,
+    condicion: String,
     valor: Number,
     mensaje: String,
     last_event: Date,

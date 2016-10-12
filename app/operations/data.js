@@ -1,13 +1,13 @@
-var Constantes = require('../constantes/constantes.js');
+var Data = require('../models/data.js');
 
 var self = module.exports = {
 
-	Add: function(object) {
-		var type = Constantes.Collection(object.tipo);
-		type.collection.insert({
-			ip: object.datos.ip,
+	Add: function(mac, fichero, valor) {
+		Data.collection.insert({
+			mac: mac,
 			date: new Date(),
-			val: parseInt(object.datos.val)
+			valor: valor,
+			fichero: fichero
 		}, {}, function(err) {});
 	}
 

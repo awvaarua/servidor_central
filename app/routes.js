@@ -51,7 +51,7 @@ module.exports = function(app, passport) {
     app.get('/script/:id/render/:posicion', md.isLoggedIn, scripts.scriptRender);
 
     var data = require('./routes/data');
-    app.post('/data/add', data.dataAdd);
+    app.post('/data/add', md.getIp, data.dataAdd);
 
     // =============================================================================
     //  ADMIN PANE =================================================================

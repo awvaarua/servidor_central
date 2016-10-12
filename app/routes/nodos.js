@@ -1,7 +1,6 @@
 var Nodos = require('../operations/nodos.js');
 var Pendientes = require('../operations/pendientes.js');
 var Ssh = require('../ssh_operations/sshoperations.js');
-var Constantes = require('../constantes/constantes.js');
 var Scripts = require('../operations/scripts.js');
 
 module.exports = {

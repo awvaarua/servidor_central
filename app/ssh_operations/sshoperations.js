@@ -1,7 +1,6 @@
 var path = require('path');
 var node_SSH = require('node-ssh');
 var ssh = new node_SSH();
-var Constantes = require('../constantes/constantes.js');
 var Scripts = require('../operations/scripts.js');
 
 var self = module.exports = {

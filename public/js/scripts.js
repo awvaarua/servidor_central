@@ -22,23 +22,35 @@ function GestionScripts() {
     return false;
 }
 
+var num_arguments_add = 0;
 function AddArgument() {
-    var arg = "<div class=\"argumento input-group\">" +
-        "                                <div class=\"col-xs-6 col-md-6 col-lg-6\">" +
-        "                                    <input id=\"nombre_arg\" class=\"form-control\" name=\"fields\" type=\"text\" placeholder=\"Nombre que se mostrará\" />" +
-        "                                </div>" +
-        "                                <div class=\"col-xs-6 col-md-6 col-lg-6\">" +
-        "                                    <select id=\"tipo_arg\" class=\"form-control\" id=\"sel_sensor\" name=\"tipo_condicion\">" +
-        "                                        <option value=\"text\">Tipo</option>" +
-        "                                        <option value=\"number\">Numérico</option>" +
-        "                                        <option value=\"text\">Texto</option>" +
-        "                                    </select>" +
-        "                                </div>" +
-        "                            </div>";
+    var arg = "<div id='argumentoadd_"+num_arguments_add+"' class=\"argumento input-group\">" +
+"                            <div class=\"col-xs-5 col-sm-5 col-md-5\">" +
+"                                <input id=\"nombre_arg\" class=\"form-control\" name=\"fields\" type=\"text\" placeholder=\"Nombre que se mostrará\" />" +
+"                            </div>" +
+"                            <div class=\"col-xs-5 col-sm-5 col-md-5\">" +
+"                                <select id=\"tipo_arg\" class=\"form-control\" id=\"sel_sensor\" name=\"tipo_condicion\">" +
+"                                    <option value=\"text\">Tipo</option>" +
+"                                    <option value=\"number\">Numérico</option>" +
+"                                    <option value=\"text\">Texto</option>" +
+"                                </select>" +
+"                            </div>" +
+"                            <div class=\"col-xs-2 col-sm-2 col-md-2\">" +
+"                                <button onclick='RemoveArgument("+num_arguments_add+")' class=\"btn btn-danger\" data-title=\"Delete\" data-toggle=\"modal\" data-target=\"#delete\"><span class=\"glyphicon glyphicon-trash\"></span></button>" +
+"                            </div>" +
+"                        </div>";
+    num_arguments_add ++;
     $('.argumentos_add').append(arg);
 
 }
 
+var num_arguments_add = 0;
+function RemoveArgument(i) {
+
+    num_arguments_add --;
+    $('#argumentoadd_'+i).remove();
+
+}
 
 function GuardarDatosScript(filename) {
     var script = {};

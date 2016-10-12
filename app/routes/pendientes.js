@@ -1,6 +1,5 @@
 var Pendientes = require('../operations/pendientes.js');
 var Scripts = require('../operations/scripts.js');
-var Constantes = require('../constantes/constantes.js');
 
 module.exports = {
 
@@ -29,7 +28,6 @@ module.exports = {
                 res.render('pendiente.ejs', {
                     pendiente: pendiente,
                     scripts: scripts,
-                    tipos: Constantes.List()
                 });
             });            
         });
@@ -42,8 +40,7 @@ module.exports = {
                 listapendientes = [];
             }
             res.render('lista-pendientes.ejs', {
-                pendientes: listapendientes,
-                tipos: Constantes.List()
+                pendientes: listapendientes
             });
         });
     },
