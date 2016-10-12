@@ -19,28 +19,35 @@
             <!-- LOGIN FORM -->
             <form id="newalert" action="/alerta/add" name="nueva_alerta">
                 <div class="form-group">
-                    <label>IP</label>
-                    <input id="alerta_ip" type="text" class="form-control" name="ip">
+                    <label>Seleccionar nodo</label>
+                    <select id="alerta_mac" class="form-control" id="sel_sensor" name="tipo_condicion">
+                        <option value="0">Seleccionar</option>
+                        <% nodos.forEach(function(nodo, i) { %>
+                            <option value="<%= nodo.mac %>"><%= nodo.nombre %> - <%= nodo.mac %></option>                        
+                        <% }); %>                        
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="sel_sensor">Tipo sensor</label>
+                    <label for="sel_sensor">Script al que hace referencia</label>
                     <select id="alerta_tipo" class="form-control" id="sel_sensor" name="tipo_sensor">
-                        <option value="0">Temperatura</option>
-                        <option value="1">Humedad</option>
+                        <option value="0">Seleccionar</option> 
+                        <% scripts.forEach(function(script, i) { %>
+                            <option value="<%= script.fichero %>"><%= script.nombre %></option>                        
+                        <% }); %>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Mensaje</label>
-                    <input id="alerta_mensaje" type="text" class="form-control" name="descripcion" placeholder='":ip" se substituirá por la ip del nodo. ":valor" se substituirá por el valor recibido'>
+                    <input id="alerta_mensaje" type="text" class="form-control" name="descripcion" placeholder='":nombre" se substituirá por la ip del nodo. ":valor" se substituirá por el valor recibido'>
                 </div>
                 <div class="form-group">
                     <label for="sel_sensor">Condición</label>
                     <select id="alerta_condicion" class="form-control" id="sel_sensor" name="tipo_condicion">
-                        <option value="0"><</option>
-                        <option value="1"><=</option>
-                        <option value="2">></option>
-                        <option value="3">>=</option>
-                        <option value="4">=</option>
+                        <option value="<"><</option>
+                        <option value="<="><=</option>
+                        <option value=">">></option>
+                        <option value=">=">>=</option>
+                        <option value="=">=</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -71,11 +78,11 @@
 
             <script type="text/javascript">
             $("#newalert").submit(function(event) {
-                /* stop form from submitting normally */
+                //Valdiate();
                 event.preventDefault();
                 var alerta = new Object();
-                alerta.ip = $('#alerta_ip').val();
-                alerta.tipo = $('#alerta_tipo').val();
+                alerta.mac = $('#alerta_mac').val();
+                alerta.fichero = $('#alerta_tipo').val();
                 alerta.mensaje = $('#alerta_mensaje').val();
                 alerta.condicion = $('#alerta_condicion').val();
                 alerta.valor = $('#alerta_valor').val();

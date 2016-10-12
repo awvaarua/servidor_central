@@ -1,7 +1,6 @@
 var path = require('path');
 var node_SSH = require('node-ssh');
 var ssh = new node_SSH();
-var Scripts = require('../operations/scripts.js');
 
 var self = module.exports = {
 
@@ -15,9 +14,9 @@ var self = module.exports = {
       username: 'pi',
       password: 'fura4468AB'
     }).then(function() {
-      ssh.putFile('/home/ssb/TFG/nodo/scripts/' + script.fichero, '/home/pi/Documents/Scripts/' + script.fichero).then(function() {
-        console.log('nohup python /home/pi/Documents/Scripts/' + script.fichero + ' ' + script.argumentos[0].valor + ' > /dev/null 2>&1 & echo $!');
-        ssh.exec('nohup python /home/pi/Documents/Scripts/' + script.fichero  + script.frecuencia + ' > /dev/null 2>&1 & echo $!').then(function(std) {
+      ssh.putFile('./uploads/' + script.fichero, '/home/pi/Scripts/' + script.fichero).then(function() {
+        console.log('nohup python /home/pi/Scripts/' + script.fichero + ' ' + script.argumentos[0].valor + ' > /dev/null 2>&1 & echo $!');
+        ssh.exec('nohup python /home/pi/Scripts/' + script.fichero + ' ' + script.argumentos[0].valor + ' > /dev/null 2>&1 & echo $!').then(function(std) {
           callback(null, std);
         }, function(err) {
           callback(err, null);

@@ -6,12 +6,11 @@ var self = module.exports = {
 
     AddAlerta: function (alerta, callback) {
         Alerta.collection.insert({
-            ip: alerta.ip,
-            tipo: parseInt(alerta.tipo),
-            condicion: parseInt(alerta.condicion),
+            mac: parseInt(alerta.mac),
+            condicion: alerta.condicion,
+            fichero: alerta.fichero,
             valor: parseInt(alerta.valor),
             mensaje: alerta.mensaje,
-            last_event: new Date(),
             usuarios: alerta.usuarios,
             frecuencia: parseInt(alerta.frecuencia)
         }, function (err) {
@@ -25,7 +24,7 @@ var self = module.exports = {
 
     GetAlerta: function (mac, fichero, callback) {
         Alerta.find({
-            mac: mac,
+            mac: parseInt(mac),
             fichero: fichero
         }, function (err, alerta) {
             if (err) {
@@ -73,11 +72,10 @@ var self = module.exports = {
                 }
                 alertas.forEach(function(alerta){
                     var mensaje = "";
-                    if (CheckCondition(valor, alerta.condicion, alerta.valor)){                    
-                        if(CheckDate(alerta, nodo)){
+                    if (CheckCondition(valor, alerta.condicion, alerta.valor)){                 
+                        if(CheckDate(alerta, nodo)){ 
                             mensaje = CreateMensaje(alerta, nodo, valor);
                             console.log("Debemos alertar");
-                            console.log(alerta.usuarios);
                             Accion.SendTelegram(mensaje, alerta.usuarios);
                         }
                     }
@@ -89,14 +87,33 @@ var self = module.exports = {
 
 }
 
-function CheckCondition(valor1, condicion, valor2){
+function CheckCondition(valor1, condicion, valor2){    
     switch (condicion) {
         case ">":
             if( valor1 > valor2) {
                 return true;
             }
-            return false;            
-    
+            return false;
+        case ">=":
+            if( valor1 >= valor2) {
+                return true;
+            }
+            return false; 
+        case "<":
+            if( valor1 < valor2) {
+                return true;
+            }
+            return false; 
+        case "<=":
+            if( valor1 <= valor2) {
+                return true;
+            }
+            return false;
+        case "=":
+            if( valor1 == valor2) {
+                return true;
+            }
+            return false;
         default:
             return false;
     }
@@ -120,7 +137,7 @@ function CheckDate(alerta){
 }
 
 function CreateMensaje(alerta, nodo, valor) {
-    var msg = "\u{2757}"+alerta.mensaje.replace(":mac", nodo.mac);
+    var msg = "\u{2757}\u{2757}\u{2757}"+alerta.mensaje.replace(":nombre", nodo.nombre);
     msg = msg.replace(":valor", valor);
     return msg;
 }

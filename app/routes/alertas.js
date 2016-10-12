@@ -1,4 +1,6 @@
 var Alertas = require('../operations/alertas.js');
+var Nodos = require('../operations/nodos.js');
+var Scripts = require('../operations/scripts.js');
 
 module.exports = {
 
@@ -28,10 +30,17 @@ module.exports = {
 	},
 
 	alertaAddView: function (req, res, next) {
-		res.render('addalerta.ejs', {
-            message: req.flash('signupMessage'),
-            messageOk: req.flash('signupMessageOk')
-        });
+		Nodos.GetAllNodes(function(nodos){
+			Scripts.GetAllScripts(function(err, scripts){
+				console.log(nodos);
+				res.render('addalerta.ejs', {
+					nodos: nodos,
+					scripts: scripts,
+					message: req.flash('signupMessage'),
+					messageOk: req.flash('signupMessageOk')
+				});
+			});
+		});
 	},
 
 	alertRemove: function (req, res, next) {
