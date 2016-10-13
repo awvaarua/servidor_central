@@ -71,20 +71,37 @@ var self = module.exports = {
                     return;
                 }
                 alertas.forEach(function(alerta){
-                    var mensaje = "";
-                    if (CheckCondition(valor, alerta.condicion, alerta.valor)){                 
-                        if(CheckDate(alerta, nodo)){ 
-                            mensaje = CreateMensaje(alerta, nodo, valor);
-                            console.log("Debemos alertar");
-                            Accion.SendTelegram(mensaje, alerta.usuarios);
-                        }
-                    }
+                    Actuar(nodo, valor, alerta);
                 });
-                console.log("Fin del bucle");
             });            
         });
     }
+}
 
+function Actuar (nodo, valor, alerta) {
+    switch (alerta.tipo) {
+        case 1:
+            CheckAlerta(nodo, valor);
+            break;
+        case 2:
+            Informar()
+            break;
+        default:
+            break;
+    }
+};
+
+function CheckAlerta(nodo, valor, alerta) {                
+    if (CheckCondition(valor, alerta.condicion, alerta.valor)) {
+        if (CheckDate()) {
+            Informar(alerta, nodo, valor);
+        }
+    }
+}
+
+function Informar(nodo, valor) {
+    mensaje = CreateMensaje(nodo, valor);
+    Accion.SendTelegram(mensaje, this.usuarios);
 }
 
 function CheckCondition(valor1, condicion, valor2){    
@@ -136,7 +153,7 @@ function CheckDate(alerta){
     return false;
 }
 
-function CreateMensaje(alerta, nodo, valor) {
+function CreateMensaje(nodo, valor, alerta) {
     var msg = "\u{2757}\u{2757}\u{2757}"+alerta.mensaje.replace(":nombre", nodo.nombre);
     msg = msg.replace(":valor", valor);
     return msg;

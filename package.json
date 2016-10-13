@@ -14,7 +14,7 @@
     "morgan": "~1.0.0",
     "multer": "^1.2.0",
     "node-ssh": "^3.0.1",
-    "node-telegram-bot": "^0.1.9",
+    "node-telegram-bot-api": "^0.24.0",
     "passport": "~0.1.17",
     "passport-local": "~0.1.6",
     "path": "^0.12.7"
