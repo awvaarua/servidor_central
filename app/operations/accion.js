@@ -66,16 +66,20 @@ bot.on("callback_query", function(callbackQuery) {
             }else{
                 msg += "       Estado: \u{2705} Online\n       Lista de scripts:\n";
                 //Bucle recursiu
-                nodo.scripts.forEach(function(script){
-                    Ssh.CheckScriptStatus(nodo.ip, script.pid, function(err, estado){
-                        if(estado == "offline"){
-                            msg += "              "+script.nombre+" \u{274C} Offline\n";
+                Ssh.CheckScriptsRecursive(nodo.ip, nodo.scripts, 0, [], function(err, info){
+                    if(err){
+                        self.UpdateMessage(err,opt);
+                        return;
+                    }
+                    info.forEach(function(script){
+                        if(script.estado == "offline"){
+                            msg += "              "+script.nombre+" \u{274C} Parado\n";
                         }else{
-                            msg += "              "+script.nombre+" \u{2705} Online\n";
+                            msg += "              "+script.nombre+" \u{2705} En ejecución\n";
                         }
                     });
+                    self.UpdateMessage(msg,opt);
                 });
-                self.UpdateMessage(msg,opt);
             }
         });        
     });
