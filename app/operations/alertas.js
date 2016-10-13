@@ -81,10 +81,10 @@ var self = module.exports = {
 function Actuar (nodo, valor, alerta) {
     switch (alerta.tipo) {
         case 1:
-            CheckAlerta(nodo, valor);
+            CheckAlerta(nodo, valor, alerta);
             break;
         case 2:
-            Informar()
+            Informar(alerta, nodo, valor)
             break;
         default:
             break;
@@ -93,15 +93,15 @@ function Actuar (nodo, valor, alerta) {
 
 function CheckAlerta(nodo, valor, alerta) {                
     if (CheckCondition(valor, alerta.condicion, alerta.valor)) {
-        if (CheckDate()) {
+        if (CheckDate(alerta)) {
             Informar(alerta, nodo, valor);
         }
     }
 }
 
-function Informar(nodo, valor) {
-    mensaje = CreateMensaje(nodo, valor);
-    Accion.SendTelegram(mensaje, this.usuarios);
+function Informar(alerta, nodo, valor) {
+    mensaje = CreateMensaje(alerta, nodo, valor);
+    Accion.SendTelegram(mensaje, alerta.usuarios);
 }
 
 function CheckCondition(valor1, condicion, valor2){    
@@ -153,7 +153,7 @@ function CheckDate(alerta){
     return false;
 }
 
-function CreateMensaje(nodo, valor, alerta) {
+function CreateMensaje(alerta, nodo, valor) {
     var msg = "\u{2757}\u{2757}\u{2757}"+alerta.mensaje.replace(":nombre", nodo.nombre);
     msg = msg.replace(":valor", valor);
     return msg;
