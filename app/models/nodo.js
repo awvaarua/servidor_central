@@ -1,31 +1,29 @@
 var mongoose = require('mongoose');
 
-// define the schema for our user model
-var userSchema = mongoose.Schema({
+var nodoSchema = mongoose.Schema({
 
-	ip: String,
-	date: Date,
-	mac: Number,
-	nombre: String,
-	descripcion: String,
+	ip: {type: String, required: [true, 'Se requiere la IP']},
+	date: {type: Date, required: [true, 'Se requiere fecha']},
+	mac: {type: Number, required: [true, 'Se requiere una MAC única']},
+	nombre: {type: String, required: [true, 'Se requiere Nombre']},
+	descripcion: {type: String, required: [true, 'Se requiere una Descripcion']},
 	scripts: [{
-		pid: Number,
-		nombre: String,
-		fichero: String,
+		pid: {type: Number, required: [true, 'Se requiere un PID']},
+		nombre: {type: String, required: [true, 'Se requiere Nombre para el script']},
+		fichero: {type: String, required: [true, 'Se requiere un Nombre de fichero']},
 		argumentos: [{
-			nombre: String,
-			valor: String,
-			orden: Number
+			nombre: {type: String, required: [true, 'Se requiere Nombre para el argumnto']},
+			valor: {type: String, required: [true, 'Se requiere un Valor para el argumento']},
+			orden: {type: Number, required: [true, 'Se requiere un Orden']},
 		}]
 	}]
 
 });
 
-userSchema.methods.sort = function () {
+nodoSchema.methods.sort = function () {
 	scripts.forEach(function(script) {
 		script.argumentos.sort(function(a, b){return a.orden - b.orden})
 	}, this);
 }
 
-// create the model for users
-module.exports = mongoose.model('Nodo', userSchema);
+module.exports = mongoose.model('Nodo', nodoSchema);

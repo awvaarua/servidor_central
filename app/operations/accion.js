@@ -34,7 +34,6 @@ bot.onText(/\/estado/, function (msg, match) {
             }]);
         });
         var opt = {
-            //reply_to_message_id: msg.message_id,
             reply_markup: {
                 hide_keyboard: true,
                 inline_keyboard: keyboard

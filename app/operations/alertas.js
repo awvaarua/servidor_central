@@ -7,7 +7,10 @@ var self = module.exports = {
     AddAlerta: function (alerta, callback) {
         console.log(alerta);
         var alert = {
-            mac: parseInt(alerta.mac),
+            nodo: {
+                mac: parseInt(alerta.mac),
+                nombre: alerta.nombre
+            },
             fichero: alerta.fichero,
             mensaje: alerta.mensaje,
             usuarios: alerta.usuarios,
@@ -54,7 +57,7 @@ var self = module.exports = {
 
     GetAlerta: function (mac, fichero, callback) {
         Alerta.find({
-            mac: parseInt(mac),
+            "nodo.mac": parseInt(mac),
             fichero: fichero
         }, function (err, alerta) {
             if (err) {
@@ -183,7 +186,7 @@ function CheckDate(alerta) {
         return true;
     }
     var now = new Date();
-    var diffMs = (now - alerta.last_event); // milliseconds between now & last
+    var diffMs = (now - alerta.last_event);
     var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
     if (diffMins >= alerta.frecuencia) {
         alerta.last_event = now;

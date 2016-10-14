@@ -2,7 +2,10 @@ var mongoose = require('mongoose');
 
 var alertSchema = mongoose.Schema({
 
-    mac: Number,
+    nodo: {
+        mac: Number,
+        nombre: String
+    },
     fichero: String,
     condicion: String,
     valor: Number,

@@ -15,16 +15,25 @@ module.exports = {
 	},
 
 	alertAdd: function (req, res, next) {
-		Alertas.AddAlerta(req.body, function (err) {
-			if (err) {
+		Nodos.GetNodo(req.body.mac, function(err, nodo){
+			if (err || !nodo) {
 				res.render('addalerta.ejs', {
 					message: "No se ha podido añadir la alerta: " + err,
 					messageOk: req.flash('signupMessage')
 				});
 			}
-			res.render('addalerta.ejs', {
-				message: req.flash('signupMessage'),
-				messageOk: "Alerta añadida correctamente"
+			req.body.nombre = nodo.nombre;
+			Alertas.AddAlerta(req.body, function (err) {
+				if (err) {
+					res.render('addalerta.ejs', {
+						message: "No se ha podido añadir la alerta: " + err,
+						messageOk: req.flash('signupMessage')
+					});
+				}
+				res.render('addalerta.ejs', {
+					message: req.flash('signupMessage'),
+					messageOk: "Alerta añadida correctamente"
+				});
 			});
 		});
 	},
