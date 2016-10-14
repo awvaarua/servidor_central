@@ -54,10 +54,10 @@
                                     <div class="col-md-4 vcenter">
                                         <h5><strong><%= argumento.nombre %></strong></h5>
                                         <div class="input-group">
-                                        <input id="<%= script.pid %>_<%= argumento.orden %>"  class="form-control arg" type="number" name="frec" value="<%= argumento.valor %>">
-                                        <span class="input-group-btn">
-                                            <button id="<%= argumento.orden %>" type="button" onclick="Update('<%= nodo.mac %>', '<%= script.pid %>', '<%= argumento.orden %>');" class="btn btn-info bt<%= script.pid %> argbt" disabled>Actualizar</button>
-                                        </span>
+                                            <input id="<%= script.pid %>_<%= argumento.orden %>"  class="form-control arg" type="number" name="frec" value="<%= argumento.valor %>">
+                                            <span class="input-group-btn">
+                                                <button id="<%= argumento.orden %>" type="button" onclick="Update('<%= nodo.mac %>', '<%= script.pid %>', '<%= argumento.orden %>');" class="btn btn-info bt<%= script.pid %> argbt" disabled>Actualizar</button>
+                                            </span>
                                         </div>
                                     </div>
                                 <% }); %>

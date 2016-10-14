@@ -33,11 +33,23 @@
     margin: auto;
 }
 
-.table-container
-{
-	width: 100%;
-	overflow-y: auto;
-	_overflow: auto;
-	margin: 0 0 1em;
+#contenedor_alerta{
+    padding: 10px;
 }
 
+.maxsize{
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.delblanc{
+    color: white;
+}
+
+.addblanc{
+    color: white;
+}
+
+.sepusers{
+    margin-bottom: 10px;
+}

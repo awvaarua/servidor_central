@@ -29,6 +29,23 @@ module.exports = {
 		});
 	},
 
+	alertUpdate: function (req, res, next) {
+		Alertas.GetAlertaById(req.params.id, function (err, alerta) {
+			if(err || !alerta){
+				res.send({
+                    ok: "false",
+                    error: err
+                });
+				return;
+			}
+			Alertas.UpdateAlerta(alerta, req.body, function (err) {
+				res.send({
+					ok: "true"
+				});	
+			});
+		});
+	},
+
 	alertaAddView: function (req, res, next) {
 		Nodos.GetAllNodes(function(nodos){
 			Scripts.GetAllScripts(function(err, scripts){

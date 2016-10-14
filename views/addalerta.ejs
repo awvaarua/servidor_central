@@ -41,22 +41,21 @@
                     <input id="alerta_mensaje" type="text" class="form-control" name="descripcion" placeholder='":nombre" se substituirá por la ip del nodo. ":valor" se substituirá por el valor recibido'>
                 </div>
                 <div class="form-group">
-                    <label for="sel_sensor">Condición</label>
-                    <select id="alerta_condicion" class="form-control" id="sel_sensor" name="tipo_condicion">
-                        <option value="<"><</option>
-                        <option value="<="><=</option>
-                        <option value=">">></option>
-                        <option value=">=">>=</option>
-                        <option value="=">=</option>
+                    <label>Tipo alerta</label>
+                    <select id="alerta_tipo_condicion" class="form-control" id="sel_sensor" name="tipo_condicion">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Condición</option>
+                        <option value="2">Inmediata</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="sel_sensor">Valor</label>
-                    <input id="alerta_valor" type="number" class="form-control" name="valor" placeholder="Valor con el que se comparará">
+                <div id="div_condicion" class="form-group">
+                    
                 </div>
-                <div class="form-group">
-                    <label for="sel_frecuencia">Frecuencia</label>
-                    <input id="alerta_frecuencia" type="number" class="form-control" name="valor" placeholder="Tiempo que debe pasar para que se vuelva a enviar una alerta">
+                <div id="div_condicion_valor" class="form-group">
+                    
+                </div>
+                <div id="div_condicion_frecuencia" class="form-group">
+                    
                 </div>
                 <div class="form-group" id="fields">
                     <label class="control-label" for="field1">Usuarios a los que enviar el mensaje</label>
@@ -84,9 +83,17 @@
                 alerta.mac = $('#alerta_mac').val();
                 alerta.fichero = $('#alerta_tipo').val();
                 alerta.mensaje = $('#alerta_mensaje').val();
-                alerta.condicion = $('#alerta_condicion').val();
-                alerta.valor = $('#alerta_valor').val();
-                alerta.frecuencia = $('#alerta_frecuencia').val();
+                if($('#alerta_tipo_condicion').val() == 1){
+                    alerta.tipo = 1;
+                    alerta.condicion = $('#alerta_condicion').val();
+                    alerta.valor = $('#alerta_valor').val();
+                    alerta.frecuencia = $('#alerta_frecuencia').val();
+                }else{
+                    alerta.tipo = 2;
+                    alerta.condicion = 0;
+                    alerta.valor = 0;
+                    alerta.frecuencia = 0;
+                }
                 var usuarios = [];
                 $('#userlist li').each(function(idx, li){
                     usuarios.push($(li).text());

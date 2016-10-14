@@ -30,6 +30,7 @@ module.exports = function(app, passport) {
     app.get('/alerts/', md.isLoggedIn, alertas.alertsGet);
     app.get('/alerta/add', md.isLoggedIn, alertas.alertaAddView);
     app.post('/alerta/add', md.isLoggedIn, alertas.alertAdd);
+    app.post('/alerta/:id/update', md.isLoggedIn, alertas.alertUpdate);
     app.post('/alerta/:id/remove', md.isLoggedIn, alertas.alertRemove);
 
     var scripts = require('./routes/scripts');
