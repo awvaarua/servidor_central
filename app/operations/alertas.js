@@ -5,8 +5,7 @@ var Nodo = require('../operations/nodos.js');
 var self = module.exports = {
 
     AddAlerta: function (alerta, callback) {
-        console.log(alerta);
-        var alert = {
+        var alert = new Alerta({
             nodo: {
                 mac: parseInt(alerta.mac),
                 nombre: alerta.nombre
@@ -15,7 +14,7 @@ var self = module.exports = {
             mensaje: alerta.mensaje,
             usuarios: alerta.usuarios,
             tipo: parseInt(alerta.tipo)
-        };
+        });
         if (parseInt(alerta.tipo) == 1) {
             alert.condicion = alerta.condicion;
             alert.valor = parseInt(alerta.valor);
@@ -24,10 +23,9 @@ var self = module.exports = {
         if(!alerta.usuarios){
             alert.usuarios = [];
         }
-        Alerta.collection.insert(alert, function (err) {
+        alert.save(function (err) {
             if (err) {
-                callback(err);
-                return;
+                return callback(err);
             }
             callback(null);
         });
@@ -47,9 +45,7 @@ var self = module.exports = {
         }
         alerta.save(function(err){
             if (err) {
-                console.log(err);
-                callback(err);
-                return;
+                return callback(err);
             }
             callback(null);
         });
@@ -61,8 +57,7 @@ var self = module.exports = {
             fichero: fichero
         }, function (err, alerta) {
             if (err) {
-                callback(err);
-                return;
+                return callback(err);
             }
             callback(null, alerta);
         });
@@ -71,8 +66,7 @@ var self = module.exports = {
     GetAlertaById: function (id, callback) {
         Alerta.findById(id, function (err, alerta) {
             if (err) {
-                callback(err);
-                return;
+                return callback(err);
             }
             callback(null, alerta);
         });
@@ -97,8 +91,7 @@ var self = module.exports = {
             _id: id
         }, function (err) {
             if (err) {
-                callback(err);
-                return;
+                return callback(err);
             }
             callback(null);
         });

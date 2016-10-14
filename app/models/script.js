@@ -2,26 +2,14 @@ var mongoose = require('mongoose');
 
 var scriptSchema = mongoose.Schema({
 
-    nombre: String,
-    fichero: String,
+    nombre: {type: String, required: [true, 'Se requiere un nombre para identificar el script']},
+    fichero: {type: String, required: [true, 'Se requiere esècificar un fichero']},
     argumentos: [{
-        nombre: String,
-        tipo: String,
-        orden: Number,
-        descripcion: String
+        nombre: {type: String, required: [true, 'Se requiere un nombre para identificar el argumento']},
+        tipo: {type: String, required: [true, 'Se requiere un tipo'], enum: ['number', 'text']},
+        orden: {type: Number, required: [true, 'Se requiere especificar un orden']},
     }]
 
 });
-
-/*alertSchema.prototype.actuar = function () {
-    switch (this._tipo_accion) {
-        case 1:
-            break;
-        case 2:
-            break;
-        default:
-            break;
-    }
-};*/
 
 module.exports = mongoose.model('Script', scriptSchema);

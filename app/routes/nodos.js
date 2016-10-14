@@ -4,16 +4,14 @@ var Ssh = require('../ssh_operations/sshoperations.js');
 var Scripts = require('../operations/scripts.js');
 
 module.exports = {
-
     //=== ADD NODE ===
     nodeAdd: function(req, res, next) {
         Nodos.AddNode(req.body.confirmacion, function(err) {
             if (err) {
-                res.send({
+                return res.send({
                     ok: "false",
                     error: "Error al insertar el nodo en la base de datos: "+err
                 });
-                return;
             }
             Pendientes.DeletePendiente(req.body.confirmacion.mac, function(err) {
                 if (err) {
@@ -194,19 +192,17 @@ module.exports = {
     scriptAdd: function(req, res, next) {
         Nodos.GetNodo(req.params.mac, function(err, nodo) {
             if (err) {
-                res.send({
+                return res.send({
                     ok: "false",
                     message: "Error al recuperar el nodo: "+err.message
                 });
-                return;
             }
-            Nodos.AddScript(req.params.mac, nodo.ip, req.body.script, function(err) {
+            Nodos.AddScript(nodo, req.body.script, function(err) {
                 if (err) {
-                    res.send({
+                    return res.send({
                         ok: "false",
                         message: "Error al añadir el script: "+err.message
                     });
-                    return;
                 }
                 res.send({
                     ok: "true"
@@ -219,46 +215,41 @@ module.exports = {
     scriptUpdate: function(req, res, next) {
         Nodos.GetNodo(req.params.mac, function(err, nodo) {
             if (err) {
-                res.send({
+                return res.send({
                     ok: "false",
                     message: err
                 });
-                return;
             }
             Ssh.StopScript(nodo.ip, req.params.pid, function(err) {
                 if (err) {
-                    res.send({
+                    return res.send({
                         ok: "false",
                         message: err
-                    });
-                    return;
+                    });                    
                 }
                 Nodos.UpdateScript(req.params.mac, req.params.pid, req.body.cambio, function(err, script) {
                     if (err) {
-                        res.send({
+                        return res.send({
                             ok: "false",
                             message: err
-                        });
-                        return;
+                        });                        
                     }
                     Ssh.StartScript(nodo.ip, script, function(err, newpid) {
                         if (err) {
-                            res.send({
+                            return res.send({
                                 ok: "false",
                                 message: err
-                            });
-                            return;
+                            });                            
                         }
                         Nodos.UpdateScript(req.params.mac, req.params.pid, {
                             tipo: "pid",
                             valor: newpid
                         }, function(err, scriptfinal) {
                             if (err) {
-                                res.send({
+                                return res.send({
                                     ok: "false",
                                     message: err
-                                });
-                                return;
+                                });                                
                             }
                             res.send({
                                 ok: "true",
@@ -270,5 +261,4 @@ module.exports = {
             });
         });
     }
-
 };

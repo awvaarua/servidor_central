@@ -54,7 +54,7 @@ function SendConfirmation(ip, mac) {
 			} else {
 				$('#pendiente_comun').html('<div class="alert alert-danger">' +
 					'<h1>Se ha producido un error</h1>' +
-					'<p>' + response.error.message + '</p>' +
+					'<p>' + response.error + '</p>' +
 					'</div>');
 			}
 		}

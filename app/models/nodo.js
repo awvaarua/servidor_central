@@ -12,9 +12,9 @@ var nodoSchema = mongoose.Schema({
 		nombre: {type: String, required: [true, 'Se requiere Nombre para el script']},
 		fichero: {type: String, required: [true, 'Se requiere un Nombre de fichero']},
 		argumentos: [{
-			nombre: {type: String, required: [true, 'Se requiere Nombre para el argumnto']},
-			valor: {type: String, required: [true, 'Se requiere un Valor para el argumento']},
-			orden: {type: Number, required: [true, 'Se requiere un Orden']},
+			nombre: {type: String, required: false},
+			valor: {type: String, required: false},
+			orden: {type: Number, required: [true, 'Se requiere un Orden para el argumento']},
 		}]
 	}]
 

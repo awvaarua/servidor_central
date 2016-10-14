@@ -27,9 +27,10 @@ var self = module.exports = {
     },
 
     AddScript: function (script, callback) {
-        Script.collection.insert(script, function(err){
+        var _scrtipt = new Script(script);
+        _scrtipt.save(function(err){
             if (err) {
-                callback(err);
+                return callback(err);
             }
             callback(null);
         });

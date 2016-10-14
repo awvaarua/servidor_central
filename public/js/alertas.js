@@ -135,25 +135,44 @@ $(document).on('click', '.actualizaralerta', function (event) {
 	$(alertacont).find('.usuarioval').each(function(i, usr){
 		alerta.usuarios.push($(usr).val());
 	});
-	console.log(alerta);
 	$.ajax({
     url: '/alerta/'+$(alertacont).find('#alerta_id').val()+'/update',
     type: 'POST',
 		data: alerta,
     success: function (response) {
+		if(response.ok == "true"){
+			var str = "<div class=\"alert alert-success\">" +
+"  <strong>Actualizado correctamente!</strong>" +
+"</div>";
+			$(alertacont).find('#response').html(str);
+			setTimeout(function() {
+				$(alertacont).find('#response').fadeOut(300, function(){ $(this).html("");});
+				$(alertacont).find('#response').fadeIn(0);
+			}, 2000);
+		}else{
+			var str = "<div class=\"alert alert-danger\">" +
+"  <strong>Se ha producido un error!</strong>"+
+"</div>";
+			$(alertacont).find('#response').html(str);
+			setTimeout(function() {
+				$(alertacont).find('#response').fadeOut(300, function(){ $(this).html("");});
+				$(alertacont).find('#response').fadeIn(0);
+			}, 2000);
+		}
     }
   });
 	return false;
 });
 
 $(document).on('click', '.eliminaralerta', function (event) {
-	var alertacont = $(this).parents("#alerta:first")[0];
+	var alertacont = $(this).parents("#contenedor_alerta:first")[0];
+	var id = $(alertacont).find('#alerta_id').val();
 	$.ajax({
-		url: '/alerta/'+$(alertacont).find('#alerta_id').val()+'/remove',
+		url: '/alerta/'+id+'/remove',
 		type: 'POST',
 		success: function (response) {
 			if(response.ok == 'true'){
-				$(alertacont).remove();
+				$(alertacont).parents('#alertaraiz').remove();
 			}			
 			return false;
 		},

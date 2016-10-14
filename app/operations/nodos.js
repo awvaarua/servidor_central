@@ -30,7 +30,6 @@ var self = module.exports = {
   },
 
   GetScript: function (mac, pid, callback) {
-    ;
     Nodo.findOne({
       mac: parseInt(mac),
       'scripts.pid': parseInt(pid)
@@ -60,13 +59,11 @@ var self = module.exports = {
   },
 
   DeleteNodo: function (mac, callback) {
-
     self.GetNodo(mac, function (err, nodo) {
       if (err) {
         callback(err, null);
         return;
       }
-
       self.DeleteAllScripts(mac, nodo.ip, nodo.scripts, 0, [], function (err, data) {
         if (err) {
           callback(err, null);
@@ -106,76 +103,50 @@ var self = module.exports = {
     });
   },
 
-  AddScripts: function (mac, ip, scripts, index, info_array, callback) {
-    if (index < scripts.length) {
-      self.AddScript(mac, ip, scripts[index], function (err, data) {
-        if (err) {
-          callback(err, null);
-          return;
-        }
-        info_array.push(data);
-        self.AddScripts(mac, ip, scripts, index + 1, info_array, callback);
-      });
-    } else {
-      callback(null, info_array);
-    }
-  },
-
-  AddScript: function (mac, ip, script, callback) {
-    Ssh.StartScript(ip, script, function (err, pid) {
+  AddScript: function (nodo, script, callback) {
+    Ssh.StartScript(nodo.ip, script, function (err, pid) {
       if (err) {
-        callback(err);
-        return;
+        return callback(err);
       }
-      script.argumentos.forEach(function(arg){
+      script.pid = pid;
+      script.argumentos.forEach(function (arg) {
         arg.orden = parseInt(arg.orden);
       });
-      Nodo.collection.update({
-        mac: parseInt(mac)
-      }, {
-          $push: {
-            scripts: {
-              pid: parseInt(pid),
-              nombre: script.nombre,
-              fichero: script.fichero,
-              argumentos: script.argumentos
-            }
-          }
-        }, function (err) {
-          if (err) {
-            callback(err);
-          }
-          callback(null);
-        });
+      nodo.scripts.push(script);
+      nodo.save(function(){
+        if (err) {
+          return callback(err);
+        }
+        callback();
+      });
     });
   },
 
-  AddNode: function (node, callback) {
-    Nodo.collection.insert({
-      ip: node.ip,
-      nombre: node.nombre,
-      descripcion: node.descripcion,
-      mac: parseInt(node.mac),
+  AddNode: function (data, callback) {
+    var nodo = new Nodo({
+      ip: data.ip,
+      nombre: data.nombre,
+      descripcion: data.descripcion,
+      mac: parseInt(data.mac),
       scripts: [],
       date: new Date()
-    }, {}, function (err) {
+    });
+    nodo.save(function(err){
       if (err) {
-        callback(err);
+        return callback(err);
       }
-      callback();
+      callback(null);
     });
   },
 
   UpdateScript: function (mac, pid, cambio, callback) {
     self.GetNodo(mac, function (err, nodo) {
       if (err) {
-        callback(err, null);
-        return;
+        return callback(err, null);
       }
-      Update(nodo, pid, cambio, function(err, script){
-        if(err){
-          callback(err);
-          return;
+      Update(nodo, pid, cambio, function (err, script) {
+        if (err) {
+          return callback(err);
         }
         callback(null, script);
       })
@@ -187,22 +158,20 @@ var self = module.exports = {
 function Update(nodo, pid, change, callback) {
   switch (change.tipo) {
     case "pid":
-      nodo.scripts.forEach(function(script){
-        if(script.pid == parseInt(pid)){
+      nodo.scripts.forEach(function (script) {
+        if (script.pid == parseInt(pid)) {
           script.pid = parseInt(change.valor);
-          nodo.save(callback(null, script));
-          return;
+          return nodo.save(callback(null, script));
         }
       });
       break;
     case "argumentos":
-      nodo.scripts.forEach(function(script){
-        if(script.pid == parseInt(pid)){
-          script.argumentos.forEach(function(arg){
-            if(arg.orden == parseInt(change.orden)){
+      nodo.scripts.forEach(function (script) {
+        if (script.pid == parseInt(pid)) {
+          script.argumentos.forEach(function (arg) {
+            if (arg.orden == parseInt(change.orden)) {
               arg.valor = change.valor;
-              nodo.save(callback(null, script));
-              return;
+              return nodo.save(callback(null, script));
             }
           });
         }

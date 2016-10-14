@@ -1,11 +1,16 @@
 <div class="general">
+    <h3>Listado de alertas</h3>
     <% alertas.forEach(function(alerta, i) { %>
-        <div class="row">
+        <div id="alertaraiz" class="row">
             <div class="panel panel-primary alerta">
                 <div class="panel-heading">
                     <h3 class="panel-title"><%= alerta.nodo.nombre %> - <%= alerta.fichero %></h3>
                 </div>
                 <div id="contenedor_alerta">
+                    <div class="row">
+                        <div id="response" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 vcenter">
+                        </div>
+                    </div>
                     <div class="row">
                         <input id="alerta_id" value="<%= alerta._id %>" hidden>
                         <input id="alerta_tipo" value="<%= alerta.tipo %>" hidden>

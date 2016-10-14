@@ -17,17 +17,17 @@ module.exports = {
 	alertAdd: function (req, res, next) {
 		Nodos.GetNodo(req.body.mac, function(err, nodo){
 			if (err || !nodo) {
-				res.render('addalerta.ejs', {
-					message: "No se ha podido añadir la alerta: " + err,
-					messageOk: req.flash('signupMessage')
+				return res.send({
+					ok: "false",
+					error: err
 				});
 			}
 			req.body.nombre = nodo.nombre;
 			Alertas.AddAlerta(req.body, function (err) {
 				if (err) {
-					res.render('addalerta.ejs', {
-						message: "No se ha podido añadir la alerta: " + err,
-						messageOk: req.flash('signupMessage')
+					return res.send({
+						ok: "false",
+						error: err
 					});
 				}
 				res.render('addalerta.ejs', {
@@ -41,13 +41,18 @@ module.exports = {
 	alertUpdate: function (req, res, next) {
 		Alertas.GetAlertaById(req.params.id, function (err, alerta) {
 			if(err || !alerta){
-				res.send({
+				return res.send({
                     ok: "false",
                     error: err
                 });
-				return;
 			}
 			Alertas.UpdateAlerta(alerta, req.body, function (err) {
+				if(err){
+					return res.send({
+						ok: "false",
+						error: err
+					});
+				}
 				res.send({
 					ok: "true"
 				});	
@@ -72,11 +77,10 @@ module.exports = {
 	alertRemove: function (req, res, next) {
 		Alertas.RemoveAlerta(req.params.id, function (err) {
 			if (err) {
-				res.send({
+				return res.send({
                     ok: "false",
                     error: err
                 });
-				return;
 			}
 			res.send({
 				ok: "true"
