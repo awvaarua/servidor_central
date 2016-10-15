@@ -35,8 +35,10 @@ function SendConfirmation(ip, mac) {
 	confirmacion.nombre = $('#pendiente_nombre').val();
 	confirmacion.descripcion = $('#pendiente_descripcion').val();
 
+	var res = $('#pendiente_comun').html();
+	var res1 = $('#pendiente_comun1').html();
 	$('#pendiente_comun').html('<img class="loading" src="http://' + window.location.host + '/public/img/load.gif"></img>');
-	$('#pendiente_comun1').remove();
+	$('#pendiente_comun1').html("");
 
 	$.ajax({
 		url: '/nodo/add/',
@@ -47,15 +49,23 @@ function SendConfirmation(ip, mac) {
 		},
 		success: function (response) {
 			if (response.ok == "true") {
-				$('#pendiente_comun').html('<div class="alert alert-success">' +
+				$('#parent').html('<div class="alert alert-success">' +
 					'<h1>Nodo iniciado correctamente</h1>' +
 					'</div>');
 				ProcesarScripts(ip, mac);
 			} else {
-				$('#pendiente_comun').html('<div class="alert alert-danger">' +
+				$('#responsecontent').html('<div class="alert alert-danger">' +
 					'<h1>Se ha producido un error</h1>' +
 					'<p>' + response.error + '</p>' +
 					'</div>');
+				setTimeout(function() {
+                            $('#responsecontent').fadeOut(300, function(){ $('#responsecontent').html("");});
+                        }, 2000);
+				setTimeout(function() {
+                            $('#responsecontent').fadeIn(300);
+                        }, 2000);
+				$('#pendiente_comun').html(res);
+				$('#pendiente_comun1').html(res1);
 			}
 		}
 	});

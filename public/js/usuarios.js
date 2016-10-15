@@ -34,7 +34,7 @@ function Delete(email) {
   return false;
 }
 
-function Update(email, pos) {
+function UpdateUser(email, pos) {
   var selected = $('select[id=sel_tipo' + pos + ']').val();
   $.ajax({
     url: '/user/update',

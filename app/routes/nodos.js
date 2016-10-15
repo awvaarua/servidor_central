@@ -33,9 +33,9 @@ module.exports = {
         Nodos.GetNodo(req.params.mac, function(err, nodo) {
             if (err) {}
             if (nodo == null) {
-                res.render('nodo_notfound.ejs', {
-                    nodo: nodo
-                });
+                return res.send({
+                        ok: "false"
+                    });
             }
             Scripts.GetAllScripts(function(err, scripts){
                 if(err){
@@ -62,12 +62,11 @@ module.exports = {
     //=== CHECK NODE STATUS ===
     nodeStatus: function(req, res, next) {
         Nodos.GetNodo(req.params.mac, function(err, nodo){
-            if (err) {
-                res.send({
+            if (err || !nodo) {
+                return res.send({
                     ok: "false",
                     error: "Error al recuperar el nodo de la BBDD: "+err
                 });
-                return;
             }
             Ssh.CheckNodeStatus(nodo.ip, function(status) {
                 res.send({

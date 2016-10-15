@@ -26,6 +26,17 @@ var self = module.exports = {
         })
     },
 
+    RemoveScript: function (id, callback) {
+        Script.remove({
+            _id: id
+        }, function (err, script) {
+            if (err) {
+                return callback(err);
+            }
+            callback(null, script);
+        })
+    },
+
     AddScript: function (script, callback) {
         var _scrtipt = new Script(script);
         _scrtipt.save(function(err){

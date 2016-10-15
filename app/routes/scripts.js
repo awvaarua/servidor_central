@@ -13,7 +13,13 @@ module.exports = {
 
 	scriptGet: function (req, res, next) {
 		Scripts.GetScript(req.params.id, function (err, script) {
-			if (err) { }
+			if (err) {
+				return res.render('response.ejs', {
+					ok: 'false',
+					titulo: 'No se ha podido eliminar el script',
+					descripcion: ""
+				});	
+			}
 			console.log(script);
 			res.render('scriptadmin.ejs', {
 				script: script
@@ -48,6 +54,23 @@ module.exports = {
 			res.send({
 				ok: "true",
 			});
+		});
+	},
+
+	scriptRemove: function (req, res, next) {
+		Scripts.RemoveScript(req.params.id, function(err){
+			if(err){
+				return res.render('response.ejs', {
+					ok: 'false',
+					titulo: 'No se ha podido eliminar el script',
+					descripcion: ""
+				});	
+			}
+			res.render('response.ejs', {
+				ok: 'true',
+				titulo: 'Script eliminado correctamente',
+				descripcion: ""
+			});	
 		});
 	},
 

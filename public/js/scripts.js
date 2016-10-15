@@ -10,6 +10,18 @@ function AddNewScript() {
     return false;
 }
 
+function DeleteScript(id) {
+    $.ajax({
+        url: '/script/'+id+'/delete',
+        type: 'POST',
+        success: function (response) {
+            $('#page-wrapper').html(response);
+            return false;
+        }
+    });
+    return false;
+}
+
 function GestionScripts() {
     $.ajax({
         url: '/scripts/',
@@ -87,5 +99,4 @@ function GuardarDatosScript(filename) {
             return false;
         }
     });
-    console.log(script);
 }
