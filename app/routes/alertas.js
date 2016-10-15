@@ -17,22 +17,25 @@ module.exports = {
 	alertAdd: function (req, res, next) {
 		Nodos.GetNodo(req.body.mac, function(err, nodo){
 			if (err || !nodo) {
-				return res.send({
-					ok: "false",
-					error: err
+				return res.render('response.ejs', {
+					ok: 'false',
+					titulo: 'Alerta no creada',
+					descripcion: err
 				});
 			}
 			req.body.nombre = nodo.nombre;
 			Alertas.AddAlerta(req.body, function (err) {
 				if (err) {
-					return res.send({
-						ok: "false",
-						error: err
+					return res.render('response.ejs', {
+						ok: 'false',
+						titulo: 'Alerta no creada',
+						descripcion: err
 					});
 				}
-				res.render('addalerta.ejs', {
-					message: req.flash('signupMessage'),
-					messageOk: "Alerta añadida correctamente"
+				res.render('response.ejs', {
+					ok: 'true',
+					titulo: 'Alerta creada correctamente',
+					descripcion: ""
 				});
 			});
 		});

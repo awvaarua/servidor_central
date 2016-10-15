@@ -1,0 +1,9 @@
+<% if(ok == 'true'){ %>
+    <div id="response" class="alert alert-success">
+        <strong><%= titulo %></strong> <%= descripcion %>
+    </div>
+<% } else{ %>
+    <div id="response" class="alert alert-danger">
+        <strong><%= titulo %></strong> <%= descripcion %>
+    </div>
+<% } %>

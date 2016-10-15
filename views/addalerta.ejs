@@ -1,81 +1,74 @@
-<% if(messageOk.length > 0){ %>
-    <div class="general container">
-        <div class="col-sm-6 col-sm-offset-3">
-            <div class="alert alert-success">
-              Alerta registrada correctamente
+<div class="general container">
+    <div class="col-sm-6 col-sm-offset-3">
+
+        <div id="responsecontent" class="col-sm-12 col-md-12 col-lg-12"></div>
+
+        <h1><span class="fa fa-sign-in"></span> Añadir alerta</h1>
+
+        <% if (message.length > 0) { %>
+            <div class="alert alert-danger"><%= message %></div>
+        <% } %>
+
+        <!-- LOGIN FORM -->
+        <form id="newalert" action="/alerta/add" name="nueva_alerta">
+            <div class="form-group">
+                <label>Seleccionar nodo</label>
+                <select id="alerta_mac" class="form-control" id="sel_sensor" name="tipo_condicion">
+                    <option value="0">Seleccionar</option>
+                    <% nodos.forEach(function(nodo, i) { %>
+                        <option value="<%= nodo.mac %>"><%= nodo.nombre %> - <%= nodo.mac %></option>               
+                    <% }); %>                        
+                </select>
             </div>
-        </div>
-    </div>
- <% } else{ %>  
-   <div class="general container">
-        <div class="col-sm-6 col-sm-offset-3">
-
-            <h1><span class="fa fa-sign-in"></span> Añadir alerta</h1>
-
-            <% if (message.length > 0) { %>
-                <div class="alert alert-danger"><%= message %></div>
-            <% } %>
-
-            <!-- LOGIN FORM -->
-            <form id="newalert" action="/alerta/add" name="nueva_alerta">
-                <div class="form-group">
-                    <label>Seleccionar nodo</label>
-                    <select id="alerta_mac" class="form-control" id="sel_sensor" name="tipo_condicion">
-                        <option value="0">Seleccionar</option>
-                        <% nodos.forEach(function(nodo, i) { %>
-                            <option value="<%= nodo.mac %>"><%= nodo.nombre %> - <%= nodo.mac %></option>               
-                        <% }); %>                        
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="sel_sensor">Script al que hace referencia</label>
-                    <select id="alerta_tipo" class="form-control" id="sel_sensor" name="tipo_sensor">
-                        <option value="0">Seleccionar</option> 
-                        <% scripts.forEach(function(script, i) { %>
-                            <option value="<%= script.fichero %>"><%= script.nombre %></option>                        
-                        <% }); %>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Mensaje</label>
-                    <input id="alerta_mensaje" type="text" class="form-control" name="descripcion" placeholder='":nombre" se substituirá por la ip del nodo. ":valor" se substituirá por el valor recibido'>
-                </div>
-                <div class="form-group">
-                    <label>Tipo alerta</label>
-                    <select id="alerta_tipo_condicion" class="form-control" id="sel_sensor" name="tipo_condicion">
-                        <option value="0">Seleccionar</option>
-                        <option value="1">Condición</option>
-                        <option value="2">Inmediata</option>
-                    </select>
-                </div>
-                <div id="div_condicion" class="form-group">
-                    
-                </div>
-                <div id="div_condicion_valor" class="form-group">
-                    
-                </div>
-                <div id="div_condicion_frecuencia" class="form-group">
-                    
-                </div>
-                <div class="form-group" id="fields">
-                    <label class="control-label" for="field1">Usuarios a los que enviar el mensaje</label>
-                    <div class="controls">
-                        <div class="entry input-group col-xs-6">
-                            <input id="user_input" class="form-control" name="fields" type="text" placeholder="@usuario" />
-                            <span class="input-group-btn">
-                                <button id="add_user_alert" onclick="AddUserToList();" class="btn btn-success btn-add" type="button">
-                                    <span class="glyphicon glyphicon-plus"></span>
-                                </button>
-                            </span>
-                        </div>
+            <div class="form-group">
+                <label for="sel_sensor">Script al que hace referencia</label>
+                <select id="alerta_tipo" class="form-control" id="sel_sensor" name="tipo_sensor">
+                    <option value="0">Seleccionar</option> 
+                    <% scripts.forEach(function(script, i) { %>
+                        <option value="<%= script.fichero %>"><%= script.nombre %></option>                        
+                    <% }); %>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Mensaje</label>
+                <input id="alerta_mensaje" type="text" class="form-control" name="descripcion" placeholder='":nombre" se substituirá por la ip del nodo. ":valor" se substituirá por el valor recibido'>
+            </div>
+            <div class="form-group">
+                <label>Tipo alerta</label>
+                <select id="alerta_tipo_condicion" class="form-control" id="sel_sensor" name="tipo_condicion">
+                    <option value="0">Seleccionar</option>
+                    <option value="1">Condición</option>
+                    <option value="2">Inmediata</option>
+                </select>
+            </div>
+            <div id="div_condicion" class="form-group">
+                
+            </div>
+            <div id="div_condicion_valor" class="form-group">
+                
+            </div>
+            <div id="div_condicion_frecuencia" class="form-group">
+                
+            </div>
+            <div class="form-group" id="fields">
+                <label class="control-label" for="field1">Usuarios a los que enviar el mensaje</label>
+                <div class="controls">
+                    <div class="entry input-group col-xs-6">
+                        <input id="user_input" class="form-control" name="fields" type="text" placeholder="@usuario" />
+                        <span class="input-group-btn">
+                            <button id="add_user_alert" onclick="AddUserToList();" class="btn btn-success btn-add" type="button">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </span>
                     </div>
-                    <ul id="userlist" class="list-group">                        
-                    </ul>
                 </div>
-                <button type="submit" class="btn btn-warning btn-lg">Añadir alerta</button>
-            </form>
+                <ul id="userlist" class="list-group">                        
+                </ul>
+            </div>
+            <button type="submit" class="btn btn-warning btn-lg">Añadir alerta</button>
+        </form>
 
-            <script type="text/javascript">
+        <script type="text/javascript">
             $("#newalert").submit(function(event) {
                 //Valdiate();
                 event.preventDefault();
@@ -101,12 +94,14 @@
                     url: $(this).attr('action'),
                     data: alerta,
                     success: function(data) {
-                        $('#page-wrapper').html(data);
+                        $('#responsecontent').html(data);
+                        setTimeout(function() {
+                            $('#response').fadeOut(300, function(){ $('#response').remove();});
+                        }, 2000);
                     }
                 }) 
             });
-        </script>
+    </script>
 
-        </div>
     </div>
-<% } %>
+</div>
