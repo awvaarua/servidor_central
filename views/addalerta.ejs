@@ -93,11 +93,16 @@
                     type: 'POST',
                     url: $(this).attr('action'),
                     data: alerta,
-                    success: function(data) {
-                        $('#responsecontent').html(data);
-                        setTimeout(function() {
-                            $('#response').fadeOut(300, function(){ $('#response').remove();});
-                        }, 2000);
+                    success: function(data, st, xhc) {
+                        if(xhc.status == 201){
+                            $('.general').html(data);
+                        }else{
+                            console.log("ERrror");
+                            $('#responsecontent').html(data);
+                            setTimeout(function() {
+                                $('#response').fadeOut(300, function(){ $('#response').remove();});
+                            }, 2000);
+                        }
                     }
                 }) 
             });

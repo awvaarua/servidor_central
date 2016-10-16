@@ -82,10 +82,12 @@ function GuardarDatosScript(filename) {
         data: script,
         success: function (response) {
             var str = "";
+            console.log(response);
             if (response.ok == "false") {
                 str = "<div class=\"col-sm-6 col-sm-offset-3\">" +
-                    "            <div class=\"alert alert-success\">" +
-                    "              Usuario registrado correctamente" +
+                    "            <div class=\"alert alert-danger\">" +
+                    "              <h3>Se ha producido un error</h3>" +
+                    "              <p>"+response.error+"</p>" +
                     "            </div>" +
                     "        </div>";
             } else {

@@ -49,9 +49,11 @@ function SendConfirmation(ip, mac) {
 		},
 		success: function (response) {
 			if (response.ok == "true") {
-				$('#parent').html('<div class="alert alert-success">' +
-					'<h1>Nodo iniciado correctamente</h1>' +
+				$('#pendiente_comun').html('<div class="alert alert-success">' +
+					'<h1>Nodo creado correctamente</h1>' +
 					'</div>');
+				$('#pendiente_comun1').remove();
+				$('#botones').remove();
 				ProcesarScripts(ip, mac);
 			} else {
 				$('#responsecontent').html('<div class="alert alert-danger">' +
@@ -116,7 +118,7 @@ function ProcesarScripts(ip, mac){
 
 function GestionNodos() {
 	$.ajax({
-		url: '/nodos/',
+		url: '/nodos/render',
 		type: 'GET',
 		success: function (response) {
 			$('#page-wrapper').html(response);
@@ -224,6 +226,25 @@ function ReiniciarNodo(mac) {
 			} else {
 				$('#cuerpo_nodos').html('<div class="alert alert-danger">' +
 					'<h1>Imposible reiniciar</h1>' +
+					'<p>' + response.error + '</p>' +
+					'</div>');
+			}
+		}
+	});
+}
+
+function PendienteNodo(mac) {
+	$.ajax({
+		url: '/nodo/' + mac + '/pendiente',
+		type: 'POST',
+		success: function (response) {
+			if (response.ok == "true") {
+				$('#cuerpo_nodos').html('<div class="alert alert-success">' +
+					'<h1>Cuando el nodo se reinicie estará en pendientes</h1>' +
+					'</div>');
+			} else {
+				$('#cuerpo_nodos').html('<div class="alert alert-danger">' +
+					'<h1>Se ha producido un error</h1>' +
 					'<p>' + response.error + '</p>' +
 					'</div>');
 			}

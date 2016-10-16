@@ -46,12 +46,11 @@ module.exports = {
 	scriptAdd: function (req, res, next) {
 		Scripts.AddScript(req.body, function(err){
 			if(err){
-				res.send({
-					ok: "false",
-					error: err
-				});	
+				req.body.err = JSON.stringify(err.errors);
+				next();
+				return;			
 			}
-			res.send({
+			return res.send({
 				ok: "true",
 			});
 		});

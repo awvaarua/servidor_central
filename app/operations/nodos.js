@@ -39,8 +39,8 @@ var self = module.exports = {
           callback(err, null);
           return;
         }
+        nodo.methods.sort();
         callback(null, nodo);
-
       });
   },
 

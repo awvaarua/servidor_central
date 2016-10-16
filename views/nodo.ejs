@@ -19,7 +19,7 @@
             <div class="col-md-4 col-md-offset-1">
             	<h4>Acciones</h4>
                 <button type="button" class="btn btn-primary buttonnode" onclick="ReiniciarNodo('<%= nodo.mac %>')" disabled="true">Reiniciar</button>
-                <button type="button" class="btn btn-primary buttonnode" disabled="true">Pendiente</button>
+                <button type="button" class="btn btn-primary buttonnode" onclick="PendienteNodo('<%= nodo.mac %>')" disabled="true">Pendiente</button>
                 <button type="button" class="btn btn-danger buttonnode" onclick="DeleteNodo('<%= nodo.mac %>')">Eliminar</button>
             </div>
         </div> 

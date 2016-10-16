@@ -4,10 +4,6 @@ var ssh = new node_SSH();
 
 var self = module.exports = {
 
-  /*
-    IN: ip, script, callback
-    OUT: error, script with updated pid
-  */
   StartScript: function (ip, script, callback) {
     ssh.connect({
       host: ip,
@@ -15,8 +11,11 @@ var self = module.exports = {
       password: 'fura4468AB'
     }).then(function () {
       ssh.putFile('./uploads/' + script.fichero, '/home/pi/Scripts/' + script.fichero).then(function () {
-        console.log('nohup python /home/pi/Scripts/' + script.fichero + ' ' + script.argumentos[0].valor + ' > /dev/null 2>&1 & echo $!');
-        ssh.exec('nohup python /home/pi/Scripts/' + script.fichero + ' ' + script.argumentos[0].valor + ' > /dev/null 2>&1 & echo $!').then(function (std) {
+        var params = "";
+        script.argumentos.forEach(function(arg){
+          params += arg.valor+" ";
+        });        
+        ssh.exec('nohup python /home/pi/Scripts/' + script.fichero + ' ' + params + '> /dev/null 2>&1 & echo $!').then(function (std) {
           callback(null, std);
         }, function (err) {
           callback(err, null);
@@ -29,10 +28,6 @@ var self = module.exports = {
     });
   },
 
-  /*
-    IN: ip, callback
-    OUT: error, string, represents online or offline status
-  */
   CheckNodeStatus: function (ip, callback) {
     var error = "";
     ssh.connect({

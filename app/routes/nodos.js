@@ -50,10 +50,19 @@ module.exports = {
     },
 
     //=== GET ALL NODES ===
-    nodes: function(req, res, next) {
+    nodesRender: function(req, res, next) {
         Nodos.GetAllNodes(function(nodos, err) {
             if (err) {}
             res.render('gestionnodos.ejs', {
+                nodos: nodos
+            });
+        });
+    },
+
+    nodes: function(req, res, next) {
+        Nodos.GetAllNodes(function(nodos, err) {
+            if (err) {}
+            res.send({
                 nodos: nodos
             });
         });
@@ -98,24 +107,52 @@ module.exports = {
     nodeRestart: function(req, res, next) {
         Nodos.GetNodo(req.params.mac, function(err, nodo) {
             if (err) {
-                    res.send({
+                    return res.send({
                         status: "false",
                         error: error
                     });
-                    return;
             }
             Ssh.RestartNode(nodo.ip, function(err) {
                 if (err) {
-                    res.send({
+                    return res.send({
                         ok: "false",
                         error: err
                     });
-                    return;
                 }
                 res.send({
                     ok: "true"
                 });
             });
+        });
+    },
+
+    nodePendiente: function(req, res, next) {
+        Nodos.GetNodo(req.params.mac, function(err, nodo) {
+            if (err) {
+                    return res.send({
+                        status: "false",
+                        error: error
+                    });
+            }
+            Nodos.DeleteNodo(req.params.mac, function(){
+                if (err) {
+                    return res.send({
+                        status: "false",
+                        error: error
+                    });
+                }
+                Ssh.RestartNode(nodo.ip, function(err) {
+                    if (err) {
+                        return res.send({
+                            ok: "false",
+                            error: err
+                        });
+                    }
+                    res.send({
+                        ok: "true"
+                    });
+                });
+            });            
         });
     },
 

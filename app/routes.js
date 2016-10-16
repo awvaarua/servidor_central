@@ -16,10 +16,12 @@ module.exports = function(app, passport) {
     var nodes = require('./routes/nodos');
     app.post('/nodo/add', md.isLoggedIn, nodes.nodeAdd);
     app.get('/nodo/:mac', md.isLoggedIn, nodes.node);
+    app.get('/nodos/render', md.isLoggedIn, nodes.nodesRender);
     app.get('/nodos/', md.isLoggedIn, nodes.nodes);
     app.get('/nodo/:mac/status', md.isLoggedIn, nodes.nodeStatus);
     app.post('/nodo/:mac/delete', md.isLoggedIn, nodes.nodeDelete);
     app.post('/nodo/:mac/restart', md.isLoggedIn, nodes.nodeRestart);
+    app.post('/nodo/:mac/pendiente', md.isLoggedIn, nodes.nodePendiente);
     app.get('/nodo/:mac/scripts', nodes.nodeScripts);
     app.get('/nodo/:mac/script/:pid/status', md.isLoggedIn, nodes.scriptStatus);
     app.post('/nodo/:mac/script/:pid/delete', md.isLoggedIn, nodes.scriptDelete);
@@ -46,7 +48,7 @@ module.exports = function(app, passport) {
     var upload = multer({ storage: storage });
     app.get('/scripts/', md.isLoggedIn, scripts.scriptsGet);
     app.get('/script/add', md.isLoggedIn, scripts.scriptsAddView);
-    app.post('/script/add', md.isLoggedIn, scripts.scriptAdd);
+    app.post('/script/add', md.isLoggedIn, scripts.scriptAdd, md.removeFileIfError);
     app.post('/script/:id/delete', md.isLoggedIn, scripts.scriptRemove);
     app.post('/script/file/upload/', md.isLoggedIn, upload.single( 'file' ), md.fileExistAndRemove, scripts.fileUpload);
     app.get('/script/:id', md.isLoggedIn, scripts.scriptGet);
@@ -54,6 +56,7 @@ module.exports = function(app, passport) {
 
     var data = require('./routes/data');
     app.post('/data/add', md.getIp, data.dataAdd);
+    app.post('/data/:mac', md.getIp, data.dataGet);
 
     // =============================================================================
     //  ADMIN PANE =================================================================

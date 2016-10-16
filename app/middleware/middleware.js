@@ -32,7 +32,7 @@ module.exports = {
 
 	fileExistAndRemove: function (req, res, next) {
 		var tmp_path = req.file.path;
-		var target_path = './uploads/' + req.file.filename
+		var target_path = './uploads/' + req.file.filename;
 		fs.access(target_path, fs.R_OK | fs.W_OK, function (err) {
 			if(!err){
 				fs.unlink(tmp_path, function() {
@@ -50,7 +50,15 @@ module.exports = {
 				});
 			}
 		});
-		
+	},
+
+	removeFileIfError: function (req, res, next) {
+		var path = './uploads/' + req.body.fichero;
+		fs.unlink(path);
+		res.send({
+			ok: "false",
+			error: req.body.err
+		});	
 	}
 
 };
