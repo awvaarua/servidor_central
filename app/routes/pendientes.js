@@ -45,6 +45,17 @@ module.exports = {
         });
     },
 
+    pendientesCount: function(req, res, next) {
+        Pendientes.GetPendientes(function(err, listapendientes) {
+            if (err) {
+                listapendientes = [];
+            }
+            res.send({
+                count: listapendientes.length
+            });
+        });
+    },
+
     //=== DELETE PENDIENTE BY IP===
     pendienteDelete: function(req, res, next) {
         Pendientes.DeletePendiente(req.params.mac, function(err) {

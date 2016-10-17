@@ -29,6 +29,9 @@
     <!-- Usuarios -->
     <link href="/css/usuarios.css" rel="stylesheet" type="text/css">
 
+    <!-- Index -->
+    <link href="/css/index.css" rel="stylesheet" type="text/css">
+
     <!-- Nodos -->
     <link href="/css/nodos.css" rel="stylesheet" type="text/css">
 
@@ -155,14 +158,14 @@
             <div class="row">
                 <div class="col-lg-9">
                 <div class="col-lg-4 col-md-6">
-                    <div class="panel panel-primary">
+                    <div class="panel panel-primary cursorpointer"  onclick="NodosPendientes();">
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-xs-3">
                                     <i class="fa fa-spinner fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">5</div>
+                                    <div id="numpendientes"class="huge">0</div>
                                     <div>Nodos pendientes</div>
                                 </div>
                             </div>
@@ -177,21 +180,21 @@
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
-                    <div class="panel panel-green">
+                    <div class="panel panel-green cursorpointer" onclick="openDialogAlertas();">
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-xs-3">
                                     <i class="fa fa-warning fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">12</div>
+                                    <div id="numalertas" class="huge">0</div>
                                     <div>Alertas generadas</div>
                                 </div>
                             </div>
                         </div>
                         <a href="#">
                             <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
+                                <span class="pull-left">Ver alertas</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                 <div class="clearfix"></div>
                             </div>
@@ -207,13 +210,13 @@
                                 </div>
                                 <div class="col-xs-9 text-right">
                                     <div class="huge">5</div>
-                                    <div>Usuarios registrados</div>
+                                    <div>Usuarios</div>
                                 </div>
                             </div>
                         </div>
                         <a href="#">
                             <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
+                                <span class="pull-left">Añadidos a telegram</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                 <div class="clearfix"></div>
                             </div>
@@ -229,11 +232,7 @@
                                         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                             <span class="caret"></span>
                                         </button>
-                                        <ul class="dropdown-menu pull-right" role="menu">
-                                            <li><a href="#" onclick="CreateChar('temperatura.py'); return false;">Temperatura</a>
-                                            </li>
-                                            <li><a href="#" onclick="CreateChar('humedad.py'); return false;">Humedad</a>
-                                            </li>
+                                        <ul id="chartbutton" class="dropdown-menu pull-right" role="menu">
                                         </ul>
                                     </div>
                                 </div>

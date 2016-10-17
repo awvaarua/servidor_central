@@ -12,6 +12,7 @@ module.exports = function(app, passport) {
     app.get('/pendiente/:mac', pendientes.pendiente);
     app.post('/pendiente/:mac/remove', md.isLoggedIn, pendientes.pendienteDelete);
     app.get('/pendientes/', md.isLoggedIn, pendientes.pendientes);
+    app.get('/pendientes/count', md.isLoggedIn, pendientes.pendientesCount);
 
     var nodes = require('./routes/nodos');
     app.post('/nodo/add', md.isLoggedIn, nodes.nodeAdd);

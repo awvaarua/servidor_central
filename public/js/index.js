@@ -1,9 +1,47 @@
-function GetNodos(fichero, status) {
+var chart;
+var scripts_index = [];
+var temperatura_index = {
+    titulo: "Temperatura",
+    ejey: "Temperatura (°C)",
+    fichero: "temperatura.py",
+    nombre: "Temperatura"
+};
+scripts_index.push(temperatura_index);
+var humedad_index = {
+    titulo: "Humedad",
+    ejey: "% Humedad",
+    fichero: "humedad.py",
+    nombre: "Humedad"
+};
+scripts_index.push(humedad_index);
+
+function GetNumPendientes(){
+    $.ajax({
+		url: '/pendientes/count',
+		type: 'GET',
+		success: function (response) {
+            $('#numpendientes').html(response.count);           
+		}
+	});
+}
+var dialog;
+function GetAlertasGeneradas(){
+    dialog = new BootstrapDialog({
+        title: 'Alertas generadas las últimas 24 horas'
+    });
+    dialog.realize();    
+}
+
+function openDialogAlertas(){
+    dialog.open();
+}
+
+function GetNodos(tipo, status) {
     $.ajax({
 		url: '/nodos/',
 		type: 'GET',
 		success: function (response) {
-            GetDataNodos(response.nodos, fichero);
+            GetDataNodos(response.nodos, tipo.fichero);
             if(status){
                 GetStatusNodos(response.nodos);
             }            
@@ -38,7 +76,13 @@ function GetStatusNodos(nodos){
 }
 
 $( document ).ready(function() {
-	GetNodos("temperatura.py", true);
+    GetNumPendientes();
+    GetAlertasGeneradas();
+	GetNodos(scripts_index[0], true);
+    scripts_index.forEach(function(script, i){
+        $('#chartbutton').append('<li><a href="#" onclick="CreateChar('+i+'); return false;">'+script.nombre+'</a></li>');
+    });
+    CreateChar(0);
 });
 
 function GetDataNodos(nodos, tipo) {    
@@ -52,35 +96,27 @@ function GetDataNodos(nodos, tipo) {
             type: 'POST',
             success: function (response) {
                 var datos = [];
-                response.datos.valores.forEach(function(data, i){
-                    if(i <= 30){
-                        datos.push(parseFloat(data.valor));
-                    }                    
-                });
-                chart.addSeries({
-                    name: nodo.nombre,
-                    data: datos,
-                    point: {
-                        events: {
-                            hover: function (e) {
-                                hs.htmlExpand(null, {
-                                    headingText: this.series.name,
-                                    maincontentText: Highcharts.dateFormat('%A, %b %e, %Y', this.x) + ':<br/> ',
-                                    width: 200
-                                });
-                            }
-                        }
-                    }
-                });
+                try{
+                    response.datos.valores.forEach(function(data, i){
+                        if(i <= 30){
+                            datos.push(parseFloat(data.valor));
+                        }                    
+                    });
+                    chart.addSeries({
+                        name: nodo.nombre,
+                        data: datos
+                    });
+                }catch(err){
+                }
             }
         });
     });
 }
 
-function CreateChar(fichero){
+function CreateChar(pos){
     chart = new Highcharts.Chart('container',{
         title: {
-            text: 'Temperatura diaria',
+            text: scripts_index[pos].titulo,
             x: -20 //center
         },
         subtitle: {
@@ -92,7 +128,7 @@ function CreateChar(fichero){
         },
         yAxis: {
             title: {
-                text: 'Temperature (°C)'
+                text: scripts_index[pos].ejey
             },
             plotLines: [{
                 value: 0,
@@ -110,42 +146,5 @@ function CreateChar(fichero){
             borderWidth: 0
         }
     });
-    GetNodos(fichero);
+    GetNodos(scripts_index[pos]);
 }
-
-var chart;
-
-$(function () {
-    chart = new Highcharts.Chart('container',{
-        title: {
-            text: 'Temperatura diaria',
-            x: -20 //center
-        },
-        subtitle: {
-            text: 'Últimas muestras',
-            x: -20
-        },
-        xAxis: {
-            categories: []
-        },
-        yAxis: {
-            title: {
-                text: 'Temperature (°C)'
-            },
-            plotLines: [{
-                value: 0,
-                width: 1,
-                color: '#808080'
-            }]
-        },
-        tooltip: {
-            valueSuffix: '°C'
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle',
-            borderWidth: 0
-        }
-    });
-});
