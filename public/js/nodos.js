@@ -358,7 +358,7 @@ $(document).on('change', '#select_pendiente', function () {
 		$('#cuerpo_nodos').html("");
 	} else {
 		$.ajax({
-			url: '/pendiente/' + mac,
+			url: '/pendiente/' + mac + '/render',
 			type: 'GET',
 			success: function (response) {
 				$('#cuerpo_nodos').html(response);

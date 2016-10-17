@@ -7,7 +7,6 @@ var self = module.exports = {
 			if(err){
 				return;
 			}
-			console.log(data);
 			if (!data) {				
 				var data = new Data({
 					mac: mac,

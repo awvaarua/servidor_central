@@ -7,7 +7,7 @@ module.exports = {
     pendienteAdd: function(req, res, next) {
         Pendientes.InsertPendiente(req.params.ip, req.params.mac, function(err) {
             if (err) {
-                res.send({
+                return res.send({
                     ok: "false",
                     err: err
                 });
@@ -20,6 +20,22 @@ module.exports = {
 
     //=== GET PENDIENTE BY MAC ===
     pendiente: function(req, res, next) {
+        Pendientes.GetPendiente(req.params.mac, function(err, pendiente) {
+            if(err){
+                return res.send({
+                    ok: "false",
+                    err: err,
+                });
+            }
+            res.send({
+                ok: "ok",
+                pendiente: pendiente
+            });          
+        });
+    },
+
+    //=== GET PENDIENTE BY MAC ===
+    pendienteRender: function(req, res, next) {
         Pendientes.GetPendiente(req.params.mac, function(err, pendiente) {
             Scripts.GetAllScripts(function(err, scripts){
                 if(err){

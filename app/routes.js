@@ -8,7 +8,8 @@ module.exports = function(app, passport) {
     app.post('/user/unlink', md.isLoggedIn, md.isAdmin, users.userDelete);
 
     var pendientes = require('./routes/pendientes');
-    app.post('/pendiente/add/:mac', md.getIp, pendientes.pendienteAdd);
+    app.get('/pendiente/add/:mac', md.getIp, pendientes.pendienteAdd);
+    app.get('/pendiente/:mac/render', pendientes.pendienteRender);
     app.get('/pendiente/:mac', pendientes.pendiente);
     app.post('/pendiente/:mac/remove', md.isLoggedIn, pendientes.pendienteDelete);
     app.get('/pendientes/', md.isLoggedIn, pendientes.pendientes);
@@ -25,6 +26,7 @@ module.exports = function(app, passport) {
     app.post('/nodo/:mac/pendiente', md.isLoggedIn, nodes.nodePendiente);
     app.get('/nodo/:mac/scripts', nodes.nodeScripts);
     app.get('/nodo/:mac/script/:pid/status', md.isLoggedIn, nodes.scriptStatus);
+    app.get('/nodo/:mac/script/:pid/start', nodes.scriptStart);
     app.post('/nodo/:mac/script/:pid/delete', md.isLoggedIn, nodes.scriptDelete);
     app.post('/nodo/:mac/script/:pid/update', nodes.scriptUpdate);
     app.post('/nodo/:mac/script/add', md.macConfig, nodes.scriptAdd);

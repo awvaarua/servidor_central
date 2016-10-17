@@ -25,6 +25,9 @@ var self = module.exports = {
         callback(err, null);
         return;
       }
+      try{
+        nodo.methods.sort();
+      }catch(err){}
       callback(null, nodo);
     });
   },

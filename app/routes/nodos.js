@@ -197,6 +197,37 @@ module.exports = {
         });
     },
 
+    scriptStart: function(req, res, next) {
+        Nodos.GetNodo(req.params.mac, function(err, nodo) {
+            if (err || !nodo) {
+                    res.send({
+                        ok:"false",
+                        error: error
+                    });
+                    return;
+            }
+            nodo.scripts.forEach(function(script, i){
+                if(script.pid == parseInt(req.params.pid)){
+                    Ssh.StartScript(nodo.ip, script, function(err, pid){
+                        if(err || !pid){
+                            res.send({
+                                ok:"false",
+                                error: error
+                            });
+                            return;
+                        }
+                        nodo.scripts[i].pid = parseInt(pid);
+                        nodo.save();
+                         res.send({
+                            ok:"true"
+                        });
+                        return;
+                    });
+                }
+            });
+        });
+    },
+
     //=== SCRIPT DELETE BY IP AND PID ===
     scriptDelete: function(req, res, next) {
         Nodos.GetNodo(req.params.mac, function(err, nodo) {
