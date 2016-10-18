@@ -7,7 +7,7 @@ var self = module.exports = {
 			if(err){
 				return;
 			}
-			if (!data) {				
+			if (!data) {			
 				var data = new Data({
 					mac: mac,
 					fichero: fichero,
@@ -33,9 +33,6 @@ var self = module.exports = {
 			mac: mac,
 			fichero: fichero
 		};
-		if (data) {
-			//query.date:
-		}
 		Data.findOne(query, function (err, data) {
 			if (err ||  !data) {
 				return callback(err);

@@ -75,8 +75,7 @@ var self = module.exports = {
     GetAllAlertas: function (callback) {
         Alerta.find({}, function (err, alertas) {
             if (err) {
-                callback(err);
-                return;
+                return callback(err);
             }
             var listado = [];
             alertas.forEach(function (alerta) {

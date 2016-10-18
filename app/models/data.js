@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 
-// define the schema for our user model
 var dataSchema = mongoose.Schema({
 
 	mac: Number,	

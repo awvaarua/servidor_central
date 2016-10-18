@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 
-// define the schema for our user model
-var userSchema = mongoose.Schema({
+var pendienteSchema = mongoose.Schema({
 
 	ip: String,
 	mac: Number,
@@ -9,5 +8,4 @@ var userSchema = mongoose.Schema({
 
 });
 
-// create the model for users
-module.exports = mongoose.model('Pendiente', userSchema);
+module.exports = mongoose.model('Pendiente', pendienteSchema);

@@ -4,22 +4,22 @@ var Ssh = require('../ssh_operations/sshoperations.js');
 var Scripts = require('../operations/scripts.js');
 
 module.exports = {
-    //=== ADD NODE ===
-    nodeAdd: function(req, res, next) {
-        Nodos.AddNode(req.body.confirmacion, function(err) {
+
+    //Añadir nodo a la base de datos i eliminarlo de pendientes
+    nodeAdd: function (req, res, next) {
+        Nodos.AddNode(req.body.confirmacion, function (err) {
             if (err) {
                 return res.send({
                     ok: "false",
-                    error: "Error al insertar el nodo en la base de datos: "+err
+                    error: "Error al insertar el nodo en la base de datos: " + err
                 });
             }
-            Pendientes.DeletePendiente(req.body.confirmacion.mac, function(err) {
+            Pendientes.DeletePendiente(req.body.confirmacion.mac, function (err) {
                 if (err) {
-                    res.send({
+                    return res.send({
                         ok: "false",
                         error: "El nodo se ha creado correctamente, pero no se ha podido eliminar de pendientes: " + err
                     });
-                    return;
                 }
                 res.send({
                     ok: "true"
@@ -28,18 +28,21 @@ module.exports = {
         });
     },
 
-    //=== GET NODE BY MAC ===
-    node: function(req, res, next) {
-        Nodos.GetNodo(req.params.mac, function(err, nodo) {
-            if (err) {}
-            if (nodo == null) {
+    //Devuelve una vista renderizada del nodo
+    node: function (req, res, next) {
+        Nodos.GetNodo(req.params.mac, function (err, nodo) {
+            if (err || !nodo) {
                 return res.send({
-                        ok: "false"
-                    });
+                    ok: "false",
+                    error: (err) ? err : "Nodo no encontrado"
+                });
             }
-            Scripts.GetAllScripts(function(err, scripts){
-                if(err){
-                    
+            Scripts.GetAllScripts(function (err, scripts) {
+                if (err || !scripts) {
+                    return res.send({
+                        ok: "false",
+                        error: (err) ? err : "Scripts no encontrados"
+                    });
                 }
                 res.render('nodo.ejs', {
                     nodo: nodo,
@@ -49,52 +52,60 @@ module.exports = {
         });
     },
 
-    //=== GET ALL NODES ===
-    nodesRender: function(req, res, next) {
-        Nodos.GetAllNodes(function(nodos, err) {
-            if (err) {}
+    //Devuelve una vista renderizada con todos los nodos
+    nodesRender: function (req, res, next) {
+        Nodos.GetAllNodes(function (err, nodos) {
+            if (err) {
+                return res.send({
+                    ok: "false",
+                    error: (err) ? err : "Nodos no encontrados no encontrados"
+                });
+            }
             res.render('gestionnodos.ejs', {
                 nodos: nodos
             });
         });
     },
 
-    nodes: function(req, res, next) {
-        Nodos.GetAllNodes(function(nodos, err) {
-            if (err) {}
+    //Devuelve un objeto con todos los nodos
+    nodes: function (req, res, next) {
+        Nodos.GetAllNodes(function (err, nodos) {
+            if (err) {
+                return res.send({
+                    ok: "false",
+                    error: (err) ? err : "Nodos no encontrados no encontrados"
+                });
+            }
             res.send({
                 nodos: nodos
             });
         });
     },
 
-    //=== CHECK NODE STATUS ===
-    nodeStatus: function(req, res, next) {
-        Nodos.GetNodo(req.params.mac, function(err, nodo){
+    nodeStatus: function (req, res, next) {
+        Nodos.GetNodo(req.params.mac, function (err, nodo) {
             if (err || !nodo) {
                 return res.send({
                     ok: "false",
-                    error: "Error al recuperar el nodo de la BBDD: "+err
+                    error: "Error al recuperar el nodo de la BBDD: " + err
                 });
             }
-            Ssh.CheckNodeStatus(nodo.ip, function(status) {
+            Ssh.CheckNodeStatus(nodo.ip, function (status) {
                 res.send({
                     status: status
                 });
             });
-        });  
+        });
     },
 
-    //=== DELETE NODE BY IP ===
-    nodeDelete: function(req, res, next) {
-        Nodos.DeleteNodo(req.params.mac, function(err, data) {
+    nodeDelete: function (req, res, next) {
+        Nodos.DeleteNodo(req.params.mac, function (err, data) {
             if (err) {
-                res.send({
+                return res.send({
                     ok: "false",
                     error: err,
                     data: data
                 });
-                return;
             }
             res.send({
                 ok: "true",
@@ -103,16 +114,15 @@ module.exports = {
         });
     },
 
-    //=== RESTART NODE BY IP ===
-    nodeRestart: function(req, res, next) {
-        Nodos.GetNodo(req.params.mac, function(err, nodo) {
+    nodeRestart: function (req, res, next) {
+        Nodos.GetNodo(req.params.mac, function (err, nodo) {
             if (err) {
-                    return res.send({
-                        status: "false",
-                        error: error
-                    });
+                return res.send({
+                    status: "false",
+                    error: error
+                });
             }
-            Ssh.RestartNode(nodo.ip, function(err) {
+            Ssh.RestartNode(nodo.ip, function (err) {
                 if (err) {
                     return res.send({
                         ok: "false",
@@ -126,22 +136,22 @@ module.exports = {
         });
     },
 
-    nodePendiente: function(req, res, next) {
-        Nodos.GetNodo(req.params.mac, function(err, nodo) {
+    nodePendiente: function (req, res, next) {
+        Nodos.GetNodo(req.params.mac, function (err, nodo) {
             if (err) {
-                    return res.send({
-                        status: "false",
-                        error: error
-                    });
+                return res.send({
+                    status: "false",
+                    error: error
+                });
             }
-            Nodos.DeleteNodo(req.params.mac, function(){
+            Nodos.DeleteNodo(req.params.mac, function () {
                 if (err) {
                     return res.send({
                         status: "false",
                         error: error
                     });
                 }
-                Ssh.RestartNode(nodo.ip, function(err) {
+                Ssh.RestartNode(nodo.ip, function (err) {
                     if (err) {
                         return res.send({
                             ok: "false",
@@ -152,13 +162,12 @@ module.exports = {
                         ok: "true"
                     });
                 });
-            });            
+            });
         });
     },
 
-    //=== GET SCRIPTS FROM NODE BY IP ===
-    nodeScripts: function(req, res, next) {
-        Nodos.GetNodo(req.params.mac, function(err, nodo) {
+    nodeScripts: function (req, res, next) {
+        Nodos.GetNodo(req.params.mac, function (err, nodo) {
             if (err) {
                 res.send({
                     ok: "false"
@@ -172,23 +181,20 @@ module.exports = {
         });
     },
 
-    //=== CHECK SCRIPT STATUS BY IP AND PID ===
-    scriptStatus: function(req, res, next) {
-        Nodos.GetNodo(req.params.mac, function(err, nodo) {
+    scriptStatus: function (req, res, next) {
+        Nodos.GetNodo(req.params.mac, function (err, nodo) {
             if (err) {
-                    res.send({
-                        status: "offline",
-                        error: error
-                    });
-                    return;
+                return res.send({
+                    status: "offline",
+                    error: error
+                });
             }
-            Ssh.CheckScriptStatus(nodo.ip, req.params.pid, function(err, status) {
+            Ssh.CheckScriptStatus(nodo.ip, req.params.pid, function (err, status) {
                 if (err) {
-                    res.send({
+                    return res.send({
                         status: "offline",
                         error: error
                     });
-                    return;
                 }
                 res.send({
                     status: status
@@ -197,55 +203,48 @@ module.exports = {
         });
     },
 
-    scriptStart: function(req, res, next) {
-        Nodos.GetNodo(req.params.mac, function(err, nodo) {
+    scriptStart: function (req, res, next) {
+        Nodos.GetNodo(req.params.mac, function (err, nodo) {
             if (err || !nodo) {
-                    res.send({
-                        ok:"false",
-                        error: error
-                    });
-                    return;
+                return res.send({
+                    ok: "false",
+                    error: error
+                });
             }
-            nodo.scripts.forEach(function(script, i){
-                if(script.pid == parseInt(req.params.pid)){
-                    Ssh.StartScript(nodo.ip, script, function(err, pid){
-                        if(err || !pid){
-                            res.send({
-                                ok:"false",
+            nodo.scripts.forEach(function (script, i) {
+                if (script.pid == parseInt(req.params.pid)) {
+                    Ssh.StartScript(nodo.ip, script, function (err, pid) {
+                        if (err || !pid) {
+                            return res.send({
+                                ok: "false",
                                 error: error
                             });
-                            return;
                         }
-                        nodo.scripts[i].pid = parseInt(pid);
-                        nodo.save();
-                         res.send({
-                            ok:"true"
+                        nodo.scripts[i].pid = parseInt(pid); nodo.save();
+                        return res.send({
+                            ok: "true"
                         });
-                        return;
                     });
                 }
             });
         });
     },
 
-    //=== SCRIPT DELETE BY IP AND PID ===
-    scriptDelete: function(req, res, next) {
-        Nodos.GetNodo(req.params.mac, function(err, nodo) {
+    scriptDelete: function (req, res, next) {
+        Nodos.GetNodo(req.params.mac, function (err, nodo) {
             if (err) {
-                    res.send({
-                        status: "offline",
-                        error: err
-                    });
-                    return;
+                return res.send({
+                    status: "offline",
+                    error: err
+                });
             }
-            Nodos.DeleteScript(req.params.mac, nodo.ip, req.params.pid, function(err, data) {
+            Nodos.DeleteScript(req.params.mac, nodo.ip, req.params.pid, function (err, data) {
                 if (err) {
-                    res.send({
+                    return res.send({
                         ok: "false",
                         error: err,
                         data: data
                     });
-                    return;
                 }
                 res.send({
                     ok: "true",
@@ -255,20 +254,19 @@ module.exports = {
         });
     },
 
-    //=== ADD SCRIPTS TO EXISTENT NODE ===
-    scriptAdd: function(req, res, next) {
-        Nodos.GetNodo(req.params.mac, function(err, nodo) {
+    scriptAdd: function (req, res, next) {
+        Nodos.GetNodo(req.params.mac, function (err, nodo) {
             if (err) {
                 return res.send({
                     ok: "false",
-                    message: "Error al recuperar el nodo: "+err.message
+                    message: "Error al recuperar el nodo: " + err.message
                 });
             }
-            Nodos.AddScript(nodo, req.body.script, function(err) {
+            Nodos.AddScript(nodo, req.body.script, function (err) {
                 if (err) {
                     return res.send({
                         ok: "false",
-                        message: "Error al añadir el script: "+err.message
+                        message: "Error al añadir el script: " + err.message
                     });
                 }
                 res.send({
@@ -278,45 +276,44 @@ module.exports = {
         });
     },
 
-    //=== SCRIPT UPDATE BY IP AND PID ===
-    scriptUpdate: function(req, res, next) {
-        Nodos.GetNodo(req.params.mac, function(err, nodo) {
+    scriptUpdate: function (req, res, next) {
+        Nodos.GetNodo(req.params.mac, function (err, nodo) {
             if (err) {
                 return res.send({
                     ok: "false",
                     message: err
                 });
             }
-            Ssh.StopScript(nodo.ip, req.params.pid, function(err) {
+            Ssh.StopScript(nodo.ip, req.params.pid, function (err) {
                 if (err) {
                     return res.send({
                         ok: "false",
                         message: err
-                    });                    
+                    });
                 }
-                Nodos.UpdateScript(req.params.mac, req.params.pid, req.body.cambio, function(err, script) {
+                Nodos.UpdateScript(req.params.mac, req.params.pid, req.body.cambio, function (err, script) {
                     if (err) {
                         return res.send({
                             ok: "false",
                             message: err
-                        });                        
+                        });
                     }
-                    Ssh.StartScript(nodo.ip, script, function(err, newpid) {
+                    Ssh.StartScript(nodo.ip, script, function (err, newpid) {
                         if (err) {
                             return res.send({
                                 ok: "false",
                                 message: err
-                            });                            
+                            });
                         }
                         Nodos.UpdateScript(req.params.mac, req.params.pid, {
                             tipo: "pid",
                             valor: newpid
-                        }, function(err, scriptfinal) {
+                        }, function (err, scriptfinal) {
                             if (err) {
                                 return res.send({
                                     ok: "false",
                                     message: err
-                                });                                
+                                });
                             }
                             res.send({
                                 ok: "true",

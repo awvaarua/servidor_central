@@ -78,19 +78,6 @@ module.exports = function(app, passport) {
     });
 
     // =============================================================================
-    // PUBLIC IMAGES ===============================================================
-    // =============================================================================    
-    // RETURN IMAGE =========================
-    var fs = require('fs');
-    app.get('/public/img/:name', function(req, res) {
-        var img = fs.readFileSync('./public/img/' + req.params.name);
-        res.writeHead(200, {
-            'Content-Type': 'image/gif'
-        });
-        res.end(img, 'binary');
-    });
-
-    // =============================================================================
     // AUTHENTICATE ================================================================
     // =============================================================================
 
@@ -103,9 +90,9 @@ module.exports = function(app, passport) {
 
     // LOGIN SEND =================================
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect: '/admin', // redirect to the secure profile section
-        failureRedirect: '/login', // redirect back to the signup page if there is an error
-        failureFlash: true // allow flash messages
+        successRedirect: '/admin',
+        failureRedirect: '/login',
+        failureFlash: true
     }));
 
     // SIGNUP =================================
@@ -118,9 +105,9 @@ module.exports = function(app, passport) {
 
     // SIGNUP SEND =================================
     app.post('/signup', md.isLoggedIn, md.isAdmin, passport.authenticate('local-signup', {
-        successRedirect: '/user/success', // redirect to the secure profile section
-        failureRedirect: '/signup', // redirect back to the signup page if there is an error
-        failureFlash: true // allow flash messages
+        successRedirect: '/user/success',
+        failureRedirect: '/signup',
+        failureFlash: true
     }));
 
     // LOGOUT =================================

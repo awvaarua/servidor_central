@@ -25,7 +25,10 @@ bot.onText(/\/start/, function (msg, match) {
 });
 
 bot.onText(/\/estado/, function (msg, match) {
-    Nodos.GetAllNodes(function(nodos){
+    Nodos.GetAllNodes(function(err, nodos){
+        if(err){
+            nodos = [];
+        }
         var keyboard = [];
         nodos.forEach(function(nodo){
             keyboard.push([{

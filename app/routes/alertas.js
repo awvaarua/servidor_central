@@ -65,14 +65,17 @@ module.exports = {
 	},
 
 	alertaAddView: function (req, res, next) {
-		Nodos.GetAllNodes(function(nodos){
-			Scripts.GetAllScripts(function(err, scripts){
-				console.log(nodos);
+		Nodos.GetAllNodes(function(err, nodos){
+			if(err){
+				nodos = [];
+			}
+			Scripts.GetAllScripts(function(err1, scripts){
+				if(err1){
+					scripts = [];
+				}
 				res.render('addalerta.ejs', {
 					nodos: nodos,
-					scripts: scripts,
-					message: req.flash('signupMessage'),
-					messageOk: req.flash('signupMessageOk')
+					scripts: scripts
 				});
 			});
 		});
