@@ -26,6 +26,17 @@ var self = module.exports = {
         })
     },
 
+    GetScriptByFile: function (fichero, callback) {
+        Script.findOne({
+            fichero: fichero
+        }, function (err, script) {
+            if (err) {
+                return callback(err);
+            }
+            callback(null, script);
+        })
+    },
+
     RemoveScript: function (id, callback) {
         Script.remove({
             _id: id

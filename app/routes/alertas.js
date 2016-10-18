@@ -20,23 +20,33 @@ module.exports = {
 				return res.status(200).render('response.ejs', {
 					ok: 'false',
 					titulo: 'Alerta no creada',
-					descripcion: err,
+					descripcion: (err) ? err : "Nodo no encontrado",
 					responseok: 'false'
 				});
 			}
 			req.body.nombre = nodo.nombre;
-			Alertas.AddAlerta(req.body, function (err) {
-				if (err) {
+			Scripts.GetScriptByFile(req.body.fichero, function(err, script){
+				if (err || !script) {
 					return res.status(200).render('response.ejs', {
 						ok: 'false',
 						titulo: 'Alerta no creada',
-						descripcion: err
+						descripcion: (err) ? err : "Script no encontrado",
+						responseok: 'false'
 					});
 				}
-				res.status(201).render('response.ejs', {
-					ok: 'true',
-					titulo: 'Alerta creada correctamente',
-					descripcion: ""
+				Alertas.AddAlerta(req.body, function (err) {
+					if (err) {
+						return res.status(200).render('response.ejs', {
+							ok: 'false',
+							titulo: 'Alerta no creada',
+							descripcion: err
+						});
+					}
+					res.status(201).render('response.ejs', {
+						ok: 'true',
+						titulo: 'Alerta creada correctamente',
+						descripcion: ""
+					});
 				});
 			});
 		});
