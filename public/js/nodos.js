@@ -82,15 +82,17 @@ function ProcesarScripts(ip, mac){
 		script.script_id = $(panel).find('.script_id').attr('id');
 		script.fichero = $(panel).find('.script_fichero').attr('id');
 		script.nombre = $(panel).find('.script_nombre').attr('id');
-
-		$(panel).find('.argument').each(function (j, input) {
-			script.argumentos.push({
-				nombre: $(input).attr('name'),
-				valor: $(input).val(),
-				orden: $(input).attr('id')
-			});
-		});
-
+		try {
+			$(panel).find('.argument').each(function (j, input) {
+				script.argumentos.push({
+					nombre: $(input).attr('name'),
+					valor: $(input).val(),
+					orden: $(input).attr('id')
+				});
+			});			
+		} catch (error) {
+			
+		}
 		$(panel).html('<img class="loading" src="http://' + window.location.host + '/public/img/load.gif"></img>');
 
 		$.ajax({

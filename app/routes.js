@@ -116,4 +116,16 @@ module.exports = function(app, passport) {
         res.redirect('/login');
     });
 
+    // =============================================================================
+    // PUBLIC IMAGES ===============================================================
+    // =============================================================================    
+    // RETURN IMAGE =========================
+    var fs = require('fs');
+    app.get('/public/img/:name', function(req, res) {
+        var img = fs.readFileSync('./public/img/' + req.params.name);
+        res.writeHead(200, {
+            'Content-Type': 'image/gif'
+        });
+        res.end(img, 'binary');
+    });
 };

@@ -101,6 +101,9 @@ var self = module.exports = {
 
   //Inicia el script en el nodos i lo guarda en BBDD.
   AddScript: function (nodo, script, callback) {
+    if(!script.argumentos){
+      script.argumentos = [];
+    }
     Ssh.StartScript(nodo.ip, script, function (err, pid) {
       if (err) {
         return callback(err);
