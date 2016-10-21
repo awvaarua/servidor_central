@@ -40,11 +40,12 @@ function GetNodos(tipo, status) {
     $.ajax({
 		url: '/nodos/',
 		type: 'GET',
-		success: function (response) {
-            GetDataNodos(response.nodos, tipo.fichero);
+		success: function (response) {            
             if(status){
                 GetStatusNodos(response.nodos);
-            }            
+            }else{
+                GetDataNodos(response.nodos, tipo.fichero);
+            }     
 		}
 	});
 }
@@ -98,7 +99,7 @@ function GetDataNodos(nodos, tipo) {
                 var datos = [];
                 try{
                     response.datos.valores.forEach(function(data, i){
-                        if(i <= 30){
+                        if(i <= 20){
                             datos.push(parseFloat(data.valor));
                         }                    
                     });
