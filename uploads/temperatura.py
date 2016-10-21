@@ -2,7 +2,7 @@ import urllib2, json, time, sys, os
 from uuid import getnode as get_mac
 
 
-url = "http://192.168.1.48:8080/data/add"
+url = "http://192.168.2.81:8080/data/add"
 frec = sys.argv[1] #Primer argumento despues del path a ejecutar
 valor = 75
 data = {
