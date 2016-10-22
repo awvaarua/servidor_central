@@ -99,7 +99,7 @@ function GetDataNodos(nodos, tipo) {
                 var datos = [];
                 try{
                     var count = 0;
-                    for (var i = response.datos.valores.length; i > 0; i--) {
+                    for (var i = response.datos.valores.length-1; i >= 0; i--) {
                         if(count >= 20){
                             break;
                         }
