@@ -103,7 +103,7 @@ function GetDataNodos(nodos, tipo) {
                         if(count >= 20){
                             break;
                         }
-                        datos.push(parseFloat(response.datos.valores[i]));
+                        datos.push(parseFloat(response.datos.valores[i].valor));
                         count++;
                     }
                     chart.addSeries({
