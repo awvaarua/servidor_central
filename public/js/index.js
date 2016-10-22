@@ -98,11 +98,14 @@ function GetDataNodos(nodos, tipo) {
             success: function (response) {
                 var datos = [];
                 try{
-                    response.datos.valores.forEach(function(data, i){
-                        if(i <= 20){
-                            datos.push(parseFloat(data.valor));
-                        }                    
-                    });
+                    var count = 0;
+                    for (var i = response.datos.valores.length; i > 0; i--) {
+                        if(count >= 20){
+                            break;
+                        }
+                        datos.push(parseFloat(response.datos.valores[i]));
+                        count++;
+                    }
                     chart.addSeries({
                         name: nodo.nombre,
                         data: datos
