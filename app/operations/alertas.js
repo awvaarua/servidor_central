@@ -1,4 +1,5 @@
 var Alerta = require('../models/alerta');
+var Aviso = require('../operations/aviso');
 var Accion = require('../operations/accion.js');
 var Nodo = require('../operations/nodos.js');
 
@@ -119,7 +120,7 @@ function Actuar(nodo, valor, alerta) {
             CheckAlerta(nodo, valor, alerta);
             break;
         case 2:
-            Informar(alerta, nodo, valor)
+            Avisar(alerta, nodo, valor)
             break;
         default:
             break;
@@ -129,9 +130,16 @@ function Actuar(nodo, valor, alerta) {
 function CheckAlerta(nodo, valor, alerta) {
     if (CheckCondition(valor, alerta.condicion, alerta.valor)) {
         if (CheckDate(alerta)) {
-            Informar(alerta, nodo, valor);
+            Avisar(alerta, nodo, valor);
         }
     }
+}
+
+function Avisar(alerta, nodo, valor){
+    Informar(alerta, nodo, valor);
+    Aviso.AddAviso({
+        mensaje: CreateMensaje(alerta, nodo, valor)
+    }, function(){});
 }
 
 function Informar(alerta, nodo, valor) {

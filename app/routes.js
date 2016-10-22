@@ -61,6 +61,9 @@ module.exports = function(app, passport) {
     app.post('/data/add', md.getIp, data.dataAdd);
     app.post('/data/:mac', md.getIp, data.dataGet);
 
+    var aviso = require('./routes/avisos');
+    app.post('/avisos/date', md.isLoggedIn, aviso.avisosGetAfterDate);
+
     // =============================================================================
     //  ADMIN PANE =================================================================
     // =============================================================================

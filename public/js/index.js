@@ -26,10 +26,26 @@ function GetNumPendientes(){
 }
 var dialog;
 function GetAlertasGeneradas(){
-    dialog = new BootstrapDialog({
-        title: 'Alertas generadas las últimas 24 horas'
-    });
-    dialog.realize();    
+    var date = new Date();
+    $.ajax({
+		url: '/avisos/date/',
+		type: 'POST',
+        data: {date: date},
+		success: function (response) {
+            $('#numalertas').html(response.avisos.length);
+            var msg = "";
+            response.avisos.forEach(function(aviso){
+                var data = new Date(aviso.fecha);
+                msg += "<row><p><strong>"+aviso.mensaje+"</strong> - "+  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() +"</p></row>"
+                console.log(aviso);
+            });
+            dialog = new BootstrapDialog({
+                title: 'Alertas generadas las últimas 24 horas',
+                message: msg
+            });
+            dialog.realize();           
+		}
+	});
 }
 
 function openDialogAlertas(){
