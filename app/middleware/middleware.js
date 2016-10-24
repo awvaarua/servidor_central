@@ -66,7 +66,7 @@ module.exports = {
 		fs.unlink(path);
 	},
 
-	checkNewIp: function(){
+	checkNewIp: function(req, res, next){
 		var ip = req.ip.split(':');
 		req.params.ip = ip[ip.length - 1];
 		Nodo.GetNodo(req.params.mac, function(err, nodo){
