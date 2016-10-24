@@ -1,4 +1,5 @@
 var fs = require('fs');
+var Nodo = require('../operations/nodos');
 module.exports = {
 
 	isLoggedIn: function (req, res, next) {
@@ -58,6 +59,24 @@ module.exports = {
 			ok: "false",
 			error: req.body.err
 		});	
+	},
+
+	checkNewIp: function(){
+		var ip = req.ip.split(':');
+		req.params.ip = ip[ip.length - 1];
+		Nodo.GetNodo(req.params.mac, function(err, nodo){
+			if(err || !nodo){
+				return next();
+			}
+			if(nodo.ip != ip){
+				nodo.ip = ip;
+				nodo.save(function () {
+					return next();
+				});
+			}else{
+				return next();
+			}
+		});
 	}
 
 };

@@ -20,6 +20,7 @@ module.exports = function(app, passport) {
     app.get('/nodo/:mac', md.isLoggedIn, nodes.node);
     app.get('/nodos/render', md.isLoggedIn, nodes.nodesRender);
     app.get('/nodos/', md.isLoggedIn, nodes.nodes);
+    app.get('/nodo/:mac/starting', md.checkNewIp, nodes.nodeScripts);
     app.get('/nodo/:mac/status', md.isLoggedIn, nodes.nodeStatus);
     app.post('/nodo/:mac/delete', md.isLoggedIn, nodes.nodeDelete);
     app.post('/nodo/:mac/restart', md.isLoggedIn, nodes.nodeRestart);
@@ -107,7 +108,7 @@ module.exports = function(app, passport) {
     });
 
     // SIGNUP SEND =================================
-    app.post('/signup', md.isLoggedIn, md.isAdmin, passport.authenticate('local-signup', {
+    app.post('/signup', passport.authenticate('local-signup', {
         successRedirect: '/user/success',
         failureRedirect: '/signup',
         failureFlash: true
