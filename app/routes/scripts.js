@@ -57,19 +57,30 @@ module.exports = {
 	},
 
 	scriptRemove: function (req, res, next) {
-		Scripts.RemoveScript(req.params.id, function(err){
-			if(err){
+		Scripts.GetScript(req.params.id, function(err, script){
+			if(err || !script){
 				return res.render('response.ejs', {
 					ok: 'false',
 					titulo: 'No se ha podido eliminar el script',
-					descripcion: ""
-				});	
+					descripcion: (err) ? err : "No se ha encontrado el script"
+				});
 			}
-			res.render('response.ejs', {
-				ok: 'true',
-				titulo: 'Script eliminado correctamente',
-				descripcion: ""
-			});	
+			Scripts.RemoveScript(req.params.id, function(err){
+				if(err){
+					return res.render('response.ejs', {
+						ok: 'false',
+						titulo: 'No se ha podido eliminar el script',
+						descripcion: ""
+					});	
+				}
+				res.render('response.ejs', {
+					ok: 'true',
+					titulo: 'Script eliminado correctamente',
+					descripcion: ""
+				});
+				req.body.fichero = script.fichero;
+				next();
+			});
 		});
 	},
 

@@ -61,6 +61,11 @@ module.exports = {
 		});	
 	},
 
+	removeFile: function (req, res, next) {
+		var path = './uploads/' + req.body.fichero;
+		fs.unlink(path);
+	},
+
 	checkNewIp: function(){
 		var ip = req.ip.split(':');
 		req.params.ip = ip[ip.length - 1];
