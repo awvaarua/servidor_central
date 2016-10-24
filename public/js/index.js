@@ -52,6 +52,10 @@ function openDialogAlertas(){
     dialog.open();
 }
 
+function openDialogUsuarios(){
+    dialog1.open();
+}
+
 function GetNodos(tipo, status) {
     $.ajax({
 		url: '/nodos/',
@@ -91,9 +95,29 @@ function GetStatusNodos(nodos){
         });
     });
 }
+var dialog1;
+function GetUsuarios(){
+    $.ajax({
+        url: '/usuarios/',
+        type: 'GET',
+        success: function (response) {
+            $('#numusuarios').html(response.usuarios.length);
+            var msg = "";
+            response.usuarios.forEach(function(usr){
+                msg += "<row><p><strong>"+usr.alias+"</strong></p></row>"
+            });
+            dialog1 = new BootstrapDialog({
+                title: 'Usuariosr regitrados en telegram',
+                message: msg
+            });
+            dialog1.realize();    
+        }
+    });
+}
 
 $( document ).ready(function() {
     GetNumPendientes();
+    GetUsuarios();
     GetAlertasGeneradas();
 	GetNodos(scripts_index[0], true);
     scripts_index.forEach(function(script, i){

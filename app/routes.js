@@ -62,6 +62,9 @@ module.exports = function(app, passport) {
     app.post('/data/add', md.getIp, data.dataAdd);
     app.post('/data/:mac', md.getIp, data.dataGet);
 
+    var usuario = require('./routes/usuarios');
+    app.get('/usuarios/', md.isLoggedIn, usuario.usuarios);
+    
     var aviso = require('./routes/avisos');
     app.post('/avisos/date', md.isLoggedIn, aviso.avisosGetAfterDate);
 
