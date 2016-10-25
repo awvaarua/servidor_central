@@ -18,7 +18,15 @@ var self = module.exports = {
         });
         if (parseInt(alerta.tipo) == 1) {
             alert.condicion = alerta.condicion;
-            alert.valor = parseInt(alerta.valor);
+            (parseFloat(alerta.valorone)) ? alert.valorone =  parseFloat(alerta.valorone) : "Nodo no encontrado"
+            if(!isNaN(parseFloat(alerta.valorone))){
+                alert.valorone =  parseFloat(alerta.valorone);
+            }
+            if(!isNaN(parseFloat(alerta.valortwo))){
+                alert.valortwo =  parseFloat(alerta.valortwo);
+            }
+            //alert.valorone =  parseFloat(alerta.valorone) || 0;
+            //alert.valortwo =  parseFloat(alerta.valortwo) || 0;
             alert.frecuencia = parseInt(alerta.frecuencia);
         }
         if(!alerta.usuarios){
@@ -33,6 +41,7 @@ var self = module.exports = {
     },
 
     UpdateAlerta: function (alerta, cambios, callback) {
+        console.log(cambios);
         alerta.mensaje = cambios.mensaje;
         if(!cambios.usuarios){
             alerta.usuarios = [];
@@ -41,8 +50,13 @@ var self = module.exports = {
         }
         if (parseInt(alerta.tipo) == 1) {
             alerta.condicion = cambios.condicion;
-            alerta.valor = parseInt(cambios.valor);
             alerta.frecuencia = parseInt(cambios.frecuencia);
+            if(!isNaN(parseFloat(cambios.valorone))){
+                alerta.valorone =  parseFloat(cambios.valorone);
+            }
+            if(!isNaN(parseFloat(cambios.valortwo))){
+                alerta.valortwo =  parseFloat(cambios.valortwo);
+            }
         }
         alerta.save(function(err){
             if (err) {
@@ -128,7 +142,7 @@ function Actuar(nodo, valor, alerta) {
 };
 
 function CheckAlerta(nodo, valor, alerta) {
-    if (CheckCondition(valor, alerta.condicion, alerta.valor)) {
+    if (CheckCondition(valor, alerta)) {
         if (CheckDate(alerta)) {
             Avisar(alerta, nodo, valor);
         }
@@ -147,30 +161,40 @@ function Informar(alerta, nodo, valor) {
     Accion.SendTelegram(mensaje, alerta.usuarios);
 }
 
-function CheckCondition(valor1, condicion, valor2) {
-    switch (condicion) {
+function CheckCondition(val_dato, alerta) {
+    switch (alerta.condicion) {
         case ">":
-            if (valor1 > valor2) {
+            if (val_dato > alerta.valorone) {
                 return true;
             }
             return false;
         case ">=":
-            if (valor1 >= valor2) {
+            if (val_dato >= alerta.valorone) {
                 return true;
             }
             return false;
         case "<":
-            if (valor1 < valor2) {
+            if (val_dato < alerta.valorone) {
                 return true;
             }
             return false;
         case "<=":
-            if (valor1 <= valor2) {
+            if (val_dato <= alerta.valorone) {
                 return true;
             }
             return false;
         case "=":
-            if (valor1 == valor2) {
+            if (val_dato == alerta.valorone) {
+                return true;
+            }
+            return false;
+        case "entre":
+            if (alerta.valorone <= val_dato && val_dato <= alerta.valortwo) {
+                return true;
+            }
+            return false;
+        case "fuera":
+            if (val_dato <= alerta.valorone && val_dato >= alerta.valortwo) {
                 return true;
             }
             return false;

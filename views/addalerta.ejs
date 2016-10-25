@@ -40,7 +40,7 @@
             <div id="div_condicion" class="form-group">
                 
             </div>
-            <div id="div_condicion_valor" class="form-group">
+            <div id="div_condicion_valor" class="form-inline marginbottom">
                 
             </div>
             <div id="div_condicion_frecuencia" class="form-group">
@@ -75,8 +75,12 @@
                 if($('#alerta_tipo_condicion').val() == 1){
                     alerta.tipo = 1;
                     alerta.condicion = $('#alerta_condicion').val();
-                    alerta.valor = $('#alerta_valor').val();
                     alerta.frecuencia = $('#alerta_frecuencia').val();
+                    try{
+                        alerta.valorone = parseFloat($('#alerta_valor').val());
+                        alerta.valortwo = parseFloat($('#alerta_valor2').val());
+                    }catch(err){
+                    }
                 }else{
                     alerta.tipo = 2;
                 }

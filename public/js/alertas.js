@@ -1,14 +1,14 @@
 function GestionAlertas() {
-  $.ajax({
-    url: '/alerts/',
-    type: 'GET',
-    success: function (response) {
-      $('#page-wrapper').hide();
-      $('#page-wrapper').html(response);
-      $('#page-wrapper').show();
-    }
-  });
-  return false;
+	$.ajax({
+		url: '/alerts/',
+		type: 'GET',
+		success: function (response) {
+			$('#page-wrapper').hide();
+			$('#page-wrapper').html(response);
+			$('#page-wrapper').show();
+		}
+	});
+	return false;
 }
 
 $(document).on('change', '#select_script', function () {
@@ -28,30 +28,49 @@ $(document).on('change', '#select_script', function () {
 	return false;
 });
 
+$(document).on('change', '#alerta_condicion', function () {
+	var id = $('#alerta_condicion').val();
+	if(id == "entre" || id == "fuera"){
+		var str1 = "" +
+		"            <input id=\"alerta_valor\" type=\"number\" class=\"form-control\" name=\"valor\" placeholder=\"Valor mínimo\">";
+		var str2 = "" +
+		"            <input id=\"alerta_valor2\" type=\"number\" class=\"form-control\" name=\"valor\" placeholder=\"Valor máximo\">";
+		$('#div_condicion_valor').html(str1);
+		$('#div_condicion_valor').append(str2);
+
+	}else{
+		var str1 = "" +
+		"            <input id=\"alerta_valor\" type=\"number\" class=\"form-control\" name=\"valor\" placeholder=\"Valor de la condición\">";
+		$('#div_condicion_valor').html(str1);
+	}
+});
+
 $(document).on('change', '#alerta_tipo_condicion', function () {
 	var id = $('#alerta_tipo_condicion').val();
 	if (id == 0) {
 		$('#div_condicion').html("");
 		$('#div_condicion_valor').html("");
-	} else if(id == 1){
+	} else if (id == 1) {
 		var str = "<label for=\"sel_sensor\">Condición</label>" +
-"                    <select id=\"alerta_condicion\" class=\"form-control\" id=\"sel_sensor\" name=\"tipo_condicion\">" +
-"                        <option value=\"<\"><</option>" +
-"                        <option value=\"<=\"><=</option>" +
-"                        <option value=\">\">></option>" +
-"                        <option value=\">=\">>=</option>" +
-"                        <option value=\"=\">=</option>" +
-"                    </select>";
-		var str1 = "<label for=\"sel_sensor\">Valor</label>" +
-"            <input id=\"alerta_valor\" type=\"number\" class=\"form-control\" name=\"valor\" placeholder=\"Valor con el que se comparará\">";
-var str2 = "<div class=\"form-group\">" +
-"                    <label for=\"sel_frecuencia\">Frecuencia</label>" +
-"                    <input id=\"alerta_frecuencia\" type=\"number\" class=\"form-control\" name=\"valor\" placeholder=\"Tiempo que debe pasar para que se vuelva a enviar una alerta\">" +
-"                </div>";
+			"                    <select id=\"alerta_condicion\" class=\"form-control\" id=\"sel_sensor\" name=\"tipo_condicion\">" +
+			"                        <option value=\"<\"><</option>" +
+			"                        <option value=\"<=\"><=</option>" +
+			"                        <option value=\">\">></option>" +
+			"                        <option value=\">=\">>=</option>" +
+			"                        <option value=\"=\">=</option>" +
+			"                        <option value=\"entre\">Entre el rango</option>" +
+			"                        <option value=\"fuera\">Fuera del rango</option>" +
+			"                    </select>";
+		var str1 = "" +
+			"            <input id=\"alerta_valor\" type=\"number\" class=\"form-control\" name=\"valor\" placeholder=\"Valor de la condición\">";
+		var str2 = "<div class=\"form-group\">" +
+			"                    <label for=\"sel_frecuencia\">Frecuencia</label>" +
+			"                    <input id=\"alerta_frecuencia\" type=\"number\" class=\"form-control\" name=\"valor\" placeholder=\"Tiempo que debe pasar para que se vuelva a enviar una alerta\">" +
+			"                </div>";
 		$('#div_condicion').html(str);
 		$('#div_condicion_valor').html(str1);
 		$('#div_condicion_frecuencia').html(str2);
-	}else{
+	} else {
 		$('#div_condicion').html("");
 		$('#div_condicion_valor').html("");
 		$('#div_condicion_frecuencia').html("");
@@ -61,12 +80,12 @@ var str2 = "<div class=\"form-group\">" +
 
 function DeleteAlerta(i, id) {
 	$.ajax({
-		url: '/alerta/'+id+'/remove',
+		url: '/alerta/' + id + '/remove',
 		type: 'POST',
 		success: function (response) {
-			if(response.ok == 'true'){
+			if (response.ok == 'true') {
 				$('#alerta_' + i).remove();
-			}			
+			}
 			return false;
 		},
 		error: function (response, err) {
@@ -77,14 +96,14 @@ function DeleteAlerta(i, id) {
 }
 
 function AddNewAlert() {
-  $.ajax({
-    url: '/alerta/add',
-    type: 'GET',
-    success: function (response) {
-      $('#page-wrapper').html(response);
-    }
-  });
-  return false;
+	$.ajax({
+		url: '/alerta/add',
+		type: 'GET',
+		success: function (response) {
+			$('#page-wrapper').html(response);
+		}
+	});
+	return false;
 }
 
 var usuarios = 0;
@@ -111,11 +130,11 @@ $(document).on('click', '.delblanc', function (event) {
 $(document).on('click', '.addblanc', function (event) {
 	var alertacont = $(this).parents("#contenedor_alerta:first")[0];
 	var str = "<div class=\"col-md-2 vcenter usuario\">" +
-"                                <div class=\"input-group maxsize\">" +
-"                                    <input id='al_usuario' type=\"text\" class='form-control usuarioval' value=\""+$(alertacont).find('#adduser').val()+"\">" +
-"                                    <span class=\"input-group-addon btn btn btn-danger delblanc\"><span class=\"glyphicon glyphicon-trash\"></span></span>" +
-"                                </div>" +
-"                            </div>";
+		"                                <div class=\"input-group maxsize\">" +
+		"                                    <input id='al_usuario' type=\"text\" class='form-control usuarioval' value=\"" + $(alertacont).find('#adduser').val() + "\">" +
+		"                                    <span class=\"input-group-addon btn btn btn-danger delblanc\"><span class=\"glyphicon glyphicon-trash\"></span></span>" +
+		"                                </div>" +
+		"                            </div>";
 	$(alertacont).find("#usuer_list").append(str);
 	$(alertacont).find('#adduser').val("")
 	return false;
@@ -127,40 +146,44 @@ $(document).on('click', '.actualizaralerta', function (event) {
 		mensaje: $(alertacont).find('#alerta_mensaje').val(),
 		usuarios: []
 	};
-	if($(alertacont).find('#alerta_tipo').val() == "1"){
+	if ($(alertacont).find('#alerta_tipo').val() == "1") {
 		alerta.frecuencia = $(alertacont).find('#alerta_frecuencia').val();
 		alerta.condicion = $(alertacont).find('#alerta_condicion').val();
-		alerta.valor = $(alertacont).find('#alerta_valor').val();
+		try{
+			alerta.valorone = parseFloat($(alertacont).find('#alerta_valor').val());
+			alerta.valortwo = parseFloat($(alertacont).find('#alerta_valor2').val());
+		}catch(err){
+		}
 	}
-	$(alertacont).find('.usuarioval').each(function(i, usr){
+	$(alertacont).find('.usuarioval').each(function (i, usr) {
 		alerta.usuarios.push($(usr).val());
 	});
 	$.ajax({
-    url: '/alerta/'+$(alertacont).find('#alerta_id').val()+'/update',
-    type: 'POST',
+		url: '/alerta/' + $(alertacont).find('#alerta_id').val() + '/update',
+		type: 'POST',
 		data: alerta,
-    success: function (response) {
-		if(response.ok == "true"){
-			var str = "<div class=\"alert alert-success\">" +
-"  <strong>Actualizado correctamente!</strong>" +
-"</div>";
-			$(alertacont).find('#response').html(str);
-			setTimeout(function() {
-				$(alertacont).find('#response').fadeOut(300, function(){ $(this).html("");});
-				$(alertacont).find('#response').fadeIn(0);
-			}, 2000);
-		}else{
-			var str = "<div class=\"alert alert-danger\">" +
-"  <strong>Se ha producido un error!</strong>"+
-"</div>";
-			$(alertacont).find('#response').html(str);
-			setTimeout(function() {
-				$(alertacont).find('#response').fadeOut(300, function(){ $(this).html("");});
-				$(alertacont).find('#response').fadeIn(0);
-			}, 2000);
+		success: function (response) {
+			if (response.ok == "true") {
+				var str = "<div class=\"alert alert-success\">" +
+					"  <strong>Actualizado correctamente!</strong>" +
+					"</div>";
+				$(alertacont).find('#response').html(str);
+				setTimeout(function () {
+					$(alertacont).find('#response').fadeOut(300, function () { $(this).html(""); });
+					$(alertacont).find('#response').fadeIn(0);
+				}, 2000);
+			} else {
+				var str = "<div class=\"alert alert-danger\">" +
+					"  <strong>Se ha producido un error!</strong>" +
+					"</div>";
+				$(alertacont).find('#response').html(str);
+				setTimeout(function () {
+					$(alertacont).find('#response').fadeOut(300, function () { $(this).html(""); });
+					$(alertacont).find('#response').fadeIn(0);
+				}, 2000);
+			}
 		}
-    }
-  });
+	});
 	return false;
 });
 
@@ -168,12 +191,12 @@ $(document).on('click', '.eliminaralerta', function (event) {
 	var alertacont = $(this).parents("#contenedor_alerta:first")[0];
 	var id = $(alertacont).find('#alerta_id').val();
 	$.ajax({
-		url: '/alerta/'+id+'/remove',
+		url: '/alerta/' + id + '/remove',
 		type: 'POST',
 		success: function (response) {
-			if(response.ok == 'true'){
+			if (response.ok == 'true') {
 				$(alertacont).parents('#alertaraiz').remove();
-			}			
+			}
 			return false;
 		},
 		error: function (response, err) {
