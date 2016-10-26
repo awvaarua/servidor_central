@@ -3,7 +3,7 @@ var Data = require('../models/data.js');
 var self = module.exports = {
 
 	Add: function (mac, fichero, valor) {
-		self.Get(mac, fichero, null, function (err, data) {			
+		self.Get(mac, fichero, function (err, data) {			
 			if(err){
 				return;
 			}
@@ -28,7 +28,7 @@ var self = module.exports = {
 		});
 	},
 
-	Get: function (mac, fichero, data, callback) {
+	Get: function (mac, fichero, callback) {
 		var query = {
 			mac: mac,
 			fichero: fichero
