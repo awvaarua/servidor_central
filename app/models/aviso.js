@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 
 var avisoSchema = mongoose.Schema({
 
-    fecha: Date,
-    mensaje: String
+    fecha: { type: Date, required: true },
+    mensaje: { type: String, required: [true, 'Se requiere un mensaje'] },
 
 });
 

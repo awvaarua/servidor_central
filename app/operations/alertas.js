@@ -121,27 +121,25 @@ var self = module.exports = {
                     return;
                 }
                 alertas.forEach(function (alerta) {
-                    Actuar(nodo, valor, alerta);
+                    Actuar(nodo, alerta, valor);
                 });
             });
         });
     }
 }
 
-function Actuar(nodo, valor, alerta) {
+function Actuar(nodo, alerta, valor) {
     switch (alerta.tipo) {
         case 1:
-            CheckAlerta(nodo, valor, alerta);
-            break;
+            return CheckAlerta(nodo, alerta, valor);
         case 2:
-            Avisar(alerta, nodo, valor)
-            break;
+            return Avisar(nodo, alerta, valor);
         default:
             break;
     }
 };
 
-function CheckAlerta(nodo, valor, alerta) {
+function CheckAlerta(nodo, alerta, valor) {
     if (CheckCondition(valor, alerta)) {
         if (CheckDate(alerta)) {
             Avisar(alerta, nodo, valor);
@@ -149,15 +147,15 @@ function CheckAlerta(nodo, valor, alerta) {
     }
 }
 
-function Avisar(alerta, nodo, valor){
-    Informar(alerta, nodo, valor);
+function Avisar(nodo, alerta, valor){
+    Informar(nodo, alerta, valor);
     Aviso.AddAviso({
-        mensaje: CreateMensaje(alerta, nodo, valor)
+        mensaje: CreateMensaje(nodo, alerta, valor)
     }, function(){});
 }
 
-function Informar(alerta, nodo, valor) {
-    mensaje = CreateMensaje(alerta, nodo, valor);
+function Informar(nodo, alerta, valor) {
+    mensaje = CreateMensaje(nodo, alerta, valor);
     Accion.SendTelegram(mensaje, alerta.usuarios);
 }
 
@@ -220,7 +218,7 @@ function CheckDate(alerta) {
     return false;
 }
 
-function CreateMensaje(alerta, nodo, valor) {
+function CreateMensaje(nodo, alerta, valor) {
     var msg = "\u{2757}\u{2757}\u{2757}" + alerta.mensaje.replace(":nombre", nodo.nombre);
     msg = msg.replace(":valor", valor);
     return msg;
