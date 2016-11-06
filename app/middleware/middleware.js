@@ -73,7 +73,7 @@ module.exports = {
 			if(err || !nodo){
 				return next();
 			}
-			if(nodo.ip != ip){
+			if(nodo.ip != req.params.ip){
 				nodo.ip = ip;
 				nodo.save(function () {
 					return next();
