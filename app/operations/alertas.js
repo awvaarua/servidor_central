@@ -119,9 +119,25 @@ var self = module.exports = {
             Nodo.GetNodo(mac, function (err, nodo) {
                 if (err || !nodo) {
                     return;
-                }
+                }   
                 alertas.forEach(function (alerta) {
                     Actuar(nodo, alerta, valor);
+                });
+            });
+        });
+    },
+
+    CheckVideo: function (mac, fichero, nombre_fichero, valor) {
+        self.GetAlerta(mac, fichero, function (err, alertas) {
+            if (err || !alertas) {
+                return;
+            }
+            Nodo.GetNodo(mac, function (err, nodo) {
+                if (err || !nodo) {
+                    return;
+                }
+                alertas.forEach(function (alerta) {
+                    Accion.SendVideo(nombre_fichero, CreateMensaje(nodo, alerta, valor), alerta.usuarios)
                 });
             });
         });

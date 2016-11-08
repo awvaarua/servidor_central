@@ -96,6 +96,21 @@ var self = module.exports = {
 
     UpdateMessage: function (texto, options) {
         bot.editMessageText(texto, options);
+    },
+
+    SendVideo: function (nombre_fichero, mensaje, usuarios, options) {
+        usuarios.forEach(function (usuario) {
+            GetUserByAlias(usuario, function (err, user) {
+                if (!err && user) {
+                    bot.sendMessage(user.user_id, mensaje, options);
+                    bot.sendVideo(user.user_id, './temp/'+nombre_fichero);
+                }
+            });
+        });
+    },
+
+    UpdateMessage: function (texto, options) {
+        bot.editMessageText(texto, options);
     }
 }
 

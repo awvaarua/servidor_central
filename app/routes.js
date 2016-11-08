@@ -61,6 +61,7 @@ module.exports = function(app, passport) {
     var data = require('./routes/data');
     app.post('/data/add', md.getIp, data.dataAdd);
     app.post('/data/:mac', md.getIp, data.dataGet);
+    app.post('/data/:mac/video', md.getIp, upload.single( 'file' ), data.dataAddVideo);
 
     var usuario = require('./routes/usuarios');
     app.get('/usuarios/', md.isLoggedIn, usuario.usuarios);
