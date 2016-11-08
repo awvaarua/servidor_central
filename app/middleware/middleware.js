@@ -66,6 +66,11 @@ module.exports = {
 		fs.unlink(path);
 	},
 
+	removeVideo: function (req, res, next) {
+		var path = './temp/video.mp4';
+		fs.unlink(path);
+	},
+
 	checkNewIp: function(req, res, next){
 		var ip = req.ip.split(':');
 		req.params.ip = ip[ip.length - 1];
