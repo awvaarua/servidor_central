@@ -54,7 +54,7 @@ module.exports = function(app, passport) {
     app.get('/script/add', md.isLoggedIn, scripts.scriptsAddView);
     app.post('/script/add', md.isLoggedIn, scripts.scriptAdd, md.removeFileIfError);
     app.post('/script/:id/delete', md.isLoggedIn, scripts.scriptRemove, md.removeFile);
-    app.post('/script/file/upload/', md.isLoggedIn, md.removeVideo, upload.single( 'file' ), md.fileExistAndRemove, scripts.fileUpload);
+    app.post('/script/file/upload/', md.isLoggedIn, upload.single( 'file' ), md.fileExistAndRemove, scripts.fileUpload);
     app.get('/script/:id', md.isLoggedIn, scripts.scriptGet);
     app.get('/script/:id/render/:posicion', md.isLoggedIn, scripts.scriptRender);
 

@@ -31,44 +31,49 @@ module.exports = {
 	},
 
 	fileExistAndRemove: function (req, res, next) {
-		var tmp_path = req.file.path;
-		var target_path = './uploads/' + req.file.filename;
-		fs.access(target_path, fs.R_OK | fs.W_OK, function (err) {
-			if(!err){
-				fs.unlink(tmp_path, function() {
-					res.send({
-						ok: "false",
-						error: "El fichero ya existe. Cambia el nombre."
-					});
-				});
-			}else{
-				fs.rename(tmp_path, target_path, function(err) {
-					if (err) throw err;
-						fs.unlink(tmp_path, function() {
-							next();
+		try {
+			var tmp_path = req.file.path;
+			var target_path = './uploads/' + req.file.filename;
+			fs.access(target_path, fs.R_OK | fs.W_OK, function (err) {
+				if(!err){
+					fs.unlink(tmp_path, function() {
+						res.send({
+							ok: "false",
+							error: "El fichero ya existe. Cambia el nombre."
 						});
-				});
-			}
-		});
+					});
+				}else{
+					fs.rename(tmp_path, target_path, function(err) {
+						if (err) throw err;
+							fs.unlink(tmp_path, function() {
+								next();
+							});
+					});
+				}
+			});	
+		} catch (error) {
+			
+		}		
 	},
 
 	removeFileIfError: function (req, res, next) {
-		var path = './uploads/' + req.body.fichero;
-		fs.unlink(path);
-		res.send({
-			ok: "false",
-			error: req.body.err
-		});	
+		try {
+			var path = './uploads/' + req.body.fichero;
+			fs.unlink(path);
+			res.send({
+				ok: "false",
+				error: req.body.err
+			});	
+		} catch (error) {	
+		}
 	},
 
 	removeFile: function (req, res, next) {
-		var path = './uploads/' + req.body.fichero;
-		fs.unlink(path);
-	},
-
-	removeVideo: function (req, res, next) {
-		var path = './temp/video.mp4';
-		fs.unlink(path);
+		try {
+			var path = './uploads/' + req.body.fichero;
+			fs.unlink(path);
+		} catch (error) {	
+		}
 	},
 
 	checkNewIp: function(req, res, next){
