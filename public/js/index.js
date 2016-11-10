@@ -36,8 +36,7 @@ function GetAlertasGeneradas(){
             var msg = "";
             response.avisos.forEach(function(aviso){
                 var data = new Date(aviso.fecha);
-                msg += "<row><p><strong>"+aviso.mensaje+"</strong> - "+  data.getHours() + ":" + data.getMinutes() + ":" + data.getSeconds() +"</p></row>"
-                console.log(aviso);
+                msg += "<row><p><strong>"+aviso.mensaje+"</strong> - "+  data.getHours() + ":" + data.getMinutes() + ":" + data.getSeconds() +"</p></row>";
             });
             dialog = new BootstrapDialog({
                 title: 'Alertas generadas las últimas 24 horas',

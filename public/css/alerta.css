@@ -57,3 +57,29 @@
 .marginbottom{
     margin-bottom: 15px;
 }
+
+.double-input .form-control {
+  width: 50%;
+  border-right-width: 0px;
+}
+
+.double-input .form-control:focus {
+  border-right-width: 1px;
+}
+
+.actionname{
+    margin-bottom: 15px;
+}
+
+.centerecontent {
+    width: 50%;
+    margin: 0 auto; 
+}
+
+.sep{
+    margin-bottom: 15px;
+}
+
+.paddinalerta{
+    padding: 10px;
+}

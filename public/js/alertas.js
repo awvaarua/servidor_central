@@ -127,6 +127,40 @@ $(document).on('click', '.delblanc', function (event) {
 	return false;
 });
 
+var acciones = 0;
+$(document).on('click', '.eliminarAccion', function (event) {
+	$(this).parents(".accionpanel:first").remove();
+	acciones--;
+	return false;
+});
+
+$(document).on('click', '.addAction', function (event) {
+	var id = $('#accion_script').val();
+	var mac = $('#accion_nodo').val();
+	$.ajax({
+		url: '/script/' + id + '/renderAccion/'+mac+"/"+acciones,
+		type: 'GET',
+		success: function (response) {
+			if(response.ok == "false"){				
+				var dialog = new BootstrapDialog({
+					title: 'Error',
+					message: response.mensaje
+				});
+				dialog.realize();
+				dialog.open();
+			}else{
+				acciones ++;
+				$('#actionlistdiv').append(response);
+				return false;
+			}
+		},
+		error: function (response, err) {
+			return false;
+		}
+	});
+	return false;
+});
+
 $(document).on('click', '.addblanc', function (event) {
 	var alertacont = $(this).parents("#contenedor_alerta:first")[0];
 	var str = "<div class=\"col-md-2 vcenter usuario\">" +

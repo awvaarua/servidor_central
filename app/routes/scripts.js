@@ -1,4 +1,5 @@
 var Scripts = require('../operations/scripts.js');
+var Nodos = require('../operations/nodos.js');
 
 module.exports = {
 
@@ -33,6 +34,30 @@ module.exports = {
 			res.render('script.ejs', {
 				script: script,
 				posicion: req.params.posicion
+			});
+		});
+	},
+
+	scriptRenderAction: function (req, res, next) {
+		Scripts.GetScript(req.params.id, function (err, script) {
+			if (err || !script) {				
+				return res.send({
+					ok: "false",
+					mensaje: (err) ? err.message : "No se ha encontrado el script"
+				});
+			}
+			Nodos.GetNodo(req.params.mac, function(err, nodo){
+				if(err || !nodo){
+					return res.send({
+						ok: "false",
+						mensaje: (err) ? err : "No se ha encontrado el nodo"
+					});
+				}
+				res.render('scriptalerta.ejs', {
+					script: script,
+					nodo: nodo,
+					posicion: req.params.posicion
+				});
 			});
 		});
 	},
