@@ -8,16 +8,20 @@
                 </a>
             </h4>
         </div>
-        <div id="collapse0" class="panel-collapse collapse in paddinalerta">
-            <input id="<%= script._id %>" class="script_id" hidden>
-            <input id="<%= script.fichero %>" class="script_fichero" hidden>
-            <input id="<%= script.nombre %>" class="script_nombre" hidden>
-            <div class="row">
+        <div id="collapse0" class="panel-collapse collapse in paddinalerta alertactionbody">
+            <input id="script_id" hidden value="<%= script._id %>">
+            <input id="script_fichero" hidden value="<%= script.fichero %>">
+            <input id="script_nombre" hidden value="<%= script.nombre %>">
+            <input id="mac" hidden value="<%= nodo.mac %>">
+            <div class="row argumentos">
                 <% script.argumentos.forEach(function(arg, i) { %>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 arg">
                         <div class="form-group">
+                            <input id="arg_nombre" hidden value="<%= arg.nombre %>">
+                            <input id="arg_orden" hidden value="<%= arg.orden %>">
+                            <input id="arg_tipo" hidden value="<%= arg.tipo %>">
                             <label for="sel_sensor"><%= arg.nombre %></label>
-                            <input id="<%= arg.orden %>" type="<%= arg.tipo %>" class="form-control argument" name="" placeholder=""></input>
+                            <input id="valor" type="<%= arg.tipo %>" class="form-control argument" name="" placeholder=""></input>
                         </div>
                     </div>
                 <% }); %>

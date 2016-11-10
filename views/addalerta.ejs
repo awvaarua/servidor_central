@@ -92,7 +92,6 @@
 
         <script type="text/javascript">
             $("#newalert").submit(function(event) {
-                //Valdiate();
                 event.preventDefault();
                 var alerta = new Object();
                 alerta.mac = $('#alerta_mac').val();
@@ -114,7 +113,26 @@
                 $('#userlist li').each(function(idx, li){
                     usuarios.push($(li).text());
                 });
+                alerta.acciones = [];
+                $('#actionlistdiv .alertactionbody').each(function(idx, body){
+                    var accion = {script:{}};
+                    accion.script.script_id = $(body).find('#script_id:first').val();
+                    accion.script.fichero = $(body).find('#script_fichero:first').val();
+                    accion.script.nombre = $(body).find('#script_nombre:first').val();
+                    accion.mac = $(body).find('#mac:first').val();
+                    accion.script.argumentos = [];
+                    $(body).find('.argumentos .arg').each(function(idx, arg){
+                        var argumento = {};
+                        argumento.nombre = $(arg).find('#arg_nombre:first').val();
+                        argumento.tipo = $(arg).find('#arg_tipo:first').val();
+                        argumento.orden = $(arg).find('#arg_orden:first').val();
+                        argumento.valor = $(arg).find('#valor:first').val();
+                        accion.script.argumentos.push(argumento);
+                    });
+                    alerta.acciones.push(accion);
+                });
                 alerta.usuarios = usuarios;
+                console.log();
                 $.ajax({
                     type: 'POST',
                     url: $(this).attr('action'),
@@ -123,7 +141,6 @@
                         if(xhc.status == 201){
                             $('.general').html(data);
                         }else{
-                            console.log("ERrror");
                             $('#responsecontent').html(data);
                             setTimeout(function() {
                                 $('#response').fadeOut(300, function(){ $('#response').remove();});

@@ -14,7 +14,8 @@ var self = module.exports = {
             fichero: alerta.fichero,
             mensaje: alerta.mensaje,
             usuarios: alerta.usuarios,
-            tipo: parseInt(alerta.tipo)
+            tipo: parseInt(alerta.tipo),
+            acciones: alerta.acciones ? alerta.acciones : []
         });
         if (parseInt(alerta.tipo) == 1) {
             alert.condicion = alerta.condicion;

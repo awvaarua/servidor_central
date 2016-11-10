@@ -14,7 +14,20 @@ var alertSchema = mongoose.Schema({
     last_event: { type: Date, required: false },
     usuarios: [],
     frecuencia: { type: Number, required: false },
-    tipo: { type: Number, required: false, enum: [1, 2] }
+    tipo: { type: Number, required: false, enum: [1, 2] },
+    acciones: [{
+        mac: { type: Number, required: [true, 'Cada acción debe hacer referencia a un nodo'] },
+        script: {
+            script_id:{type: String, required: [true, 'Un script debe tener un id']},
+            fichero: {type: String, required: [true, 'Un script debe tener un fichero']},
+            nombre: {type: String, required: [true, 'Un script debe tener un nombre']},
+            argumentos: [{
+                nombre: {type: String, required: [true, 'Un argumento debe tener un nombre']},
+                valor: {type: String, required: [true, 'Un argumento debe tener un valor']},
+                orden: {type: Number, required: [true, 'Un argumento debe tener un orden']},
+            }]
+        },
+    }]
 
 });
 
