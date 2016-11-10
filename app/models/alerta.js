@@ -25,6 +25,7 @@ var alertSchema = mongoose.Schema({
                 nombre: {type: String, required: [true, 'Un argumento debe tener un nombre']},
                 valor: {type: String, required: [true, 'Un argumento debe tener un valor']},
                 orden: {type: Number, required: [true, 'Un argumento debe tener un orden']},
+                tipo: {type: String, required: [true, 'Se requiere un tipo'], enum: ['number', 'text']},
             }]
         },
     }]

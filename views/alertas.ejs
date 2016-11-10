@@ -75,15 +75,89 @@
                         <% }); %>
                     </div>
                     <div class="row">
+                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 vcenter">
+                            <h5><strong>Listado de acciones</strong></h5>
+                        </div>
+                    </div>
+                    <div id="actions_list" class="row actions_list">
+                        <% alerta.acciones.forEach(function(accion, i) { %>
+                            <div class="col-lg-12 accionalerta">
+                                <input id="script_id" hidden value="<%= accion.script.script_id %>">
+                                <input id="script_fichero" hidden value="<%= accion.script.fichero %>">
+                                <input id="script_nombre" hidden value="<%= accion.script.nombre %>">
+                                <input id="mac" hidden value="<%= accion.mac %>">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <strong><%= accion.script.nombre %></strong>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row argumentos">
+                                            <% accion.script.argumentos.forEach(function(argumento, i) { %>
+                                                <div class="col-md-4 vcenter arg">
+                                                    <h5><strong><%= argumento.nombre %></strong></h5>
+                                                    <div class="input-group">
+                                                        <input id="valor" class="form-control" type="number" name="frec" value="<%= argumento.valor %>">
+                                                        <input id="arg_nombre" hidden value="<%= argumento.nombre %>">
+                                                        <input id="arg_orden" hidden value="<%= argumento.orden %>">
+                                                        <input id="arg_tipo" hidden value="<%= argumento.tipo %>">
+                                                    </div>
+                                                </div>
+                                            <% }); %>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                                <div class="pull-right">
+                                                    <button type="button" class="btn btn-danger margintop eliminaraccion">Eliminar acción</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                     <div class="row">
+                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 vcenter">
+                            <h5><strong>Añadir acción</strong></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group double-input">
+                                <select id="accion_nodo" class="form-control" id="sel_sensor" name="tipo_condicion">
+                                    <option value="0">Seleccionar nodo</option>
+                                    <% nodos.forEach(function(nodo, i) { %>
+                                        <option value="<%= nodo.mac %>"><%= nodo.nombre %> - <%= nodo.mac %></option>               
+                                    <% }); %>                        
+                                </select>
+                                <select id="accion_script" class="form-control" id="sel_sensor" name="tipo_sensor">
+                                    <option value="0">Seleccionar Script</option> 
+                                    <% scripts.forEach(function(script, i) { %>
+                                        <option value="<%= script.id %>"><%= script.nombre %></option>                        
+                                    <% }); %>
+                                </select>
+                                <span class="input-group-btn">
+                                    <button id="add_action_alert"  class="btn btn-success addActionEdit" type="button">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div id="actionlistdiv">
+                            
+                        </div>
+                    </div>
+                    <hr id="sep">
+                    <div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <button type="button" class="btn btn-info btn-md adddelete actualizaralerta">
-                                <span class="glyphicon glyphicon-refresh"></span> Actualizar
+                                <span class="glyphicon glyphicon-refresh"></span> Actualizar Alerta
                             </button>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <div class="pull-right">
                                 <button type="button" class="btn btn-danger btn-md pull-right adddelete eliminaralerta">
-                                    <span class="glyphicon glyphicon-trash"></span> Eliminar
+                                    <span class="glyphicon glyphicon-trash"></span> Eliminar Alerta
                                 </button>
                             </div>
                         </div>

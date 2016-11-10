@@ -49,6 +49,11 @@ var self = module.exports = {
         }else{
             alerta.usuarios = cambios.usuarios;
         }
+        if(!cambios.acciones){
+            alerta.acciones = [];
+        }else{
+            alerta.acciones = cambios.acciones;
+        }
         if (parseInt(alerta.tipo) == 1) {
             alerta.condicion = cambios.condicion;
             alerta.frecuencia = parseInt(cambios.frecuencia);

@@ -8,8 +8,20 @@ module.exports = {
 	alertsGet: function (req, res, next) {
 		Alertas.GetAllAlertas(function (err, alertas) {
 			if (err) { }
-			res.render('alertas.ejs', {
-				alertas: alertas
+			Nodos.GetAllNodes(function(err, nodos){
+				if (err || !nodos) {
+					nodos = [];
+				}
+				Scripts.GetAllScripts(function(err, scripts){
+					if(err || !scripts){
+						scripts = [];
+					}
+					res.render('alertas.ejs', {
+						alertas: alertas,
+						nodos: nodos,
+						scripts : scripts
+					});
+				});
 			});
 		});
 	},

@@ -56,7 +56,8 @@ module.exports = {
 				res.render('scriptalerta.ejs', {
 					script: script,
 					nodo: nodo,
-					posicion: req.params.posicion
+					posicion: req.params.posicion,
+					tipo: req.params.tipo
 				});
 			});
 		});

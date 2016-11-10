@@ -138,7 +138,7 @@ $(document).on('click', '.addAction', function (event) {
 	var id = $('#accion_script').val();
 	var mac = $('#accion_nodo').val();
 	$.ajax({
-		url: '/script/' + id + '/renderAccion/'+mac+"/"+acciones,
+		url: '/script/' + id + '/renderAccion/'+mac+"/"+acciones+"/1",
 		type: 'GET',
 		success: function (response) {
 			if(response.ok == "false"){				
@@ -161,6 +161,33 @@ $(document).on('click', '.addAction', function (event) {
 	return false;
 });
 
+$(document).on('click', '.addActionEdit', function (event) {
+	var id = $('#accion_script').val();
+	var mac = $('#accion_nodo').val();
+	$.ajax({
+		url: '/script/' + id + '/renderAccion/'+mac+"/"+acciones+"/2",
+		type: 'GET',
+		success: function (response) {
+			if(response.ok == "false"){				
+				var dialog = new BootstrapDialog({
+					title: 'Error',
+					message: response.mensaje
+				});
+				dialog.realize();
+				dialog.open();
+			}else{
+				acciones ++;
+				$('.actions_list').append(response);
+				return false;
+			}
+		},
+		error: function (response, err) {
+			return false;
+		}
+	});
+	return false;
+});
+
 $(document).on('click', '.addblanc', function (event) {
 	var alertacont = $(this).parents("#contenedor_alerta:first")[0];
 	var str = "<div class=\"col-md-2 vcenter usuario\">" +
@@ -173,12 +200,17 @@ $(document).on('click', '.addblanc', function (event) {
 	$(alertacont).find('#adduser').val("")
 	return false;
 });
+$(document).on('click', '.eliminaraccion', function (event) {
+	$(this).parents(".accionalerta:first").remove();
+	return false;
+});
 
 $(document).on('click', '.actualizaralerta', function (event) {
 	var alertacont = $(this).parents("#contenedor_alerta:first")[0];
 	var alerta = {
 		mensaje: $(alertacont).find('#alerta_mensaje').val(),
-		usuarios: []
+		usuarios: [],
+		acciones: []
 	};
 	if ($(alertacont).find('#alerta_tipo').val() == "1") {
 		alerta.frecuencia = $(alertacont).find('#alerta_frecuencia').val();
@@ -189,6 +221,23 @@ $(document).on('click', '.actualizaralerta', function (event) {
 		}catch(err){
 		}
 	}
+	$(alertacont).find('.accionalerta').each(function (i, act) {
+		var accion = {script:{}};
+		accion.script.script_id = $(act).find('#script_id:first').val();
+		accion.script.fichero = $(act).find('#script_fichero:first').val();
+		accion.script.nombre = $(act).find('#script_nombre:first').val();
+		accion.mac = $(act).find('#mac:first').val();
+		accion.script.argumentos = [];
+		$(act).find('.argumentos .arg').each(function(idx, arg){
+			var argumento = {};
+			argumento.nombre = $(arg).find('#arg_nombre:first').val();
+			argumento.tipo = $(arg).find('#arg_tipo:first').val();
+			argumento.orden = $(arg).find('#arg_orden:first').val();
+			argumento.valor = $(arg).find('#valor:first').val();
+			accion.script.argumentos.push(argumento);
+		});
+		alerta.acciones.push(accion);
+	});
 	$(alertacont).find('.usuarioval').each(function (i, usr) {
 		alerta.usuarios.push($(usr).val());
 	});

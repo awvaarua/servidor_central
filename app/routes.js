@@ -57,7 +57,7 @@ module.exports = function(app, passport) {
     app.post('/script/file/upload/', md.isLoggedIn, upload.single( 'file' ), md.fileExistAndRemove, scripts.fileUpload);
     app.get('/script/:id', md.isLoggedIn, scripts.scriptGet);
     app.get('/script/:id/render/:posicion', md.isLoggedIn, scripts.scriptRender);
-    app.get('/script/:id/renderAccion/:mac/:posicion', md.isLoggedIn, scripts.scriptRenderAction);
+    app.get('/script/:id/renderAccion/:mac/:posicion/:tipo', md.isLoggedIn, scripts.scriptRenderAction);
 
     var data = require('./routes/data');
     app.post('/data/add', md.getIp, data.dataAdd);
