@@ -70,6 +70,7 @@ function GetNodos(tipo, status) {
 }
 
 function GetStatusNodos(nodos){
+    $('#numnodos').html(nodos.length);
     nodos.forEach(function(nodo){        
         $.ajax({
             url: '/nodo/' + nodo.mac + '/status',
