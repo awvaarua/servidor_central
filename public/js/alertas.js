@@ -162,8 +162,9 @@ $(document).on('click', '.addAction', function (event) {
 });
 
 $(document).on('click', '.addActionEdit', function (event) {
-	var id = $('#accion_script').val();
-	var mac = $('#accion_nodo').val();
+	var id = $(this).parents('.actual:first').find('#accion_script:first').val();
+	var mac = $(this).parents('.actual:first').find('#accion_nodo:first').val();
+	var list = $(this).parents('#contenedor_alerta:first').find('.actions_list:first');
 	$.ajax({
 		url: '/script/' + id + '/renderAccion/'+mac+"/"+acciones+"/2",
 		type: 'GET',
@@ -177,7 +178,7 @@ $(document).on('click', '.addActionEdit', function (event) {
 				dialog.open();
 			}else{
 				acciones ++;
-				$('.actions_list').append(response);
+				$(list).append(response);
 				return false;
 			}
 		},
