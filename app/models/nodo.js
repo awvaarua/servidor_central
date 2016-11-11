@@ -15,6 +15,7 @@ var nodoSchema = mongoose.Schema({
 			nombre: {type: String, required: false},
 			valor: {type: String, required: false},
 			orden: {type: Number, required: [true, 'Se requiere un Orden para el argumento']},
+			tipo: {type: String, required: false,}
 		}]
 	}]
 

@@ -181,13 +181,18 @@ function Actuar(nodo, alerta, valor) {
 };
 
 function EjecutarAcciones(alerta, valor) {
-    if(!aelrta || !alerta.acciones){
+    if(!alerta || !alerta.acciones){
         return;
     }
     alerta.acciones.forEach(function(accion, idx){
         Nodo.GetNodo(accion.mac, function(err, nodo){
             if(!err && nodo){
-                Nodo.AddScript(nodo, accion.script, function(err){});
+                var script = {
+                    nombre: accion.script.nombre,
+                    fichero: accion.script.fichero,
+                    argumentos: accion.script.argumentos
+                };
+                Nodo.AddScript(nodo, script, function(err){});
             }            
         });
     });

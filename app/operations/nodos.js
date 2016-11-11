@@ -113,7 +113,7 @@ var self = module.exports = {
         arg.orden = parseInt(arg.orden);
       });
       nodo.scripts.push(script);
-      nodo.save(function () {
+      nodo.save(function (err) {
         if (err) {
           return callback(err);
         }
