@@ -143,28 +143,60 @@ var self = module.exports = {
                     return;
                 }
                 alertas.forEach(function (alerta) {
-                    Accion.SendVideo(nombre_fichero, CreateMensaje(nodo, alerta, valor), alerta.usuarios)
+                    ActuarVideo(nodo, alerta, valor, nombre_fichero);
                 });
             });
         });
     }
 }
 
-function Actuar(nodo, alerta, valor) {
+function ActuarVideo(nodo, alerta, valor, nombre_fichero) {
     switch (alerta.tipo) {
         case 1:
-            return CheckAlerta(nodo, alerta, valor);
+            return CheckAlerta(nodo, alerta, valor, function(){
+                Accion.SendVideo(nombre_fichero, CreateMensaje(nodo, alerta, valor), alerta.usuarios)
+                EjecutarAcciones(alerta, valor);
+            });
         case 2:
-            return Avisar(nodo, alerta, valor);
+            Accion.SendVideo(nombre_fichero, CreateMensaje(nodo, alerta, valor), alerta.usuarios)
+            EjecutarAcciones(alerta, valor);
         default:
             break;
     }
 };
 
-function CheckAlerta(nodo, alerta, valor) {
+function Actuar(nodo, alerta, valor) {
+    switch (alerta.tipo) {
+        case 1:
+            return CheckAlerta(nodo, alerta, valor, function(){
+                Avisar(nodo, alerta, valor);
+                return EjecutarAcciones(alerta, valor);
+            });
+        case 2:
+            Avisar(nodo, alerta, valor);
+            return EjecutarAcciones(alerta, valor);
+        default:
+            break;
+    }
+};
+
+function EjecutarAcciones(alerta, valor) {
+    if(!aelrta || !alerta.acciones){
+        return;
+    }
+    alerta.acciones.forEach(function(accion, idx){
+        Nodo.GetNodo(accion.mac, function(err, nodo){
+            if(!err && nodo){
+                Nodo.AddScript(nodo, accion.script, function(err){});
+            }            
+        });
+    });
+}
+
+function CheckAlerta(nodo, alerta, valor, callback) {
     if (CheckCondition(valor, alerta)) {
         if (CheckDate(alerta)) {
-            Avisar(alerta, nodo, valor);
+            callback();
         }
     }
 }
