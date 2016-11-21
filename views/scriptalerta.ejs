@@ -13,7 +13,8 @@
                 <input id="script_id" hidden value="<%= script._id %>">
                 <input id="script_fichero" hidden value="<%= script.fichero %>">
                 <input id="script_nombre" hidden value="<%= script.nombre %>">
-                <input id="mac" hidden value="<%= nodo.mac %>">
+                <input id="mac" hidden value="<%= nodo.mac %>">                
+                <input id="nodonombre" hidden value="<%= nodo.nombre %>">
                 <div class="row argumentos">
                     <% script.argumentos.forEach(function(arg, i) { %>
                         <div class="col-lg-6 arg">
@@ -41,6 +42,7 @@
     <input id="script_fichero" hidden value="<%= script.fichero %>">
     <input id="script_nombre" hidden value="<%= script.nombre %>">
     <input id="mac" hidden value="<%= nodo.mac %>">
+    <input id="nodonombre" hidden value="<%= nodo.nombre %>">
     <div class="panel panel-default">
         <div class="panel-heading">
             <strong><%= script.nombre %></strong>
@@ -54,6 +56,7 @@
                             <input id="arg_nombre" hidden value="<%= arg.nombre %>">
                             <input id="arg_orden" hidden value="<%= arg.orden %>">
                             <input id="arg_tipo" hidden value="<%= arg.tipo %>">
+                            <input id="nodonombre" hidden value="<%= nodo.nombre %>">
                             <input id="valor" type="<%= arg.tipo %>" class="form-control argument" name="" placeholder=""></input>
                         </div>
                     </div>

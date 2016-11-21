@@ -38,10 +38,10 @@ module.exports = {
                 });
             }
             Scripts.GetAllScripts(function (err, scripts) {
-                if (err || !scripts) {
+                if (err) {
                     return res.send({
                         ok: "false",
-                        error: (err) ? err : "Scripts no encontrados"
+                        error: err
                     });
                 }
                 res.render('nodo.ejs', {
@@ -58,7 +58,7 @@ module.exports = {
             if (err) {
                 return res.send({
                     ok: "false",
-                    error: (err) ? err : "Nodos no encontrados no encontrados"
+                    error:  err
                 });
             }
             res.render('gestionnodos.ejs', {
@@ -73,7 +73,7 @@ module.exports = {
             if (err) {
                 return res.send({
                     ok: "false",
-                    error: (err) ? err : "Nodos no encontrados no encontrados"
+                    error: err
                 });
             }
             res.send({
@@ -87,7 +87,7 @@ module.exports = {
             if (err || !nodo) {
                 return res.send({
                     ok: "false",
-                    error: "Error al recuperar el nodo de la BBDD: " + err
+                    error: (err) ? err : "Nodo no encontrado"
                 });
             }
             Ssh.CheckNodeStatus(nodo.ip, function (status) {
@@ -116,10 +116,10 @@ module.exports = {
 
     nodeRestart: function (req, res, next) {
         Nodos.GetNodo(req.params.mac, function (err, nodo) {
-            if (err) {
+            if (err || !nodo) {
                 return res.send({
                     status: "false",
-                    error: error
+                    error: (err) ? err : "Nodo no encontrado"
                 });
             }
             Ssh.RestartNode(nodo.ip, function (err) {
@@ -138,13 +138,13 @@ module.exports = {
 
     nodePendiente: function (req, res, next) {
         Nodos.GetNodo(req.params.mac, function (err, nodo) {
-            if (err) {
+            if (err || !nodo) {
                 return res.send({
                     status: "false",
-                    error: error
+                    error: (err) ? err : "Nodo no encontrado"
                 });
             }
-            Nodos.DeleteNodo(req.params.mac, function () {
+            Nodos.DeleteNodo(req.params.mac, function (err) {
                 if (err) {
                     return res.send({
                         status: "false",

@@ -228,6 +228,7 @@ $(document).on('click', '.actualizaralerta', function (event) {
 		accion.script.fichero = $(act).find('#script_fichero:first').val();
 		accion.script.nombre = $(act).find('#script_nombre:first').val();
 		accion.mac = $(act).find('#mac:first').val();
+		accion.nombre_nodo = $(act).find('#nodonombre:first').val();
 		accion.script.argumentos = [];
 		$(act).find('.argumentos .arg').each(function(idx, arg){
 			var argumento = {};

@@ -42,7 +42,6 @@ var self = module.exports = {
     },
 
     UpdateAlerta: function (alerta, cambios, callback) {
-        console.log(cambios);
         alerta.mensaje = cambios.mensaje;
         if(!cambios.usuarios){
             alerta.usuarios = [];

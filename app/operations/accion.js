@@ -17,7 +17,7 @@ bot.onText(/\/start/, function (msg, match) {
 
 bot.onText(/\/estado/, function (msg, match) {
     Nodos.GetAllNodes(function (err, nodos) {
-        if (err) {
+        if (err || !nodos) {
             nodos = [];
         }
         var keyboard = [];
@@ -39,7 +39,7 @@ bot.onText(/\/estado/, function (msg, match) {
 
 bot.onText(/\/set/, function (msg, match) {
     Nodos.GetAllNodes(function (err, nodos) {
-        if (err) {
+        if (err || !nodos) {
             nodos = [];
         }
         var keyboard = [];
@@ -68,7 +68,6 @@ bot.on("callback_query", function (callbackQuery) {
     } catch (error) {
         return self.UpdateMessage("Formato de mensaje incorrecto", opt);
     }
-    console.log(data);
     if (accion == "/estado") {
         EstadoAction(mac, opt);
     } else if (accion == "/set") {

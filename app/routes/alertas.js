@@ -65,7 +65,7 @@ module.exports = {
 	},
 
 	alertUpdate: function (req, res, next) {
-		Alertas.GetAlertaById(req.params.id, function (err, alerta) {
+		Alertas.GetAlertaById(req.params.id, function (err, alerta) {			
 			if(err || !alerta){
 				return res.send({
                     ok: "false",

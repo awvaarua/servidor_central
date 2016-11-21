@@ -17,8 +17,9 @@ var alertSchema = mongoose.Schema({
     tipo: { type: Number, required: false, enum: [1, 2] },
     acciones: [{
         mac: { type: Number, required: [true, 'Cada acción debe hacer referencia a un nodo'] },
+        nombre_nodo:{type: String, required: [true, 'Una acción debe tener un nombre de nodo']},
         script: {
-            script_id:{type: String, required: [true, 'Un script debe tener un id']},
+            script_id:{type: String, required: [true, 'Un script debe tener un id']},            
             fichero: {type: String, required: [true, 'Un script debe tener un fichero']},
             nombre: {type: String, required: [true, 'Un script debe tener un nombre']},
             argumentos: [{

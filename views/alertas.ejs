@@ -86,9 +86,10 @@
                                 <input id="script_fichero" hidden value="<%= accion.script.fichero %>">
                                 <input id="script_nombre" hidden value="<%= accion.script.nombre %>">
                                 <input id="mac" hidden value="<%= accion.mac %>">
+                                <input id="nodonombre" hidden value="<%= accion.nombre_nodo %>">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <strong><%= accion.script.nombre %></strong>
+                                        <strong><%= accion.script.nombre %> - <%= accion.nombre_nodo %></strong>
                                     </div>
                                     <div class="panel-body">
                                         <div class="row argumentos">
