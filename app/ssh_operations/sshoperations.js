@@ -110,13 +110,11 @@ var self = module.exports = {
       username: 'pi',
       password: 'fura4468AB'
     }).then(function () {
-      ssh.exec('sudo reboot now').then(function () {
-        callback();
+      callback();
+      ssh.exec('sudo reboot now').then(function () {        
       }, function (error) {
-        callback();
       });
     }, function (error) {
-      console.log("Error al intentar conectar: " + error);
       callback(error);
     });
     ssh.dispose();
