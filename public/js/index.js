@@ -24,6 +24,7 @@ function GetNumPendientes(){
 		}
 	});
 }
+
 var dialog;
 function GetAlertasGeneradas(){
     var date = new Date();

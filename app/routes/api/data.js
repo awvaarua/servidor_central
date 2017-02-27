@@ -1,5 +1,5 @@
-var Data = require('../operations/data.js');
-var Alerta = require('../operations/alertas.js');
+var Data = require('../../operations/data.js');
+var Alerta = require('../../operations/alertas.js');
 
 module.exports = {
 

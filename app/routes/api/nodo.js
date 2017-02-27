@@ -1,11 +1,10 @@
-var Nodos = require('../operations/nodos.js');
-var Pendientes = require('../operations/pendientes.js');
-var Ssh = require('../ssh_operations/sshoperations.js');
-var Scripts = require('../operations/scripts.js');
+var Nodos = require('../../operations/nodos.js');
+var Pendientes = require('../../operations/pendientes.js');
+var Ssh = require('../../ssh_operations/sshoperations.js');
+var Scripts = require('../../operations/scripts.js');
 
 module.exports = {
 
-    //Añadir nodo a la base de datos i eliminarlo de pendientes
     nodeAdd: function (req, res, next) {
         Nodos.AddNode(req.body.confirmacion, function (err) {
             if (err) {
@@ -28,47 +27,7 @@ module.exports = {
         });
     },
 
-    //Devuelve una vista renderizada del nodo
-    node: function (req, res, next) {
-        Nodos.GetNodo(req.params.mac, function (err, nodo) {
-            if (err || !nodo) {
-                return res.send({
-                    ok: "false",
-                    error: (err) ? err : "Nodo no encontrado"
-                });
-            }
-            Scripts.GetAllScripts(function (err, scripts) {
-                if (err) {
-                    return res.send({
-                        ok: "false",
-                        error: err
-                    });
-                }
-                res.render('nodo.ejs', {
-                    nodo: nodo,
-                    listado_scripts: scripts
-                });
-            });
-        });
-    },
-
-    //Devuelve una vista renderizada con todos los nodos
-    nodesRender: function (req, res, next) {
-        Nodos.GetAllNodes(function (err, nodos) {
-            if (err) {
-                return res.send({
-                    ok: "false",
-                    error:  err
-                });
-            }
-            res.render('gestionnodos.ejs', {
-                nodos: nodos
-            });
-        });
-    },
-
-    //Devuelve un objeto con todos los nodos
-    nodes: function (req, res, next) {
+    nodesGetAll: function (req, res, next) {
         Nodos.GetAllNodes(function (err, nodos) {
             if (err) {
                 return res.send({

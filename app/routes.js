@@ -7,19 +7,15 @@ module.exports = function(app, passport) {
     app.post('/user/update', md.isLoggedIn, md.isAdmin, users.userUpdate);
     app.post('/user/unlink', md.isLoggedIn, md.isAdmin, users.userDelete);
 
-    var pendientes = require('./routes/pendientes');
-    app.get('/pendiente/add/:mac', md.getIp, pendientes.pendienteAdd);
-    app.get('/pendiente/:mac/render', pendientes.pendienteRender);
-    app.get('/pendiente/:mac', pendientes.pendiente);
-    app.post('/pendiente/:mac/remove', md.isLoggedIn, pendientes.pendienteDelete);
-    app.get('/pendientes/', md.isLoggedIn, pendientes.pendientes);
+    var pendientes = require('./routes/api/pendiente');
+    app.get('/pendiente/:mac', pendientes.pendienteGet);
+    app.get('/pendiente/add/:mac', md.getIp, pendientes.pendienteAdd);    
     app.get('/pendientes/count', md.isLoggedIn, pendientes.pendientesCount);
+    app.post('/pendiente/:mac/remove', md.isLoggedIn, pendientes.pendienteDelete);
 
-    var nodes = require('./routes/nodos');
-    app.post('/nodo/add', md.isLoggedIn, nodes.nodeAdd);
-    app.get('/nodo/:mac', md.isLoggedIn, nodes.node);
-    app.get('/nodos/render', md.isLoggedIn, nodes.nodesRender);
-    app.get('/nodos/', md.isLoggedIn, nodes.nodes);
+    var nodes = require('./routes/api/nodo');
+    app.post('/nodo/add', md.isLoggedIn, nodes.nodeAdd);    
+    app.get('/nodos/', md.isLoggedIn, nodes.nodesGetAll);
     app.get('/nodo/:mac/starting', md.checkNewIp, nodes.nodeScripts);
     app.get('/nodo/:mac/status', md.isLoggedIn, nodes.nodeStatus);
     app.post('/nodo/:mac/delete', md.isLoggedIn, nodes.nodeDelete);
@@ -32,23 +28,13 @@ module.exports = function(app, passport) {
     app.post('/nodo/:mac/script/:pid/update', nodes.scriptUpdate);
     app.post('/nodo/:mac/script/add', md.macConfig, nodes.scriptAdd);
 
-    var alertas = require('./routes/alertas');
-    app.get('/alerts/', md.isLoggedIn, alertas.alertsGet);
-    app.get('/alerta/add', md.isLoggedIn, alertas.alertaAddView);
-    app.post('/alerta/add', md.isLoggedIn, alertas.alertAdd);
+    var alertas = require('./routes/api/alerta');
     app.post('/alerta/:id/update', md.isLoggedIn, alertas.alertUpdate);
     app.post('/alerta/:id/remove', md.isLoggedIn, alertas.alertRemove);
 
     var scripts = require('./routes/scripts');
     var multer = require('multer');
-    var storage = multer.diskStorage({
-        destination: function (req, file, cb) {
-            cb(null, 'temp/')
-        },
-        filename: function (req, file, cb) {
-            cb(null, file.originalname)
-        }
-    })
+    var storage = multer.diskStorage({destination: function (req, file, cb) {cb(null, 'temp/')},filename: function (req, file, cb) {cb(null, file.originalname)}});
     var upload = multer({ storage: storage });
     app.get('/scripts/', md.isLoggedIn, scripts.scriptsGet);
     app.get('/script/add', md.isLoggedIn, scripts.scriptsAddView);
@@ -59,15 +45,15 @@ module.exports = function(app, passport) {
     app.get('/script/:id/render/:posicion', md.isLoggedIn, scripts.scriptRender);
     app.get('/script/:id/renderAccion/:mac/:posicion/:tipo', md.isLoggedIn, scripts.scriptRenderAction);
 
-    var data = require('./routes/data');
+    var data = require('./routes/api/data');
     app.post('/data/add', md.getIp, data.dataAdd);
     app.post('/data/:mac', md.getIp, data.dataGet);
     app.post('/data/:mac/video', md.getIp, upload.single( 'file' ), data.dataAddVideo);
 
-    var usuario = require('./routes/usuarios');
+    var usuario = require('./routes/api/usuario');
     app.get('/usuarios/', md.isLoggedIn, usuario.usuarios);
     
-    var aviso = require('./routes/avisos');
+    var aviso = require('./routes/api/aviso');
     app.post('/avisos/date', md.isLoggedIn, aviso.avisosGetAfterDate);
 
     // =============================================================================
@@ -85,6 +71,19 @@ module.exports = function(app, passport) {
             user: req.user
         });
     });
+
+    var web_pendientes = require('./routes/web/pendiente');
+    app.get('/pendiente/:mac/render', web_pendientes.pendienteRender);
+    app.get('/pendientes/render', md.isLoggedIn, web_pendientes.pendientesRender);
+
+    var web_nodos = require('./routes/web/nodo');
+    app.get('/nodos/render', md.isLoggedIn, web_nodos.nodesRender);
+    app.get('/nodo/:mac', md.isLoggedIn, web_nodos.nodeRender);
+
+    var web_alertas = require('./routes/web/alerta');
+    app.get('/alerts/', md.isLoggedIn, web_alertas.alertsGet);
+    app.get('/alerta/add', md.isLoggedIn, web_alertas.alertaAddView);
+    app.post('/alerta/add', md.isLoggedIn, web_alertas.alertAdd);
 
     // =============================================================================
     // AUTHENTICATE ================================================================

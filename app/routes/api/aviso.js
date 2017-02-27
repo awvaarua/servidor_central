@@ -1,4 +1,4 @@
-var Aviso = require('../operations/aviso.js');
+var Aviso = require('../../operations/aviso.js');
 
 module.exports = {
 

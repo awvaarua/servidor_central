@@ -1,4 +1,4 @@
-var Usuarios = require('../operations/usuarios.js');
+var Usuarios = require('../../operations/usuarios.js');
 
 module.exports = {
 

@@ -16,6 +16,7 @@ var self = module.exports = {
   },
 
   InsertPendiente: function(ip, mac, callback) {
+    if (isNaN(parseInt(mac))) return callback ("MAC no válida");
     Pendiente.collection.insert({
       ip: ip,
       mac: parseInt(mac),
@@ -29,24 +30,21 @@ var self = module.exports = {
   },
 
   GetPendiente: function(mac, callback) {
+    if (isNaN(parseInt(mac))) return callback ("MAC no válida");
     Pendiente.findOne({
       mac: parseInt(mac)
     }, function(err, obj) {
-      if (err) {
-        callback(err);
-      }
-      console.log(obj)
+      if (err) return callback(err);
       callback(null, obj);
     });
   },
 
   DeletePendiente: function(mac, callback) {
+    if (isNaN(parseInt(mac))) return callback ("MAC no válida");
     Pendiente.remove({
       mac: parseInt(mac)
     }, function(err) {
-      if (err) {
-        callback(err);
-      }
+      if (err) return callback(err);
       callback(null);
     });
   }

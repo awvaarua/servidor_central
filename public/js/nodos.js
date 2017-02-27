@@ -1,43 +1,16 @@
-function NodosPendientes() {
-	$.ajax({
-		url: '/pendientes/',
-		type: 'GET',
-		success: function (response) {
-			$('#page-wrapper').html(response);
-			return false;
-		}
-	});
-	return false;
-}
-
-function DeleteNodoPendiente(mac) {
-	$.ajax({
-		url: '/pendiente/' + mac + '/remove',
-		type: 'POST',
-		success: function (response) {
-			$('.panel-group').remove();
-			$("#select_pendiente option[value='" + mac + "']").remove();
-			return false;
-		},
-		error: function (response, err) {
-			return false;
-		}
-	});
-	return false;
-}
-
 function SendConfirmation(ip, mac) {
 
-	var confirmacion = new Object();
-	confirmacion.ip = ip;
-	confirmacion.mac = mac;
-	confirmacion.scripts = new Array(0);
-	confirmacion.nombre = $('#pendiente_nombre').val();
-	confirmacion.descripcion = $('#pendiente_descripcion').val();
+	var confirmacion = {
+		ip: ip,
+		mac: mac,
+		scripts: [],
+		nombre: $('#pendiente_nombre').val(),
+		descripcion: $('#pendiente_descripcion').val()
+	};
 
 	var res = $('#pendiente_comun').html();
 	var res1 = $('#pendiente_comun1').html();
-	$('#pendiente_comun').html('<img class="loading" src="http://' + window.location.host + '/public/img/load.gif"></img>');
+	$('#pendiente_comun').html('<img class="loading" src="/public/img/load.gif"></img>');
 	$('#pendiente_comun1').html("");
 
 	$.ajax({
@@ -49,39 +22,28 @@ function SendConfirmation(ip, mac) {
 		},
 		success: function (response) {
 			if (response.ok == "true") {
-				$('#pendiente_comun').html('<div class="alert alert-success">' +
-					'<h1>Nodo creado correctamente</h1>' +
-					'</div>');
+				$('#pendiente_comun').html('<div class="alert alert-success"><h1>Nodo creado correctamente</h1></div>');
 				$('#pendiente_comun1').remove();
 				$('#botones').remove();
 				ProcesarScripts(ip, mac);
 			} else {
-				$('#responsecontent').html('<div class="alert alert-danger">' +
-					'<h1>Se ha producido un error</h1>' +
-					'<p>' + response.error + '</p>' +
-					'</div>');
-				setTimeout(function() {
-                            $('#responsecontent').fadeOut(300, function(){ $('#responsecontent').html("");});
-                        }, 2000);
-				setTimeout(function() {
-                            $('#responsecontent').fadeIn(300);
-                        }, 2000);
+				$('#responsecontent').html('<div class="alert alert-danger"><h1>Se ha producido un error</h1><p>' + response.error + '</p></div>');
 				$('#pendiente_comun').html(res);
 				$('#pendiente_comun1').html(res1);
 			}
 		}
 	});
-	return false;
 }
 
 function ProcesarScripts(ip, mac){
 
 	$('.panelscripts').each(function (i, panel) {
-		var script = new Object();
-		script.argumentos = [];
-		script.script_id = $(panel).find('.script_id').attr('id');
-		script.fichero = $(panel).find('.script_fichero').attr('id');
-		script.nombre = $(panel).find('.script_nombre').attr('id');
+		var script = {
+			argumentos: [],
+			script_id: $(panel).find('.script_id').attr('id'),
+			fichero: $(panel).find('.script_fichero').attr('id'),
+			nombre: $(panel).find('.script_nombre').attr('id')
+		};
 		try {
 			$(panel).find('.argument').each(function (j, input) {
 				script.argumentos.push({
@@ -90,10 +52,8 @@ function ProcesarScripts(ip, mac){
 					orden: $(input).attr('id')
 				});
 			});			
-		} catch (error) {
-			
-		}
-		$(panel).html('<img class="loading" src="http://' + window.location.host + '/public/img/load.gif"></img>');
+		} catch (error) {}
+		$(panel).html('<img class="loading" src="/public/img/load.gif"></img>');
 
 		$.ajax({
 			url: '/nodo/'+mac+'/script/add',
@@ -104,14 +64,9 @@ function ProcesarScripts(ip, mac){
 			},
 			success: function (response) {
 				if (response.ok == "true") {
-					$(panel).html('<div class="alert alert-success">' +
-						'<h1>Script iniciado</h1>' +
-						'</div>');
+					$(panel).html('<div class="alert alert-success"><h1>Script iniciado</h1></div>');
 				} else {
-					$(panel).html('<div class="alert alert-danger">' +
-						'<h1>Se ha producido un error</h1>' +
-						'<p>' + response.message + '</p>' +
-						'</div>');
+					$(panel).html('<div class="alert alert-danger"><h1>Se ha producido un error</h1><p>' + response.message + '</p></div>');
 				}
 			}
 		});
@@ -124,10 +79,8 @@ function GestionNodos() {
 		type: 'GET',
 		success: function (response) {
 			$('#page-wrapper').html(response);
-			return false;
 		}
 	});
-	return false;
 }
 
 function CheckScriptsStatus(mac) {
@@ -174,11 +127,10 @@ function CheckStatus(mac) {
 			}
 		}
 	});
-	return false;
 }
 
 function DeleteScriptNodo(mac, pid) {
-	$('div#' + pid).find('.panel-body').html('<img class="loading" src="http://' + window.location.host + '/public/img/load.gif"></img>');
+	$('div#' + pid).find('.panel-body').html('<img class="loading" src="/public/img/load.gif"></img>');
 	$.ajax({
 		url: '/nodo/' + mac + '/script/' + pid + '/delete',
 		type: 'POST',
@@ -186,7 +138,7 @@ function DeleteScriptNodo(mac, pid) {
 			if (response.ok == "true") {
 				$('div#' + pid).remove();
 			} else {
-				console.log(response.message);
+				alert(response.message);
 			}
 		}
 	});
@@ -198,19 +150,10 @@ function DeleteNodo(mac) {
 		type: 'POST',
 		success: function (response) {
 			if (response.ok == "true") {
-				$('#cuerpo_nodos').html('<div class="alert alert-success">' +
-					'<h1>Nodo eliminado correctamente</h1>' +
-					'<h4>Scripts eliminados</h4>' +
-					'<p>' + JSON.stringify(response.data) + '</p>' +
-					'</div>');
+				$('#cuerpo_nodos').html('<div class="alert alert-success"><h1>Nodo eliminado correctamente</h1><h4>Scripts eliminados</h4><p></div>');
 				$("#select_nodo option[value='" + ip + "']").remove();
 			} else {
-				$('#cuerpo_nodos').html('<div class="alert alert-danger">' +
-					'<h1>Se ha producido un error</h1>' +
-					'<h4>Error</h4>' +
-					'<h4>Scripts eliminados</h4>' +
-					'<p>' + response.error + '</p>' +
-					'</div>');
+				$('#cuerpo_nodos').html('<div class="alert alert-danger"><h1>Se ha producido un error</h1><h4>Error</h4><h4>Scripts eliminados</h4><p>' + response.error + '</p></div>');
 			}
 		}
 	});
@@ -222,14 +165,9 @@ function ReiniciarNodo(mac) {
 		type: 'POST',
 		success: function (response) {
 			if (response.ok == "true") {
-				$('#cuerpo_nodos').html('<div class="alert alert-success">' +
-					'<h1>El nodo se está reiniciando...</h1>' +
-					'</div>');
+				$('#cuerpo_nodos').html('<div class="alert alert-success"><h1>El nodo se está reiniciando...</h1></div>');
 			} else {
-				$('#cuerpo_nodos').html('<div class="alert alert-danger">' +
-					'<h1>Imposible reiniciar</h1>' +
-					'<p>' + response.error + '</p>' +
-					'</div>');
+				$('#cuerpo_nodos').html('<div class="alert alert-danger"><h1>Imposible reiniciar</h1><p>' + response.error + '</p></div>');
 			}
 		}
 	});
@@ -241,14 +179,9 @@ function PendienteNodo(mac) {
 		type: 'POST',
 		success: function (response) {
 			if (response.ok == "true") {
-				$('#cuerpo_nodos').html('<div class="alert alert-success">' +
-					'<h1>Cuando el nodo se reinicie estará en pendientes</h1>' +
-					'</div>');
+				$('#cuerpo_nodos').html('<div class="alert alert-success"><h1>Cuando el nodo se reinicie estará en pendientes</h1></div>');
 			} else {
-				$('#cuerpo_nodos').html('<div class="alert alert-danger">' +
-					'<h1>Se ha producido un error</h1>' +
-					'<p>' + response.error + '</p>' +
-					'</div>');
+				$('#cuerpo_nodos').html('<div class="alert alert-danger"><h1>Se ha producido un error</h1><p>' + response.error + '</p></div>');
 			}
 		}
 	});
@@ -274,10 +207,7 @@ function Update(mac, pid, orden) {
 				$('.bt' + response.data.pid).prop('disabled', false);
 			} else {
 				$('.bt' + pid).prop('disabled', false);
-				$('#cuerpo_nodos').html('<div class="alert alert-danger">' +
-					'<h1>Se ha producido un error</h1>' +
-					'<p>' + response.message + '</p>' +
-					'</div>');
+				$('#cuerpo_nodos').html('<div class="alert alert-danger"><h1>Se ha producido un error</h1><p>' + response.message + '</p></div>');
 			}
 		}
 	});
@@ -310,7 +240,7 @@ function AddScripts(tabla, ip) {
 		scripts.push(script);
 	});
 
-	$('#panel_cuerpo' + tabla).html('<img class="loading" src="http://' + window.location.host + '/public/img/load.gif"></img>');
+	$('#panel_cuerpo' + tabla).html('<img class="loading" src="/public/img/load.gif"></img>');
 
 	$.ajax({
 		url: '/nodo/' + ip + '/scripts/add/',
@@ -321,19 +251,12 @@ function AddScripts(tabla, ip) {
 		},
 		success: function (response) {
 			if (response.ok == "true") {
-				$('#tabla0').html('<div id="alert0" class="alert alert-success">' +
-					'<h1>Scripts iniciados correctamente</h1>' +
-					'<p>' + JSON.stringify(response.data) + '</p>' +
-					'</div>');
+				$('#tabla0').html('<div id="alert0" class="alert alert-success"><h1>Scripts iniciados correctamente</h1><p>' + JSON.stringify(response.data) + '</p></div>');
 			} else {
-				$('#tabla0').html('<div id="alert0" class="alert alert-danger">' +
-					'<h1>Se ha producido un error</h1>' +
-					'<p>' + response.message + '</p>' +
-					'</div>');
+				$('#tabla0').html('<div id="alert0" class="alert alert-danger"><h1>Se ha producido un error</h1><p>' + response.message + '</p></div>');
 			}
 		}
 	});
-	return false;
 }
 
 $(document).on('change', '#select_nodo', function () {
