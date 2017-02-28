@@ -49,7 +49,7 @@ module.exports = {
                     error: (err) ? err : "Nodo no encontrado"
                 });
             }
-            Ssh.CheckNodeStatus(nodo.ip, function (status) {
+            Ssh.CheckNodeStatus(nodo, function (status) {
                 res.send({
                     status: status
                 });
@@ -81,7 +81,7 @@ module.exports = {
                     error: (err) ? err : "Nodo no encontrado"
                 });
             }
-            Ssh.RestartNode(nodo.ip, function (err) {
+            Ssh.RestartNode(nodo, function (err) {
                 if (err) {
                     return res.send({
                         ok: "false",
@@ -110,7 +110,7 @@ module.exports = {
                         error: error
                     });
                 }
-                Ssh.RestartNode(nodo.ip, function (err) {
+                Ssh.RestartNode(nodo, function (err) {
                     if (err) {
                         return res.send({
                             ok: "false",
@@ -148,7 +148,7 @@ module.exports = {
                     error: error
                 });
             }
-            Ssh.CheckScriptStatus(nodo.ip, req.params.pid, function (err, status) {
+            Ssh.CheckScriptStatus(nodo, req.params.pid, function (err, status) {
                 if (err) {
                     return res.send({
                         status: "offline",
@@ -172,7 +172,7 @@ module.exports = {
             }
             nodo.scripts.forEach(function (script, i) {
                 if (script.pid == parseInt(req.params.pid)) {
-                    Ssh.StartScript(nodo.ip, script, function (err, pid) {
+                    Ssh.StartScript(nodo, script, function (err, pid) {
                         if (err || !pid) {
                             return res.send({
                                 ok: "false",
@@ -197,7 +197,7 @@ module.exports = {
                     error: err
                 });
             }
-            Nodos.DeleteScript(req.params.mac, nodo.ip, req.params.pid, function (err, data) {
+            Nodos.DeleteScript(req.params.mac, nodo, req.params.pid, function (err, data) {
                 if (err) {
                     return res.send({
                         ok: "false",
@@ -243,7 +243,7 @@ module.exports = {
                     message: err
                 });
             }
-            Ssh.StopScript(nodo.ip, req.params.pid, function (err) {
+            Ssh.StopScript(nodo, req.params.pid, function (err) {
                 if (err) {
                     return res.send({
                         ok: "false",
@@ -257,7 +257,7 @@ module.exports = {
                             message: err
                         });
                     }
-                    Ssh.StartScript(nodo.ip, script, function (err, newpid) {
+                    Ssh.StartScript(nodo, script, function (err, newpid) {
                         if (err) {
                             return res.send({
                                 ok: "false",

@@ -148,7 +148,7 @@ function EstadoAction(mac, opt) {
             return self.UpdateMessage("El nodo no se ha podido recuperar", opt);
         }
         var msg = "Información del nodo: " + nodo.nombre + "\n";
-        Ssh.CheckNodeStatus(nodo.ip, function (status) {
+        Ssh.CheckNodeStatus(nodo, function (status) {
             if (status == "offline") {
                 msg += "       Estado: \u{274C} Offline\n";
                 return self.UpdateMessage(msg, opt);
@@ -158,7 +158,7 @@ function EstadoAction(mac, opt) {
                 if(!nodo.scripts.length){
                     return self.UpdateMessage(msg, opt);
                 }
-                Ssh.CheckScriptsRecursive(nodo.ip, nodo.scripts, 0, [], function (err, info) {
+                Ssh.CheckScriptsRecursive(nodo, nodo.scripts, 0, [], function (err, info) {
                     if (err) {
                         return self.UpdateMessage(err, opt);
                     }
@@ -213,7 +213,7 @@ function GiveOptions(mac, fichero, opt) {
         }
         nodo.scripts.forEach(function(script){
             if(script.fichero == fichero){
-                Ssh.CheckScriptStatus(nodo.ip, script.pid, function(err, estado){
+                Ssh.CheckScriptStatus(nodo, script.pid, function(err, estado){
                     if(err){
                         return self.UpdateMessage("Error al recuperar el estado del script", opt);
                     }else if(estado == "online"){
@@ -248,7 +248,7 @@ function Action(mac, fichero, action, opt) {
         nodo.scripts.forEach(function(script){
             if(script.fichero == fichero){
                 if(action == "on"){
-                    Encender(nodo.ip, script, function(err, pid){
+                    Encender(nodo, script, function(err, pid){
                         if(err){
                             return self.UpdateMessage("Error al iniciar", opt);
                         }
@@ -257,7 +257,7 @@ function Action(mac, fichero, action, opt) {
                         return self.UpdateMessage("Encendido!!", opt);
                     });
                 }else{
-                    Apagar(nodo.ip, script, function(err){
+                    Apagar(nodo, script, function(err){
                         if(err){
                             return self.UpdateMessage("Error al parar", opt);
                         }
@@ -269,8 +269,8 @@ function Action(mac, fichero, action, opt) {
     });
 }
 
-function Encender(ip, script, callback){
-    Ssh.StartScript(ip, script, function(err, pid){
+function Encender(nodo, script, callback){
+    Ssh.StartScript(nodo, script, function(err, pid){
         if(err){
             return callback("Error al iniciar el script");
         }
@@ -278,8 +278,8 @@ function Encender(ip, script, callback){
     });
 }
 
-function Apagar(ip, script, callback){
-    Ssh.StopScript(ip, script.pid, function(err){
+function Apagar(nodo, script, callback){
+    Ssh.StopScript(nodo, script.pid, function(err){
         callback(err);
     });
 }

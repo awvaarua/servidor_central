@@ -45,7 +45,7 @@ var self = module.exports = {
       if (err) {
         return callback(err, null);
       }
-      self.DeleteAllScripts(mac, nodo.ip, nodo.scripts, 0, [], function (err, data) {
+      self.DeleteAllScripts(mac, nodo, nodo.scripts, 0, [], function (err, data) {
         if (err) {
           return callback(err, null);
         }
@@ -62,14 +62,14 @@ var self = module.exports = {
   },
 
   //Recorre recursivamente todos los scripts
-  DeleteAllScripts: function (mac, ip, scripts, index, info_array, callback) {
+  DeleteAllScripts: function (mac, nodo, scripts, index, info_array, callback) {
     if (index < scripts.length) {
-      self.DeleteScript(mac, ip, scripts[index].pid, function (err, data) {
+      self.DeleteScript(mac, nodo, scripts[index].pid, function (err, data) {
         if (err) {
           callback(err, data);
         }
         info_array.push(data);
-        self.DeleteAllScripts(mac, ip, scripts, index + 1, info_array, callback);
+        self.DeleteAllScripts(mac, nodo, scripts, index + 1, info_array, callback);
       });
     } else {
       callback(null, info_array);
@@ -77,8 +77,8 @@ var self = module.exports = {
   },
 
   //Elimina el script dentro del nodo
-  DeleteScript: function (mac, ip, pid, callback) {
-    Ssh.StopScript(ip, pid, function (err, data) {
+  DeleteScript: function (mac, nodo, pid, callback) {
+    Ssh.StopScript(nodo, pid, function (err, data) {
       if (err) {
         callback(err);
       }
@@ -104,7 +104,7 @@ var self = module.exports = {
     if(!script.argumentos){
       script.argumentos = [];
     }
-    Ssh.StartScript(nodo.ip, script, function (err, pid) {
+    Ssh.StartScript(nodo, script, function (err, pid) {
       if (err) {
         return callback(err);
       }
