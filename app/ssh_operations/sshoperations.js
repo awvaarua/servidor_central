@@ -95,10 +95,6 @@ var self = module.exports = {
     ssh.dispose();
   },
 
-  /*
-    IN: ip, pid, callback
-    OUT: error
-  */
   RestartNode: function (nodo, callback) {
     ssh.connect({
       host: nodo.ip,

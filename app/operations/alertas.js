@@ -250,7 +250,7 @@ function CheckCondition(val_dato, alerta) {
             }
             return false;
         case "fuera":
-            if (val_dato <= alerta.valorone && val_dato >= alerta.valortwo) {
+            if (val_dato <= alerta.valorone || val_dato >= alerta.valortwo) {
                 return true;
             }
             return false;
