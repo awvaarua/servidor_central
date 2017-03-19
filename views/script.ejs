@@ -11,6 +11,7 @@
             <div class="panel-body centered script_cuerpo" id="panel_cuerpo<%= posicion %>">
                 <input id="<%= script._id %>" class="script_id" hidden>
                 <input id="<%= script.fichero %>" class="script_fichero" hidden>
+                <input id="<%= script.comando %>" class="script_comando" hidden>
                 <input id="<%= script.nombre %>" class="script_nombre" hidden>
                 <div class="row">
                     <% script.argumentos.forEach(function(arg, i) { %>
