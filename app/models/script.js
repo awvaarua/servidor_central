@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var scriptSchema = mongoose.Schema({
 
     nombre: {type: String, required: [true, 'Se requiere un nombre para identificar el script']},
+    comando: {type: String, required: [true, 'Se requiere un comando para la ejecución']},
     fichero: {type: String, required: [true, 'Se requiere esècificar un fichero']},
     argumentos: [{
         nombre: {type: String, required: [true, 'Se requiere un nombre para identificar el argumento']},

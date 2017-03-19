@@ -68,6 +68,7 @@ function GuardarDatosScript(filename) {
     var script = {};
     script.fichero = filename;
     script.nombre = $('#script_nombre').val();
+    script.comando = $('#script_comand').val();
     script.argumentos = [];
     $('.argumentos_add').find('.argumento').each(function (i, arg) {
         var argumento = {};

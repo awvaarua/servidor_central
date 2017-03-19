@@ -5,7 +5,8 @@ function SendConfirmation(ip, mac) {
 		mac: mac,
 		scripts: [],
 		nombre: $('#pendiente_nombre').val(),
-		descripcion: $('#pendiente_descripcion').val()
+		usuario: $('#pendiente_usuario').val(),
+		contrasenya: $('#pendiente_contrasenya').val()
 	};
 
 	var res = $('#pendiente_comun').html();

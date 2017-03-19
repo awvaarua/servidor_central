@@ -127,7 +127,8 @@ var self = module.exports = {
     var nodo = new Nodo({
       ip: data.ip,
       nombre: data.nombre,
-      descripcion: data.descripcion,
+      usuario: data.usuario,
+      contrasenya: data.contrasenya,
       mac: parseInt(data.mac),
       scripts: [],
       date: new Date()

@@ -7,15 +7,15 @@ var self = module.exports = {
   StartScript: function (nodo, script, callback) {
     ssh.connect({
       host: nodo.ip,
-      username: 'pi',
-      password: 'fura4468AB'
+      username: nodo.usuario,
+      password: nodo.contrasenya
     }).then(function () {
       ssh.putFile('./uploads/' + script.fichero, '/home/pi/Scripts/' + script.fichero).then(function () {
         var params = "";
         script.argumentos.forEach(function(arg){
           params += arg.valor+" ";
-        });        
-        ssh.exec('nohup python /home/pi/Scripts/' + script.fichero + ' ' + params + '> /dev/null 2>&1 & echo $!').then(function (std) {
+        });
+        ssh.exec('nohup '+ script.comando +' /home/pi/Scripts/' + script.fichero + ' ' + params + '> /dev/null 2>&1 & echo $!').then(function (std) {
           callback(null, std);
         }, function (err) {
           callback(err, null);
@@ -32,8 +32,8 @@ var self = module.exports = {
     var error = "";
     ssh.connect({
       host: nodo.ip,
-      username: 'pi',
-      password: 'fura4468AB'
+      username: nodo.usuario,
+      password: nodo.contrasenya
     }).then(function () {
       callback('online');
     }, function (err) {
@@ -64,8 +64,8 @@ var self = module.exports = {
   CheckScriptStatus: function (nodo, pid, callback) {
     ssh.connect({
       host: nodo.ip,
-      username: 'pi',
-      password: 'fura4468AB'
+      username: nodo.usuario,
+      password: nodo.contrasenya
     }).then(function () {
       ssh.exec('kill -0 ' + pid).then(function (std) {
         callback(null, 'online');
@@ -81,8 +81,8 @@ var self = module.exports = {
   StopScript: function (nodo, pid, callback) {
     ssh.connect({
       host: nodo.ip,
-      username: 'pi',
-      password: 'fura4468AB'
+      username: nodo.usuario,
+      password: nodo.contrasenya
     }).then(function () {
       ssh.exec('kill ' + pid).then(function (std) {
         callback(null, pid);
@@ -98,8 +98,8 @@ var self = module.exports = {
   RestartNode: function (nodo, callback) {
     ssh.connect({
       host: nodo.ip,
-      username: 'pi',
-      password: 'fura4468AB'
+      username: nodo.usuario,
+      password: nodo.contrasenya
     }).then(function () {
       callback();
       ssh.exec('sudo reboot now').then(function () {        

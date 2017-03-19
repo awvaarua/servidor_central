@@ -6,7 +6,8 @@ var nodoSchema = mongoose.Schema({
 	date: {type: Date, required: [true, 'Se requiere fecha']},
 	mac: {type: Number, required: [true, 'Se requiere una MAC única']},
 	nombre: {type: String, required: [true, 'Se requiere Nombre']},
-	descripcion: {type: String, required: [true, 'Se requiere una Descripcion']},
+	usuario: {type: String, required: [true, 'Se requiere un Usuario de acceso a SSH']},
+	contrasenya: {type: String, required: [true, 'Se requiere una contraseña de acceso aSSH']},
 	scripts: [{
 		pid: {type: Number, required: [true, 'Se requiere un PID']},
 		nombre: {type: String, required: [true, 'Se requiere Nombre para el script']},
