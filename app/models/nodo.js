@@ -11,6 +11,7 @@ var nodoSchema = mongoose.Schema({
 	scripts: [{
 		pid: {type: Number, required: [true, 'Se requiere un PID']},
 		nombre: {type: String, required: [true, 'Se requiere Nombre para el script']},
+		comando: {type: String, required: [true, 'Se requiere un Comando para el Script']},
 		fichero: {type: String, required: [true, 'Se requiere un Nombre de fichero']},
 		argumentos: [{
 			nombre: {type: String, required: false},
