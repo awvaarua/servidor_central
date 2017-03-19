@@ -21,6 +21,7 @@ var alertSchema = mongoose.Schema({
         script: {
             script_id:{type: String, required: [true, 'Un script debe tener un id']},            
             fichero: {type: String, required: [true, 'Un script debe tener un fichero']},
+            comando: {type: String, required: [true, 'Un script debe tener un comando']},
             nombre: {type: String, required: [true, 'Un script debe tener un nombre']},
             argumentos: [{
                 nombre: {type: String, required: [true, 'Un argumento debe tener un nombre']},
