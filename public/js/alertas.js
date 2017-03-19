@@ -226,6 +226,7 @@ $(document).on('click', '.actualizaralerta', function (event) {
 		var accion = {script:{}};
 		accion.script.script_id = $(act).find('#script_id:first').val();
 		accion.script.fichero = $(act).find('#script_fichero:first').val();
+		accion.script.comando = $(act).find('#script_comando:first').val();
 		accion.script.nombre = $(act).find('#script_nombre:first').val();
 		accion.mac = $(act).find('#mac:first').val();
 		accion.nombre_nodo = $(act).find('#nodonombre:first').val();

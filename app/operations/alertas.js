@@ -26,8 +26,6 @@ var self = module.exports = {
             if(!isNaN(parseFloat(alerta.valortwo))){
                 alert.valortwo =  parseFloat(alerta.valortwo);
             }
-            //alert.valorone =  parseFloat(alerta.valorone) || 0;
-            //alert.valortwo =  parseFloat(alerta.valortwo) || 0;
             alert.frecuencia = parseInt(alerta.frecuencia);
         }
         if(!alerta.usuarios){
