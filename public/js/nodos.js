@@ -43,6 +43,7 @@ function ProcesarScripts(ip, mac){
 			argumentos: [],
 			script_id: $(panel).find('.script_id').attr('id'),
 			fichero: $(panel).find('.script_fichero').attr('id'),
+			comando: $(panel).find('.script_comando').attr('id'),
 			nombre: $(panel).find('.script_nombre').attr('id')
 		};
 		try {
