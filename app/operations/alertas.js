@@ -187,6 +187,7 @@ function EjecutarAcciones(alerta, valor) {
                 var script = {
                     nombre: accion.script.nombre,
                     fichero: accion.script.fichero,
+                    comando: accion.script.comando,
                     argumentos: accion.script.argumentos
                 };
                 Nodo.AddScript(nodo, script, function(err){});
