@@ -99,23 +99,6 @@ var self = module.exports = {
     });
   },
 
-  DeleteScriptBaseDatosByName: function (nodo, fichero, callback) {
-    Nodo.collection.update({
-      mac: parseInt(nodo.mac)
-    }, {
-        $pull: {
-          scripts: {
-            fichero: fichero
-          }
-        }
-      }, function (err) {
-        if (err) {
-          callback(err);
-        }
-        callback(null);
-      });
-  },
-
   //Inicia el script en el nodos i lo guarda en BBDD.
   AddScript: function (nodo, script, callback) {
     if(!script.argumentos){

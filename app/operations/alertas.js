@@ -190,12 +190,7 @@ function EjecutarAcciones(alerta, valor) {
                     comando: accion.script.comando,
                     argumentos: accion.script.argumentos
                 };
-                Nodo.DeleteScriptBaseDatosByName(nodo, accion.script.fichero, function(err){
-                    if (err){
-                        return;
-                    }
-                    Nodo.AddScript(nodo, script, function(err){});
-                });                
+                Nodo.AddScript(nodo, script, function(err){});
             }            
         });
     });
