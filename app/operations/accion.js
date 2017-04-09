@@ -4,8 +4,22 @@ var Nodos = require('../operations/nodos');
 var Ssh = require('../ssh_operations/sshoperations.js');
 var token = '161755617:AAEkQY8R5qcMjQJAtCZ9NIiQFmJUDS_87R8';
 var bot = new TelegramBot(token, { polling: true });
+var PASSWORD = 'fura4468AB';
 
 bot.onText(/\/start/, function (msg, match) {
+    try{
+        var pass = msg.text.split(" ")[1];
+    }catch (err){
+        return self.SendTelegram("Para registrarse debe proporcionar una contraseña /start 'password'", [msg.from.username], {});
+    }
+    if (!pass){
+        return self.SendTelegram("Para registrarse debe proporcionar una contraseña /start 'password'", [msg.from.username], {});
+    }
+
+    if (pass != PASSWORD){
+        return self.SendTelegram("Contraseña incorrecta", [msg.from.username], {});
+    }
+
     AddUser(msg.from.username, msg.from.id, function (err) {
         if (err) {
             self.SendTelegram("Lo sentimos, se ha producido un error: " + err, [msg.from.username], {});
