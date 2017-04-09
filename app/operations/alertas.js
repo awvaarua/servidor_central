@@ -190,7 +190,12 @@ function EjecutarAcciones(alerta, valor) {
                     comando: accion.script.comando,
                     argumentos: accion.script.argumentos
                 };
-                Nodo.AddScript(nodo, script, function(err){});
+                Nodo.DeleteScriptBaseDatosByName(nodo, accion.script.fichero, function(err){
+                    if (err){
+                        return;
+                    }
+                    Nodo.AddScript(nodo, script, function(err){});
+                });                
             }            
         });
     });
@@ -266,7 +271,7 @@ function CheckDate(alerta) {
     }
     var now = new Date();
     var diffMs = (now - alerta.last_event);
-    var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+    var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
     if (diffMins >= alerta.frecuencia) {
         alerta.last_event = now;
         alerta.save();
