@@ -9,20 +9,21 @@ var PASSWORD = 'fura4468AB';
 bot.onText(/\/start/, function (msg, match) {
     try{
         var pass = msg.text.split(" ")[1];
+        console.log(msg);
     }catch (err){
-        return self.SendTelegram("Para registrarse debe proporcionar una contraseña /start 'password'", [msg.from.username], {});
+        return bot.sendMessage(msg.from.id, "Para registrarse debe proporcionar una contraseña /start 'password'");
     }
     if (!pass){
-        return self.SendTelegram("Para registrarse debe proporcionar una contraseña /start 'password'", [msg.from.username], {});
+        return bot.sendMessage(msg.from.id, "Para registrarse debe proporcionar una contraseña /start 'password'");
     }
 
     if (pass != PASSWORD){
-        return self.SendTelegram("Contraseña incorrecta", [msg.from.username], {});
+        return bot.sendMessage(msg.from.id, "Contraseña incorrecta");
     }
 
     AddUser(msg.from.username, msg.from.id, function (err) {
         if (err) {
-            self.SendTelegram("Lo sentimos, se ha producido un error: " + err, [msg.from.username], {});
+            return bot.sendMessage(msg.from.id, "Para registrarse debe proporcionar una contraseña /start 'password'");
         } else {
             self.SendTelegram("Usuario añadido correctamente", [msg.from.username], {});
         }
@@ -30,70 +31,90 @@ bot.onText(/\/start/, function (msg, match) {
 });
 
 bot.onText(/\/estado/, function (msg, match) {
-    Nodos.GetAllNodes(function (err, nodos) {
-        if (err || !nodos) {
-            nodos = [];
+    GetUserById(msg.chat.id, function(err, user){
+
+        if(err || !user){
+            return bot.sendMessage(msg.from.id, "Usuario no autorizado ;)");
         }
-        var keyboard = [];
-        nodos.forEach(function (nodo) {
-            keyboard.push([{
-                text: nodo.nombre + ' - ' + nodo.mac,
-                callback_data: "/estado " + nodo.mac
-            }]);
-        });
-        var opt = {
-            reply_markup: {
-                hide_keyboard: true,
-                inline_keyboard: keyboard
+        Nodos.GetAllNodes(function (err, nodos) {
+            if (err || !nodos) {
+                nodos = [];
             }
-        };
-        self.SendTelegram("Selecciona un nodo", [msg.from.username], opt);
+            var keyboard = [];
+            nodos.forEach(function (nodo) {
+                keyboard.push([{
+                    text: nodo.nombre + ' - ' + nodo.mac,
+                    callback_data: "/estado " + nodo.mac
+                }]);
+            });
+            var opt = {
+                reply_markup: {
+                    hide_keyboard: true,
+                    inline_keyboard: keyboard
+                }
+            };
+            self.SendTelegram("Selecciona un nodo", [msg.from.username], opt);
+        });
     });
 });
 
 bot.onText(/\/set/, function (msg, match) {
-    Nodos.GetAllNodes(function (err, nodos) {
-        if (err || !nodos) {
-            nodos = [];
+    GetUserById(msg.chat.id, function(err, user){
+
+        if(err || !user){
+            return bot.sendMessage(msg.from.id, "Usuario no autorizado ;)");
         }
-        var keyboard = [];
-        nodos.forEach(function (nodo) {
-            keyboard.push([{
-                text: nodo.nombre + ' - ' + nodo.mac,
-                callback_data: "/set " + nodo.mac
-            }]);
-        });
-        var opt = {
-            reply_markup: {
-                hide_keyboard: true,
-                inline_keyboard: keyboard
+        Nodos.GetAllNodes(function (err, nodos) {
+            if (err || !nodos) {
+                nodos = [];
             }
-        };
-        self.SendTelegram("Selecciona un nodo", [msg.from.username], opt);
+            var keyboard = [];
+            nodos.forEach(function (nodo) {
+                keyboard.push([{
+                    text: nodo.nombre + ' - ' + nodo.mac,
+                    callback_data: "/set " + nodo.mac
+                }]);
+            });
+            var opt = {
+                reply_markup: {
+                    hide_keyboard: true,
+                    inline_keyboard: keyboard
+                }
+            };
+            self.SendTelegram("Selecciona un nodo", [msg.from.username], opt);
+        });
     });
 });
 
 bot.on("callback_query", function (callbackQuery) {
-    var opt = { chat_id: callbackQuery.message.chat.id, message_id: callbackQuery.message.message_id }
-    try {
-        var data = callbackQuery.data.split(" ")
-        var accion = data[0];
-        var mac = data[1];
-    } catch (error) {
-        return self.UpdateMessage("Formato de mensaje incorrecto", opt);
-    }
-    if (accion == "/estado") {
-        EstadoAction(mac, opt);
-    } else if (accion == "/set") {
-        SetAction(mac, opt);
-    } else if (accion == "/getactions") {
-        var fichero = data[2];   
-        GiveOptions(mac, fichero, opt);
-    } else if (accion == "/action") {
-        var fichero = data[2];
-        var accion = data[3];
-        Action(mac, fichero, accion, opt);
-    }
+
+    GetUserById(callbackQuery.message.chat.id, function(err, user){
+
+        if(err || !user){
+            return bot.sendMessage(msg.from.id, "Usuario no autorizado ;)");
+        }
+
+        var opt = { chat_id: callbackQuery.message.chat.id, message_id: callbackQuery.message.message_id }
+        try {
+            var data = callbackQuery.data.split(" ")
+            var accion = data[0];
+            var mac = data[1];
+        } catch (error) {
+            return self.UpdateMessage("Formato de mensaje incorrecto", opt);
+        }
+        if (accion == "/estado") {
+            EstadoAction(mac, opt);
+        } else if (accion == "/set") {
+            SetAction(mac, opt);
+        } else if (accion == "/getactions") {
+            var fichero = data[2];   
+            GiveOptions(mac, fichero, opt);
+        } else if (accion == "/action") {
+            var fichero = data[2];
+            var accion = data[3];
+            Action(mac, fichero, accion, opt);
+        }
+    });
 });
 
 var self = module.exports = {
@@ -147,6 +168,17 @@ function GetUserByAlias(alias, callback) {
     alias = alias.replace('@', '');
     Usuario.findOne({
         alias: alias
+    }, function (err, user) {
+        if (err) {
+            callback(err);
+        }
+        callback(null, user);
+    });
+}
+
+function GetUserById(user_id, callback) {
+    Usuario.findOne({
+        user_id: user_id
     }, function (err, user) {
         if (err) {
             callback(err);
@@ -250,8 +282,6 @@ function GiveOptions(mac, fichero, opt) {
 }
 
 function Action(mac, fichero, action, opt) {
-    console.log(action);
-    self.UpdateMessage("\n \u{1F504} Cargando \n", opt);
     Nodos.GetNodo(mac, function (err, nodo) {
         if (err || !nodo) {
             return self.UpdateMessage("El nodo no se ha podido recuperar", opt);
