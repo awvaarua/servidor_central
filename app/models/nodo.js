@@ -10,7 +10,7 @@ var nodoSchema = mongoose.Schema({
 	contrasenya: {type: String, required: [true, 'Se requiere una contraseña de acceso aSSH']},
 	scripts: [{
 		pid: {type: Number, required: [true, 'Se requiere un PID']},
-		script_id: {type: Number, required: [true, 'Se requiere un ID para el script']},
+		script_id: {type: String, required: [true, 'Se requiere un ID para el script']},
 		nombre: {type: String, required: [true, 'Se requiere Nombre para el script']},
 		comando: {type: String, required: [true, 'Se requiere un Comando para el Script']},
 		fichero: {type: String, required: [true, 'Se requiere un Nombre de fichero']},
