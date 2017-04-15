@@ -185,9 +185,10 @@ function EjecutarAcciones(alerta, valor) {
         Nodo.GetNodo(accion.mac, function(err, nodo){
             if(!err && nodo){
                 var existe = false;
+                var pid_eliminar = 0;
                 nodo.scripts.forEach(function (script) {
                     if (script.script_id == accion.script.script_id){
-                        existe = true;
+                        existe = true;pid_eliminar=script.pid;
                     }
                 });
                 var script = {
@@ -198,7 +199,7 @@ function EjecutarAcciones(alerta, valor) {
                     script_id: accion.script.script_id
                 };
                 if (existe){
-                    Nodo.DeleteScript(nodo.mac, nodo, script.pid, function(){
+                    Nodo.DeleteScript(nodo.mac, nodo, pid_eliminar, function(){
                          Nodo.AddScript(nodo, script, function(err){});
                     });
                 }else{
