@@ -198,7 +198,7 @@ function EjecutarAcciones(alerta, valor) {
                     script_id: accion.script.script_id
                 };
                 if (existe){
-                    Nodo.DeleteScript(nodo.mac, nodo, scrtip.pid, function(){
+                    Nodo.DeleteScript(nodo.mac, nodo, script.pid, function(){
                          Nodo.AddScript(nodo, script, function(err){});
                     });
                 }else{
