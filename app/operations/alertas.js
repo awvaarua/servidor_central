@@ -184,13 +184,26 @@ function EjecutarAcciones(alerta, valor) {
     alerta.acciones.forEach(function(accion, idx){
         Nodo.GetNodo(accion.mac, function(err, nodo){
             if(!err && nodo){
+                var existe = false;
+                nodo.scripts.forEach(function (script) {
+                    if (script.script_id == accion.script.script_id){
+                        existe = true;
+                    }
+                });
                 var script = {
                     nombre: accion.script.nombre,
                     fichero: accion.script.fichero,
                     comando: accion.script.comando,
-                    argumentos: accion.script.argumentos
+                    argumentos: accion.script.argumentos,
+                    script_id: accion.script.script_id
                 };
-                Nodo.AddScript(nodo, script, function(err){});
+                if (existe){
+                    Nodo.DeleteScript(nodo.mac, nodo, scrtip.pid, function(){
+                         Nodo.AddScript(nodo, script, function(err){});
+                    });
+                }else{
+                     Nodo.AddScript(nodo, script, function(err){});
+                }
             }            
         });
     });
